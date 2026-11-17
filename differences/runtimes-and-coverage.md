@@ -47,6 +47,9 @@ A map with `war3map.lua` is a Lua map. Data a non-melee map does not override co
 | Lua maps' `common.j`, `blizzard.j` | deliberate | Bundled 3.0.1 copies, whatever the install. |
 | Stock balance data for non-melee maps | deliberate | 1.29 values (Tavern sells 5 heroes, Ensnare 12 s), not Reforged's. |
 | A map's `Units\CommandFunc.txt` | unverified | Replaces the stock file; missing sections use the built-in ones. |
+| Model texture with replaceable id 21 or an unmapped id | deliberate | Gets an empty texture without a file lookup or a failure count. |
+| Model texture path `war3mapImported\X.blp` | unverified | Does not fall back to `X.blp` at the archive root; fix the import path. |
+| Missing BLP texture file | works | Logs one line and the texture stays empty. |
 | Map textures vs game textures | deliberate | A map file of the same base name wins, also across `.blp`, `.tga` and `.dds`. |
 
 ## Native coverage and constants

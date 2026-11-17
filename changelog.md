@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Big maps load about 25% faster: texture decoding runs on worker threads (2026-11-17)
 - Shop sale events: `EVENT_PLAYER_UNIT_SELL`, `EVENT_PLAYER_UNIT_SELL_ITEM`, `EVENT_UNIT_SELL`, `EVENT_UNIT_SELL_ITEM` fire during a purchase, with… (2026-11-17)
 - `WmsSetUnitUntargetable` and `WmsIsUnitUntargetable` make a unit untargetable by other units' attacks, spells and auto-acquire (2026-11-17)
 - `BlzGetUnitRealField(unit, UNIT_RF_SELECTION_SCALE)` returns the unit type's selection scale (was 0), as measured in Reforged 3.0.1.24371: not changed by… (2026-11-16)
@@ -105,6 +106,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `RemoveUnit` on an already removed unit does nothing (2026-11-17)
+- Model textures with replaceable id 21 or an unmapped id get an empty texture without a failed lookup (2026-11-17)
 - `GetUnitCurrentOrder` reads 0 after a stop, or after the running ability is removed or disabled mid-cast (it kept the old order) (2026-11-17)
 - Windowed edge-scroll with a caught cursor is smooth at edges and corners (no stepping after focus changes) (2026-11-17)
 - JASS integer literals with a leading zero are octal (`010` = 8) and no longer stop the script from loading

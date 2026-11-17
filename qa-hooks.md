@@ -32,6 +32,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `-qaleave <seconds>` | Returns to the menu after that long and loads the map once more. |
 | `-qaleavecount <n>`, `-qaleavemap <map>` | Repeats the leave `n` times; restarts load `<map>`. |
 | `-qalua <file>[;<file>...]` | Runs Lua files in order in the map's VM; a failing file stops the rest. |
+| `-qablpsync` | Turns off worker-thread BLP decoding at map load (decode on the render thread). |
 | `-qagrab` | Keeps cursor catch and edge scrolling on (`-qalog` alone turns them off). |
 | `-qacursorpin <x>,<y>` | Pins the cursor position the in-game UI reads (window pixels, top-left origin); the OS cursor does not move. Needs `-qalog` and `-loadfile`. |
 | `WarMashQaReport(key, value)` | Writes a value into the log; at most 1000 keys per run. |
@@ -53,7 +54,9 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `damageEvents` (exit) | Counts and last values of damage events. |
 | `mapLoaded.phases`, `loadCost` | Load time by phase and cost bucket. |
 | `mapLoaded.loadDetail`, `exit.loadDetail` | BLP decode steps, sound read and decode (5 slowest), paths of missing textures (`imageInputNull`). |
-| `effectPreload` timing fields | `blpSummedMs`, `blpThreads`, `blpWallShare`, `workWallShare`. |
+| `effectPreload` timing fields | `wallMs`, `blpSummedMs`, `blpThreads`, `blpWallShare`, `workWallShare`. |
+| `exit.blpAsync` | Worker decode counters: `enabled`, `threadsPerBatch`, `batches`, `submitted`, `completed`, `workerFailures`, `workerTimeouts`, `inlineRuns`, `maxInFlight`, `waits`, `waitMs`, `lateFailures`, `threads`. |
+| `loadCost.blpDecode` vs `loadDetail.blpMs` | With workers on, `blpDecode` is render-thread time only; `blpMs` sums all threads. |
 | `assetLoadFailures` | Distinct missing asset paths, each counted once (not every load attempt). |
 | `state.mapTextures`, `groundTextures`, `exit.textureFailures` | Textures served from the map, ground tiles, failed paths. |
 | `iconPreload` | Icon loading progress and frame cost. |
