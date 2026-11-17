@@ -21,7 +21,8 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | Hero armor from agility | unverified | Damage reduction uses the fractional armor; the display still rounds. |
 | `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzGetUnitMaxHP`, `BlzGetUnitMaxMana`, `BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`, `BlzGetUnitSkin` | works | Raising max HP or mana also raises the current value; lowering clamps it. |
 | Getters after `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana` while buffed | bugfix | Return exactly the value set, also while buffs are active. |
-| `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana` with 0 or less | gap | Max HP is clamped to at least 1; Reforged kills the unit at max HP 0, as measured. |
+| `BlzSetUnitMaxHP` with 0 | bugfix | Kills the unit, as measured; `SetWidgetLife` does not revive it. A negative value also kills (unverified). |
+| `BlzSetUnitMaxMana` with 0 or less | unverified | Max mana is clamped to at least 0. |
 | `BlzSetUnitRealField` | partial | Sight radius, HP and mana regeneration, acquisition range and turn rate work; other fields return false. |
 | `BlzGetUnitIntegerField` | partial | Only primary attribute and the four tint fields; other fields return 0. |
 | `BlzSetUnitIntegerField` | partial | Only the classification field works; it reads back as written, and other fields return false. |

@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Shop sale events: `EVENT_PLAYER_UNIT_SELL`, `EVENT_PLAYER_UNIT_SELL_ITEM`, `EVENT_UNIT_SELL`, `EVENT_UNIT_SELL_ITEM` fire during a purchase, with… (2026-11-17)
 - `WmsSetUnitUntargetable` and `WmsIsUnitUntargetable` make a unit untargetable by other units' attacks, spells and auto-acquire (2026-11-17)
 - `BlzGetUnitRealField(unit, UNIT_RF_SELECTION_SCALE)` returns the unit type's selection scale (was 0), as measured in Reforged 3.0.1.24371: not changed by… (2026-11-16)
 - Shops sell units: `IssueNeutralImmediateOrderById` with a unit id buys a mercenary or tavern hero for the ordering player… (2026-11-16)
@@ -101,6 +102,10 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `BlzSetUnitMaxHP(unit, 0)` kills the unit and `SetWidgetLife` does not revive it, as measured in Reforged (2026-11-17)
+- `SetUnitMoveSpeed` clamps to the gameplay constants (150..400 by default) and reads back unrounded (2026-11-17)
+- A disabled `Aatk` deals no damage, also from a swing in progress (2026-11-17)
+- `RegionClearRect`, `RegionClearCell`, `RegionClearCellAtLoc`: `IsUnitInRegion` turns false at once and no leave event fires (2026-11-17)
 - `UNIT_IF_UNIT_CLASSIFICATION` writes now match Reforged: bit 128 is only Ancient and the write replaces the field (2026-11-17)
 - An instant Channel whose caster is paused with `BlzPauseUnitEx` in CAST or EFFECT fires EFFECT, FINISH and ENDCAST in one tick and is not re-issued (2026-11-17)
 - A Channel cast that starts after the caster walks into range now runs normally and fires FINISH at its end (it ended at once with ENDCAST only) (2026-11-17)

@@ -28,7 +28,7 @@ Selection works for the local player only. Mouse and key events are not synced: 
 
 ## Items and shops
 
-Shop purchases by script work; the stock rules are unverified and there are no sell events.
+Shop purchases by script or UI work; the stock rules are unverified. Sell events fire, pawn events do not.
 
 | Native | Status | What differs |
 |---|---|---|
@@ -39,6 +39,8 @@ Shop purchases by script work; the stock rules are unverified and there are no s
 | `UnitAddItem`, `UnitHasItem` | bugfix | `UnitAddItem` returns a boolean. |
 | `UnitUseItem`, `UnitUseItemTarget` | deliberate | False when the order is refused (a potion at full life); Reforged returns true. |
 | `UnitUseItemPoint` | deliberate | True when the order is accepted; WC3 always returns false. |
-| `IssueNeutralImmediateOrderById` | partial | Buys items and units; no sell event, rally point or tavern revive, while Reforged fires sell events synchronously. |
+| `IssueNeutralImmediateOrderById` | partial | Buys items and units; no rally point or tavern revive yet. |
+| `EVENT_PLAYER_UNIT_SELL`, `EVENT_PLAYER_UNIT_SELL_ITEM`, `EVENT_UNIT_SELL`, `EVENT_UNIT_SELL_ITEM` | bugfix | Fire synchronously during the purchase, on the shop and its owner; order against the pickup event is unmeasured. |
+| `EVENT_PLAYER_UNIT_PAWN_ITEM`, `EVENT_UNIT_PAWN_ITEM` | gap | Not implemented. |
 | `IssueNeutralPointOrder`, `IssueNeutralPointOrderById`, `IssueNeutralTargetOrder`, `IssueNeutralTargetOrderById` | unverified | `neutralinteract` sets the shop selection for the ordering player only. |
 | `IssueNeutralImmediateOrder` (string form) | gap | Not implemented on purpose. |

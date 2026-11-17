@@ -27,6 +27,7 @@ BlzUnitHideAbility(hero, FourCC("A000"), false)
 | `BlzUnitDisableAbility`: counting | bugfix | A counter per ability as in Reforged: N disables need N enables, as measured. |
 | `BlzUnitDisableAbility(..., false, hideUI)`: which disable an enable closes | deliberate | Closes one with the same `hideUI` first, else any other; Reforged needs `(false, false)`. |
 | `BlzUnitHideAbility`: counting | deliberate | An on/off switch: one `false` undoes any number of `true` calls; Reforged counts. |
+| `BlzUnitDisableAbility`, `SetPlayerAbilityAvailable` on `Aatk` | bugfix | No damage, also from a swing in progress and auto-acquire; Reforged accepts the attack order and the unit walks, WarMash refuses it. |
 | `BlzUnitHideAbility` on `Aatk` | deliberate | The attack stays hidden and unusable; Reforged: hiding it has no effect. Visual-only hiding is planned as a `Wms` native. |
 | Ability hidden by `BlzUnitHideAbility`: orders | bugfix | Refuses orders like a disabled ability, as measured; a running cast finishes. |
 | `ConvertAbilityDisableType(7)` | deliberate | Valid in WarMash (disable type POLYMORPH); out of range in WC3. |

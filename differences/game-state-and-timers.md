@@ -25,7 +25,8 @@ In a single-player start of a non-melee map only the local player's slot is play
 | `EndGame` | gap | Leaves to the menu, no score screen. |
 | `RestartGame`, `ChangeLevel` | deliberate | Leave to the menu. |
 | `DisplayTimedTextFromPlayer`, `GetDefaultDifficulty`, `UnitSuspendDecay` | works | Implemented. |
-| `GetSellingUnit`, `GetRescuer`, `GetSoldItem` | gap | Always nil: no sell or rescue events. |
+| `GetSellingUnit`, `GetBuyingUnit`, `GetSoldUnit`, `GetSoldItem` | bugfix | Return the shop, buyer, new unit and item during a sale. |
+| `GetRescuer` | gap | Always nil: no rescue events. |
 | `PauseGame`, `DisplayLoadDialog`, `PingMinimap`, `UnitAddIndicator`, `VolumeGroupSetVolume`, `AddItemToStock`, `RemoveItemFromStock`, `DestroyUbersplat`, `RemoveWeatherEffect` | stub | One log line, no effect. |
 
 ## Timers, triggers and hashtables

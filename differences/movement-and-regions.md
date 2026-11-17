@@ -24,6 +24,7 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 | `SetUnitFlyHeight` below 0 | unverified | Ground unit types are clamped at 0. |
 | Snared units (`UNIT_TYPE_SNARED`) | bugfix | Do not walk and read move speed 0, as measured. |
 | `GetUnitMoveSpeed`, `BlzGetUnitRealField(UNIT_RF_SPEED)` with a speed buff | bugfix | Unrounded value, as measured; movement itself still uses whole numbers. |
+| `SetUnitMoveSpeed` | bugfix | Clamped to 150..400 and read back unrounded, as measured; a map's own minimum of 0 is ignored. |
 | `GetUnitDefaultMoveSpeed` | unverified | The unit type's speed from object data; 0 for a null unit. |
 | Slow or speed upgrade while a speed buff is active | bugfix | Change the base speed without baking in the buff; WC3's combination rule is unverified. |
 | `IsTerrainPathable` | partial | Works for walk, fly, build and float pathing; other types return false. |
@@ -44,6 +45,7 @@ end))
 | Native | Status | What differs |
 |---|---|---|
 | `RegionAddRect`, `RegionAddCell`, `RegionAddCellAtLoc` over a standing unit | bugfix | The unit is inside at once but gets no enter event. |
+| `RegionClearRect`, `RegionClearCell`, `RegionClearCellAtLoc` | bugfix | `IsUnitInRegion` turns false at once and no leave event fires. |
 | `GroupEnumUnitsOfType`, `...OfPlayer`, `...InRect`, `...InRange`, `...InRangeOfLoc`, `...Selected` and their Counted forms | bugfix | Clear the group first; the spatial forms skip Locust units. |
 | `GroupEnumUnitsInRect`, `GroupEnumUnitsInRange`, `GroupEnumUnitsInRangeOfLoc` | bugfix | Return dead units until the corpse is gone, as in WC3. |
 | `GroupEnumUnitsInRangeOfUnit` and its Counted form (WarMash only) | bugfix | Clear first, skip Locust units, accept a null unit. |
