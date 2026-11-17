@@ -56,7 +56,7 @@ Details:
 |---|---|---|
 | Channel (`ANcl`) | works | Per-level fields `Ncl1` to `Ncl6`, mana, cooldown and all five spell events. |
 | Channel with follow-through time 0 | unverified | Treated as an instant cast (0.001 s). |
-| Channel cast after a walk into range | bugfix | The cast runs normally and FINISH fires at its end; before, it ended at once with ENDCAST only. |
+| Channel cast after a walk into range | bugfix | The cast runs normally and FINISH fires at its end; before, it ended at once with ENDCAST only. Failing for lack of mana no longer leaves the unit stuck. |
 | Channel: `SPELL_FINISH` / `SPELL_ENDCAST` timing | bugfix | Fire in the tick the follow-through ends, after that tick's timers, as measured. |
 | Ability-builder (JSON) channels: end events | deliberate | Same order as Channel by analogy; a cut channel fires ENDCAST only. |
 | `BlzPauseUnitEx` during a Channel cast | bugfix | Ends the cast and re-issues the order at the unpause, as measured. |
