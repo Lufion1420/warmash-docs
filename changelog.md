@@ -67,6 +67,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- `RemoveUnit` on a hero that died normally releases its tech-tree count once (`GetPlayerTechCount`, hero training limit) (2026-11-17)
 - `BlzPauseUnitEx(u, false)` no longer re-issues a Channel cast that the pause cut after its EFFECT (Reforged does, so one order can cast several times) (2026-11-17)
 - `CAMERA_FIELD_FARZ`: the camera far plane is raised to what the view needs, so zooming out no longer cuts the far ground to black… (2026-11-17)
 - Unholy Frenzy's life drain is a damage event from the caster once per second, not an attack (measured in Reforged 3.0.1.24371; was a silent life loss) (2026-11-16)

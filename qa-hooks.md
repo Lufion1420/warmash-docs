@@ -52,6 +52,8 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `state.healthBars` | Floating bars and text tags. |
 | `damageEvents` (exit) | Counts and last values of damage events. |
 | `mapLoaded.phases`, `loadCost` | Load time by phase and cost bucket. |
+| `mapLoaded.loadDetail`, `exit.loadDetail` | BLP decode steps, sound read and decode (5 slowest), paths of missing textures (`imageInputNull`). |
+| `effectPreload` timing fields | `blpSummedMs`, `blpThreads`, `blpWallShare`, `workWallShare`. |
 | `assetLoadFailures` | Distinct missing asset paths, each counted once (not every load attempt). |
 | `state.mapTextures`, `groundTextures`, `exit.textureFailures` | Textures served from the map, ground tiles, failed paths. |
 | `iconPreload` | Icon loading progress and frame cost. |

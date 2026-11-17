@@ -25,6 +25,7 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `BlzSetUnitMaxHP` with 0 on a unit with Reincarnation or Ankh | unverified | The replacement is skipped and the unit stays dead; during a Reincarnation delay the unit dies for real when it ends, without killer. |
 | `RemoveUnit` on a unit in a Reincarnation delay | unverified | The unit stays removed: no revive, no death event, tech-tree count released. |
 | `RemoveUnit`, then `ReviveHero`, `ReviveHeroLoc` or `ResurrectUnit` in the same tick | unverified | Returns false and revives nothing. |
+| `RemoveUnit` on a hero that died normally | unverified | Releases its tech-tree count once (`GetPlayerTechCount`, hero training limit); before, the dead removed hero counted forever. |
 | `RemoveUnit` on a hero queued at an altar | unverified | The queue entry is cancelled and gold, lumber and food are refunded to the altar owner. |
 | `BlzSetUnitMaxMana` with 0 or less | unverified | Max mana is clamped to at least 0. |
 | `BlzSetUnitRealField` | partial | Sight radius, HP and mana regeneration, acquisition range and turn rate work; other fields return false. |
@@ -98,7 +99,7 @@ Idle units walk home after a chase they started themselves. Player and script or
 | Auto-acquire target choice | unverified | Highest `prio` first, then the nearest. |
 | `GetUnitCurrentOrder` during auto-acquired attacks | unverified | Reads 0 (Hive, unmeasured), not attack. |
 | `GetUnitCurrentOrder` after a stop, or after the running ability is removed or disabled mid-cast | bugfix | Reads 0 (Hive, unmeasured); was the old order. `SPELL_ENDCAST` handlers still read the cast's order. |
-| `GetUnitCurrentOrder` for a move blocked by pathing | unverified | Keeps reading move while the unit still tries; an arrived move reads 0. |
+| `GetUnitCurrentOrder` for a move blocked by pathing or units | unverified | Keeps reading move while the unit still tries, reads 0 once it gives up (16 to 58 s); an arrived move reads 0. |
 | Chase target turns invulnerable, hidden or Locust | deliberate | The guard walks home at once. |
 | Re-acquire after a chase | works | Respects auto-attack-disabling buffs; a script order inside an autocast clears the leash. |
 | Creep return (`MaxGuardDistance`, `GuardReturnTime`) | bugfix | Walks home 5 s after first passing 1000 from home, as measured. |
