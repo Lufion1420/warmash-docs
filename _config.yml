@@ -3,7 +3,7 @@
 # edits made directly in the public repo are overwritten by the next publish.
 
 title: WarMash script API
-description: Script API reference for WarMash, a Java engine that runs Warcraft III maps: which natives work, which differ from the real game, launch arguments and the changelog.
+description: "Script API reference for WarMash, a Java engine that runs Warcraft III maps: which natives work, which differ from the real game, launch arguments and the changelog."
 
 url: https://lufion1420.github.io
 baseurl: /warmash-docs
