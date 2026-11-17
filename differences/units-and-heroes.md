@@ -26,7 +26,7 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `RemoveUnit` on a unit in a Reincarnation delay | unverified | The unit stays removed: no revive, no death event, tech-tree count released. |
 | `RemoveUnit`, then `ReviveHero`, `ReviveHeroLoc` or `ResurrectUnit` in the same tick | unverified | Returns false and revives nothing. |
 | `RemoveUnit` on a hero that died normally | unverified | Releases its tech-tree count once (`GetPlayerTechCount`, hero training limit); before, the dead removed hero counted forever. |
-| `RemoveUnit` on a unit that is already removed | unverified | Does nothing: the tech-tree count is released once, not again per call. |
+| `RemoveUnit` on a unit that is already removed or whose corpse has decayed | unverified | Does nothing more: the tech-tree count is released once, and no second removal is logged. |
 | `RemoveUnit` on a hero queued at an altar | unverified | The queue entry is cancelled and gold, lumber and food are refunded to the altar owner. |
 | `BlzSetUnitMaxMana` with 0 or less | unverified | Max mana is clamped to at least 0. |
 | `BlzSetUnitRealField` | partial | Sight radius, HP and mana regeneration, acquisition range and turn rate work; other fields return false. |
