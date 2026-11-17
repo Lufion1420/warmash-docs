@@ -32,7 +32,7 @@ JASS maps read `common.j` and `Blizzard.j` from the configured install (1.29 tod
 |---|---|---|
 | `GetTriggerUnit`, `GetFilterUnit`, `GetEnumUnit` from `main` | gap | Throw an error. |
 | Integer literal with a leading zero (`010`) | bugfix | Read as octal (8), as in pjass; `08` and `09` stop the script with an error. |
-| Real literal with a leading zero (`05.5`) | gap | The script fails to parse. |
+| Real literal with a leading zero (`05.5`, `00.5`, `08.5`) | bugfix | Read as a decimal real (5.5, 0.5, 8.5), as in pjass. |
 | Frame API natives in JASS maps | gap | Only if the install's `common.j` declares them. |
 | One-character rawcode (`'a'`) | unverified | Read as 0x61000000, not 97. |
 
