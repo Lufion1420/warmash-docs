@@ -1,0 +1,27 @@
+# Jekyll configuration for the WarMash script API documentation (GitHub Pages).
+# Generated into this public repo by a publish script in the engine repository;
+# edits made directly in the public repo are overwritten by the next publish.
+
+title: WarMash script API
+description: Script API reference for WarMash, a Java engine that runs Warcraft III maps: which natives work, which differ from the real game, launch arguments and the changelog.
+
+url: https://lufion1420.github.io
+baseurl: /warmash-docs
+
+# Theme: just-the-docs, pinned to a release tag (v0.12.0, 2026-01-23).
+remote_theme: just-the-docs/just-the-docs@v0.12.0
+plugins:
+  - jekyll-remote-theme
+  - jekyll-include-cache
+  - jekyll-seo-tag
+
+color_scheme: dark
+search_enabled: true
+search:
+  heading_level: 3
+heading_anchors: true
+
+# Keep the repo README out of the site (it would compete with index.md as the home page).
+exclude:
+  - README.md
+  - .gitattributes
