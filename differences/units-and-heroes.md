@@ -21,16 +21,17 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | Hero armor from agility | unverified | Damage reduction uses the fractional armor; the display still rounds. |
 | `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzGetUnitMaxHP`, `BlzGetUnitMaxMana`, `BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`, `BlzGetUnitSkin` | works | Raising max HP or mana also raises the current value; lowering clamps it. |
 | Getters after `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana` while buffed | bugfix | Return exactly the value set, also while buffs are active. |
-| `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana` with 0 or less | unverified | Max HP is clamped to at least 1, max mana to at least 0. |
+| `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana` with 0 or less | gap | Max HP is clamped to at least 1; Reforged kills the unit at max HP 0, as measured. |
 | `BlzSetUnitRealField` | partial | Sight radius, HP and mana regeneration, acquisition range and turn rate work; other fields return false. |
 | `BlzGetUnitIntegerField` | partial | Only primary attribute and the four tint fields; other fields return 0. |
-| `BlzSetUnitIntegerField` | stored-only | Only the classification field is kept, and it does not change targeting; other fields return false. |
-| `IsUnitType(unit, UNIT_TYPE_ANCIENT)` | partial | Reads bit 128 of the classification set by `BlzSetUnitIntegerField`. |
+| `BlzSetUnitIntegerField` | partial | Only the classification field works; it reads back as written, and other fields return false. |
+| `UNIT_IF_UNIT_CLASSIFICATION` writes | bugfix | Bit 128 is only Ancient and never blocks targeting; `IsUnitType(ANCIENT)` and ancient target lists read it, as measured. |
+| `UNIT_IF_UNIT_CLASSIFICATION` write replaces the field | bugfix | Writing 128 or 0 clears `IsUnitType(MECHANICAL)`, and 0 clears the type's own Ancient, as measured. |
 | `BlzGetUnitBooleanField` | partial | 12 fields, read from the unit type, not the unit; `BlzSetUnitBooleanField` is missing. |
 | `SetUnitState` life and mana | bugfix | Clamped to the maximum; lowering max life does not lower current life. |
 | `BlzGetUnitCollisionSize`, `GetDestructableTypeId`, `GetDestructableOccluderHeight` | works | Implemented. |
 | `IsUnitInRange`, `IsUnitInRangeLoc`, `IsUnitInRangeXY` | bugfix | Real range checks from the first unit's edge; `IsUnitInRangeXY` was always false. |
-| `IsUnitPaused`, `IsUnitInTransport`, `IsUnitLoaded`, `GetHeroSkillPoints`, `UnitInventorySize`, `IsPointBlighted` | works | `IsUnitPaused` counts `PauseUnit` only, not `BlzPauseUnitEx`. |
+| `IsUnitPaused`, `IsUnitInTransport`, `IsUnitLoaded`, `GetHeroSkillPoints`, `UnitInventorySize`, `IsPointBlighted` | works | `IsUnitPaused` is true after `PauseUnit`, false under `BlzPauseUnitEx`, as measured. |
 | `IsUnitType` with `UNIT_TYPE_POISONED`, `UNIT_TYPE_PLAGUED` | gap | Always false: these effects do not exist in WarMash yet. |
 | `IsUnitType(unit, UNIT_TYPE_POLYMORPHED)` | works | True while the unit is under Polymorph. |
 | Null unit in `BlzGetUnitArmor`, `GetUnitDefense`, `GetUnitCastPoint`, `GetUnitCastBackswingPoint`, `UnitGetTemporaryDefenseBonus`; `GetSpellTargetUnit`, `GetSpellTargetLoc` outside a spell | bugfix | Return 0 or nil instead of a script error. |

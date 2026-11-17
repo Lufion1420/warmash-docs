@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `WmsSetUnitUntargetable` and `WmsIsUnitUntargetable` make a unit untargetable by other units' attacks, spells and auto-acquire (2026-11-17)
 - `BlzGetUnitRealField(unit, UNIT_RF_SELECTION_SCALE)` returns the unit type's selection scale (was 0), as measured in Reforged 3.0.1.24371: not changed by… (2026-11-16)
 - Shops sell units: `IssueNeutralImmediateOrderById` with a unit id buys a mercenary or tavern hero for the ordering player… (2026-11-16)
 - `UnitDamagePoint`, `IssueBuildOrder` by unit name, `IssueNeutralImmediateOrderById` (shop items; units too), `IssueNeutralPointOrder`… (2026-11-16)
@@ -100,6 +101,10 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `UNIT_IF_UNIT_CLASSIFICATION` writes now match Reforged: bit 128 is only Ancient and the write replaces the field (2026-11-17)
+- An instant Channel whose caster is paused with `BlzPauseUnitEx` in CAST or EFFECT fires EFFECT, FINISH and ENDCAST in one tick and is not re-issued (2026-11-17)
+- A paused instant Channel ends with ENDCAST when its target is lost before EFFECT (unverified) (2026-11-17)
+- A script error in one cast's FINISH or ENDCAST action no longer blocks other casts ending in the same tick (2026-11-17)
 - An order given by script inside a condition of an issued-target-order trigger no longer replaces the outer order's target or makes it fail (2026-11-16)
 - Slow (also Thunder Clap) and the move speed upgrades no longer write an active speed buff into the unit's base speed… (2026-11-16)
 - A disabled command button whose icon has no disabled art is drawn dark (45 percent brightness, WarMash's own value): a silenced hero's buttons… (2026-11-16)

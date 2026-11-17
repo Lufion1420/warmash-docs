@@ -58,7 +58,11 @@ Details:
 | Channel: `SPELL_FINISH` / `SPELL_ENDCAST` timing | bugfix | Fire in the tick the follow-through ends, after that tick's timers, as measured. |
 | Ability-builder (JSON) channels: end events | deliberate | Same order as Channel by analogy; a cut channel fires ENDCAST only. |
 | `BlzPauseUnitEx` during a Channel cast | bugfix | Ends the cast and re-issues the order at the unpause, as measured. |
-| `BlzPauseUnitEx` inside the EFFECT of an instant Channel | deliberate | Not re-issued, so it casts once as in Reforged; FINISH is not fired. |
+| `BlzPauseUnitEx` in the CAST or EFFECT of an instant Channel | bugfix | EFFECT, FINISH and ENDCAST fire in one tick and the order is not re-issued, as measured. |
+| Paused instant Channel: target lost before EFFECT | unverified | A dead, hidden or untargetable target ends the cast with ENDCAST, no EFFECT, no mana. |
+| Paused instant Channel: target lost after EFFECT | works | FINISH and ENDCAST still fire. |
+| Paused instant Channel: stun during the pause | unverified | The cast ends with ENDCAST in the unit's next update. |
+| Script error in a FINISH or ENDCAST action | bugfix | Other casts ending in the same tick still end normally. |
 | Channel with blank `Animnames` | deliberate | No cast animation plays. |
 | Channel: stun before EFFECT | unverified | The cast ends; WC3 reportedly casts again after the stun. |
 | Channel: order given before EFFECT | unverified | Interrupts the cast; not queued. |

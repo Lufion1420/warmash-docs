@@ -39,6 +39,6 @@ Shop purchases by script work; the stock rules are unverified and there are no s
 | `UnitAddItem`, `UnitHasItem` | bugfix | `UnitAddItem` returns a boolean. |
 | `UnitUseItem`, `UnitUseItemTarget` | deliberate | False when the order is refused (a potion at full life); Reforged returns true. |
 | `UnitUseItemPoint` | deliberate | True when the order is accepted; WC3 always returns false. |
-| `IssueNeutralImmediateOrderById` | partial | Buys items and units; no sell event, rally point or tavern revive. |
+| `IssueNeutralImmediateOrderById` | partial | Buys items and units; no sell event, rally point or tavern revive, while Reforged fires sell events synchronously. |
 | `IssueNeutralPointOrder`, `IssueNeutralPointOrderById`, `IssueNeutralTargetOrder`, `IssueNeutralTargetOrderById` | unverified | `neutralinteract` sets the shop selection for the ordering player only. |
 | `IssueNeutralImmediateOrder` (string form) | gap | Not implemented on purpose. |

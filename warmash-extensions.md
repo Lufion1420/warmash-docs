@@ -20,16 +20,27 @@ end
 
 ## Natives
 
-None yet.
-
 | Name | Signature | Behavior | Since | Stability |
 |---|---|---|---|---|
+| `WmsSetUnitUntargetable` | `(unit, boolean)` | While on, no other unit's attack, unit-target spell, auto-acquire or return fire can target the unit, whatever its targets-allowed say. | 2026-11-17 | experimental |
+| `WmsIsUnitUntargetable` | `(unit) -> boolean` | Reads only this flag. | 2026-11-17 | experimental |
+
+Details for `WmsSetUnitUntargetable`:
+- Refused orders show the error "unable to target this unit"; a right-click by another unit becomes follow. Dummy casters and autocast are blocked too.
+- Not affected: utility orders (load, repair, Moon Well, harvest, mounting, Mass Teleport, Entangle Gold Mine), area effects, script damage and missiles already in flight.
+- Works from Lua and JASS; a map function with the same name shadows it.
+
+```lua
+local u = CreateUnit(Player(0), FourCC("hfoo"), 0, 0, 0)
+WmsSetUnitUntargetable(u, true)
+print(WmsIsUnitUntargetable(u)) --> true
+```
 
 `Stability` is `experimental` (may change without notice) or `stable`.
 
 ## Planned
 
-Nothing is announced yet; this list is filled when a native is designed.
+No further native is designed yet.
 
 Direction only, no design yet: a Lua-facing custom UI API (beyond the Frame API that follows WC3) and WarMash's own extended native API on top of `common.j` and the `Blz*` natives.
 
