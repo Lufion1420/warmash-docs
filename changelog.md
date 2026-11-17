@@ -102,6 +102,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Windowed edge-scroll with a caught cursor is smooth at edges and corners (no stepping after focus changes) (2026-11-17)
 - JASS integer literals with a leading zero are octal (`010` = 8) and no longer stop the script from loading
 - JASS real literals with a leading zero (`05.5`, `00.5`, `08.5`) are read as decimal reals instead of failing to parse (2026-11-17)
 - `RemoveUnit` on a unit in a Reincarnation delay keeps it removed (no revive, no death event), and a `ReviveHero`, `ReviveHeroLoc` or `ResurrectUnit` call in… (2026-11-17)
