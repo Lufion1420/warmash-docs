@@ -104,6 +104,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `GetUnitCurrentOrder` reads 0 after a stop, or after the running ability is removed or disabled mid-cast (it kept the old order) (2026-11-17)
 - Windowed edge-scroll with a caught cursor is smooth at edges and corners (no stepping after focus changes) (2026-11-17)
 - JASS integer literals with a leading zero are octal (`010` = 8) and no longer stop the script from loading
 - JASS real literals with a leading zero (`05.5`, `00.5`, `08.5`) are read as decimal reals instead of failing to parse (2026-11-17)

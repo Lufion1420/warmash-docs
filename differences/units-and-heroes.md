@@ -96,7 +96,9 @@ Idle units walk home after a chase they started themselves. Player and script or
 | Script move (`SetUnitX/Y`, `SetUnitPosition`) of more than 128 | deliberate | Moves the unit's guard home to the new spot. |
 | `RemoveGuardPosition`, `RecycleGuardPosition`, `SetUnitCreepGuard`, `RemoveAllGuardPositions` | unverified | Implemented with inferred meanings. |
 | Auto-acquire target choice | unverified | Highest `prio` first, then the nearest. |
-| `GetUnitCurrentOrder` during auto-acquired attacks | unverified | Reads 0 or the last real order, not attack. |
+| `GetUnitCurrentOrder` during auto-acquired attacks | unverified | Reads 0 (Hive, unmeasured), not attack. |
+| `GetUnitCurrentOrder` after a stop, or after the running ability is removed or disabled mid-cast | bugfix | Reads 0 (Hive, unmeasured); was the old order. `SPELL_ENDCAST` handlers still read the cast's order. |
+| `GetUnitCurrentOrder` for a move blocked by pathing | unverified | Keeps reading move while the unit still tries; an arrived move reads 0. |
 | Chase target turns invulnerable, hidden or Locust | deliberate | The guard walks home at once. |
 | Re-acquire after a chase | works | Respects auto-attack-disabling buffs; a script order inside an autocast clears the leash. |
 | Creep return (`MaxGuardDistance`, `GuardReturnTime`) | bugfix | Walks home 5 s after first passing 1000 from home, as measured. |
