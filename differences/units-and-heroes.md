@@ -22,6 +22,7 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzGetUnitMaxHP`, `BlzGetUnitMaxMana`, `BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`, `BlzGetUnitSkin` | works | Raising max HP or mana also raises the current value; lowering clamps it. |
 | Getters after `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana` while buffed | bugfix | Return exactly the value set, also while buffs are active. |
 | `BlzSetUnitMaxHP` with 0 | bugfix | Kills the unit, as measured; `SetWidgetLife` does not revive it. A negative value also kills (unverified). |
+| `BlzSetUnitMaxHP` with 0 on a unit with Reincarnation or Ankh | unverified | The replacement is skipped and the unit stays dead; during a Reincarnation delay the unit dies for real when it ends, without killer. |
 | `BlzSetUnitMaxMana` with 0 or less | unverified | Max mana is clamped to at least 0. |
 | `BlzSetUnitRealField` | partial | Sight radius, HP and mana regeneration, acquisition range and turn rate work; other fields return false. |
 | `BlzGetUnitIntegerField` | partial | Only primary attribute and the four tint fields; other fields return 0. |

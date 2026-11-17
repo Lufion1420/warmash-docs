@@ -24,7 +24,7 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 | `SetUnitFlyHeight` below 0 | unverified | Ground unit types are clamped at 0. |
 | Snared units (`UNIT_TYPE_SNARED`) | bugfix | Do not walk and read move speed 0, as measured. |
 | `GetUnitMoveSpeed`, `BlzGetUnitRealField(UNIT_RF_SPEED)` with a speed buff | bugfix | Unrounded value, as measured; movement itself still uses whole numbers. |
-| `SetUnitMoveSpeed` | bugfix | Clamped to 150..400 and read back unrounded, as measured; a map's own minimum of 0 is ignored. |
+| `SetUnitMoveSpeed` | bugfix | Clamped to 150..400 and read back unrounded, as measured; a map's own minimum or maximum, including 0, is used as the bound (0 for both gives speed 0). |
 | `GetUnitDefaultMoveSpeed` | unverified | The unit type's speed from object data; 0 for a null unit. |
 | Slow or speed upgrade while a speed buff is active | bugfix | Change the base speed without baking in the buff; WC3's combination rule is unverified. |
 | `IsTerrainPathable` | partial | Works for walk, fly, build and float pathing; other types return false. |

@@ -103,7 +103,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 ### Fixed
 
 - `BlzSetUnitMaxHP(unit, 0)` kills the unit and `SetWidgetLife` does not revive it, as measured in Reforged (2026-11-17)
-- `SetUnitMoveSpeed` clamps to the gameplay constants (150..400 by default) and reads back unrounded (2026-11-17)
+- `SetUnitMoveSpeed` clamps to the gameplay constants (150..400 by default) and reads back unrounded, 2026-11-17 (2026-11-17)
+- `BlzSetUnitMaxHP(unit, 0)` on a unit with Reincarnation or Ankh skips the replacement and the unit stays dead (2026-11-17)
 - A disabled `Aatk` deals no damage, also from a swing in progress (2026-11-17)
 - `RegionClearRect`, `RegionClearCell`, `RegionClearCellAtLoc`: `IsUnitInRegion` turns false at once and no leave event fires (2026-11-17)
 - `UNIT_IF_UNIT_CLASSIFICATION` writes now match Reforged: bit 128 is only Ancient and the write replaces the field (2026-11-17)
