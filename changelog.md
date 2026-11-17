@@ -102,6 +102,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- JASS integer literals with a leading zero are octal (`010` = 8) and no longer stop the script from loading (2026-11-17)
+- A missing model file (for example a `_.mdx` doodad) is logged once per path without a stack trace, and the doodad is skipped (2026-11-17)
 - `BlzSetUnitMaxHP(unit, 0)` kills the unit and `SetWidgetLife` does not revive it, as measured in Reforged (2026-11-17)
 - `SetUnitMoveSpeed` clamps to the gameplay constants (150..400 by default) and reads back unrounded, 2026-11-17 (2026-11-17)
 - `BlzSetUnitMaxHP(unit, 0)` on a unit with Reincarnation or Ankh skips the replacement and the unit stays dead (2026-11-17)
