@@ -18,6 +18,7 @@ parent: Differences from Warcraft III
 | `GetCameraEyePositionX/Y/Z/Loc`, `GetCameraTargetPositionX/Y/Z/Loc` | unverified | Implemented. |
 | `SetCameraPosition` | bugfix | Cancels a running pan. |
 | `CAMERA_FIELD_ZOFFSET` | deliberate | Replaces the preset height until the camera is reset. |
+| `CAMERA_FIELD_FARZ` | deliberate | The far plane is raised when the view needs more, so zooming out no longer cuts the ground to black; larger values apply, `GetCameraField` returns the set value. |
 | `CameraSetSourceNoise`, `CameraSetTargetNoise` and their Ex forms | bugfix | A sinusoidal sway (shape inferred). |
 | Camera bounds | unverified | The target is clamped every frame, as in a Reforged run. |
 | `BlzCameraSetupApplyForceDurationSmooth`, `BlzCameraSetupGet/SetCameraType`, `BlzCameraSetupGet/SetLabel`, `BlzGet/SetCameraAllowsHotkeyTargetLock`, `CameraSetDepthOfFieldScale`, `CameraSetFocalDistance`, `CameraSetSmoothingFactor`, `Get/SetCameraFieldControlledByInput`, `SetCameraOrientController`, `SetCameraQuickPosition`, `SetCameraRotateMode`, `SetCinematicCamera`, `StopCamera` | gap | Not implemented (17 natives). |

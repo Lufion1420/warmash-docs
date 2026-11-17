@@ -48,6 +48,7 @@ Not needed for normal play.
 | `-Dwarmash.noEmitterBatch=true` | Turns the merging of additive particle emitters off. |
 | `-Dwarmash.noEmitterGlCache=true` | Turns the emitter GL-call cache off. |
 | `-qahealthbars on` or `-qahealthbars off` | Overrides "Always show Health Bars" for one run; the saved setting stays. |
+| `-qacamfield <s> <field> <value>` | At game second `s`, sets a camera field (for example `FARZ`); repeatable. |
 
 ## Good to know
 

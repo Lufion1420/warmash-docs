@@ -46,6 +46,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `exit.luaCaughtErrors`, `exit.luaCaughtErrorMessages` | Errors caught by `xpcall` handlers (up to 20 messages). |
 | `state.cursor.edgeScroll` | Edge-scroll counters: frames on the edge, scrolled or not (with reason), focus changes. |
 | `state.camera`, `localSelection` | Camera fields and the local player's selection. |
+| `state.camera.projectionFarZ`, `state.worldPixelRows` | Actual far plane; dark share of 7 world rows (black-cut check). |
 | `state.worstFrame`, `state.frameGapMaxMs` | The slowest frame and its top 10 natives. |
 | `hud` | World frame, hero buttons, tooltip, buff bar, multiboard, chat, FPS text. |
 | `state.healthBars` | Floating bars and text tags. |
@@ -86,6 +87,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 |---|---|
 | `-qaspawn <s> <rawcode>` | Creates a unit for the local player at its start location. |
 | `-qaselect <s>`, `-qaselectcycle <s>` | Selects a hero, or cycles through unit types every 0.5 s. |
+| `-qacamfield <s> <field> <value>` | Applies `SetCameraField` at game second `s`; repeatable. |
 | `-qakey <s> <key>` | Presses a key (LibGDX name, case-sensitive). |
 | `-qachat <s> <n>` | Posts `n` chat lines. |
 | `-qafogprobe <s>` | Compares the visibility natives with the raw fog of war. |
