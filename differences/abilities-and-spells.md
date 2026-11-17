@@ -27,6 +27,7 @@ BlzUnitHideAbility(hero, FourCC("A000"), false)
 | `BlzUnitDisableAbility`: counting | bugfix | A counter per ability as in Reforged: N disables need N enables, as measured. |
 | `BlzUnitDisableAbility(..., false, hideUI)`: which disable an enable closes | deliberate | Closes one with the same `hideUI` first, else any other; Reforged needs `(false, false)`. |
 | `BlzUnitHideAbility`: counting | deliberate | An on/off switch: one `false` undoes any number of `true` calls; Reforged counts. |
+| `BlzUnitHideAbility` on `Aatk` | deliberate | The attack stays hidden and unusable; Reforged: hiding it has no effect. Visual-only hiding is planned as a `Wms` native. |
 | Ability hidden by `BlzUnitHideAbility`: orders | bugfix | Refuses orders like a disabled ability, as measured; a running cast finishes. |
 | `ConvertAbilityDisableType(7)` | deliberate | Valid in WarMash (disable type POLYMORPH); out of range in WC3. |
 | `SetAbilityDisabled`, `SetAbilityIconShowing` (WarMash only) | deliberate | Script disable and icon switches; `SetAbilityIconShowing` does not refresh the command card by itself. |
@@ -55,6 +56,7 @@ Details:
 |---|---|---|
 | Channel (`ANcl`) | works | Per-level fields `Ncl1` to `Ncl6`, mana, cooldown and all five spell events. |
 | Channel with follow-through time 0 | unverified | Treated as an instant cast (0.001 s). |
+| Channel cast after a walk into range | bugfix | The cast runs normally and FINISH fires at its end; before, it ended at once with ENDCAST only. |
 | Channel: `SPELL_FINISH` / `SPELL_ENDCAST` timing | bugfix | Fire in the tick the follow-through ends, after that tick's timers, as measured. |
 | Ability-builder (JSON) channels: end events | deliberate | Same order as Channel by analogy; a cut channel fires ENDCAST only. |
 | `BlzPauseUnitEx` during a Channel cast | bugfix | Ends the cast and re-issues the order at the unpause, as measured. |
