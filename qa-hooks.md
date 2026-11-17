@@ -56,7 +56,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `mapLoaded.loadDetail`, `exit.loadDetail` | BLP decode steps, sound read and decode (5 slowest), paths of missing textures (`imageInputNull`). |
 | `effectPreload` timing fields | `wallMs`, `blpSummedMs`, `blpThreads`, `blpWallShare`, `workWallShare`. |
 | `exit.blpAsync` | Worker decode counters: `enabled`, `threadsPerBatch`, `batches`, `submitted`, `completed`, `workerFailures`, `workerTimeouts`, `inlineRuns`, `maxInFlight`, `waits`, `waitMs`, `lateFailures`, `threads`. |
-| `loadCost.blpDecode` vs `loadDetail.blpMs` | With workers on, `blpDecode` is render-thread time only; `blpMs` sums all threads. |
+| `loadCost.blpDecode` vs `loadDetail.blpMs` | With workers on, `blpDecode` is render-thread time only; `blpMs` sums all threads. `blpAsync.submitted` also counts UI and command-card icons. |
 | `assetLoadFailures` | Distinct missing asset paths, each counted once (not every load attempt). |
 | `state.mapTextures`, `groundTextures`, `exit.textureFailures` | Textures served from the map, ground tiles, failed paths. |
 | `iconPreload` | Icon loading progress and frame cost. |

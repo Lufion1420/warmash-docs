@@ -59,6 +59,7 @@ Details:
 | Native | Status | What differs |
 |---|---|---|
 | Command button hotkey letters | deliberate | Lua maps show each button's hotkey, as in Reforged; JASS maps show none. |
+| Escape in a sub-card | deliberate | Closes one level (spell book, build menu, hero skills) and does not cancel targeting; cancelling targeting returns to the sub-card. |
 | Passive item-based abilities | deliberate | Get no command button. |
 | Disabled button without disabled art | bugfix | Normal icon at 45 percent brightness. |
 | Cursor tint | deliberate | Red over enemies, green over own or allied units, yellow over neutral units and objects. |

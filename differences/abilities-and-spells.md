@@ -91,7 +91,11 @@ Details:
 | Cleave (`ANca`) | unverified | Melee only; each unit in the area takes the full factor and no attack event fires. |
 | Item sight bonus (`AIsi`) | unverified | Raises sight while carried; the sight field reads the value without it. |
 | Spell damage reduction (`AIsr`) | unverified | Reduces `ATTACK_TYPE_NORMAL` and `ATTACK_TYPE_MAGIC` damage. |
-| `Aclf`, `Aspb`, `Aprg`, `AEer`, `Assk` | gap | Do nothing: no engine class yet. |
+| `Aclf`, `Aprg`, `AEer` | gap | Do nothing: no engine class yet. |
+| Spell Book (`Aspb`) | partial | The book button opens a sub-card of the listed abilities, keyed by base order id; children cast normally with their own spell events. |
+| Spell Book children | unverified | Shown only in the book and hidden per ability; removing the book removes them, disabling keeps them; Minimum and Maximum are ignored. |
+| Spell Book shared cooldown (`spb2`) | gap | Has no effect by default; a cast without a target closes the book. |
+| Hardened Skin (`Assk`) | unverified | Attacks lose the ignored damage down to the minimum, before armor; attacks only, with chance and ranged or melee flags. |
 | Aerial Shackles (`Amls`) | bugfix | The channel ends after its duration and fires ENDCAST. |
 | Ensnare (`Aens`) | partial | Target cannot move but may attack and cast; hits magic-immune, refuses ethereal, as measured. |
 | Bloodlust (`Ablo`) | works | Attack rate, speed and scale bonus with autocast; speed reads 337.5 from 270, as measured. |

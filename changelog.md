@@ -11,6 +11,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Spell Book (`Aspb`) opens a sub-card of its listed abilities (2026-11-17)
+- UI and command-card icons decode on the worker threads too (`blpAsync.submitted` counts them) (2026-11-17)
 - Big maps load about 25% faster: texture decoding runs on worker threads (2026-11-17)
 - Shop sale events: `EVENT_PLAYER_UNIT_SELL`, `EVENT_PLAYER_UNIT_SELL_ITEM`, `EVENT_UNIT_SELL`, `EVENT_UNIT_SELL_ITEM` fire during a purchase, with… (2026-11-17)
 - `WmsSetUnitUntargetable` and `WmsIsUnitUntargetable` make a unit untargetable by other units' attacks, spells and auto-acquire (2026-11-17)
