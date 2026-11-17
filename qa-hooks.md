@@ -6,124 +6,110 @@ nav_order: 5
 # QA and debug hooks
 {: .no_toc }
 
-**These are test hooks, not an API for maps.** They exist so that automated test runs can drive the game and read its state. They can change or disappear without notice, and none of them exists in real Warcraft III. Do not call a `WarMashQa*` function from a map: outside a test run the name is nil.
+**Test tooling, not an API for maps.** These hooks let automated runs drive the game and read its state. They can change without notice and do not exist in real Warcraft III. Outside a test run every `WarMashQa*` name is nil.
 
-How the pieces fit together:
-
-- `-qalog <file>` makes the game write one JSON record per line (map load, a state record every 5 s, exit). Most other `-qa` arguments need it.
-- `-qalua <file>` runs a Lua file inside the map's Lua VM after the map has loaded. All `WarMashQa*` Lua functions exist only in chunks run this way.
-- Functions that "return JSON text" return a string; values a script wants in the log go through `WarMashQaReport(key, value)`.
+- `-qalog <file>` writes one JSON record per line: map load, state every 5 s, exit.
+- `-qalua <file>` runs a Lua file in the map's VM after load; all `WarMashQa*` functions exist only there.
+- Functions marked "JSON" return a JSON string.
 
 ```
 ./gradlew desktop:runGame -Pargs="-loadfile <path to map>.w3x -window -qalog <output folder>/run.jsonl -qaexit 25 -qalua <output folder>/check.lua"
 ```
 
 ```lua
--- check.lua: report a value into the -qalog output
+-- check.lua: put a value into the -qalog output
 WarMashQaReport("local.player", tostring(GetPlayerId(GetLocalPlayer())))
 ```
 
-## Contents
-{: .no_toc }
+Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are in the engine source (`QaStateLogger`).
 
-1. TOC
-{:toc}
+## Run control
 
-## Basics: logging, exit and running Lua
+| Hook | What it does |
+|---|---|
+| `-qalog <file>` | JSON log of load, state and exit records; also counts script errors and missing natives. |
+| `-qaexit <seconds>` | Exits that long after the map has loaded. |
+| `-qaleave <seconds>` | Returns to the menu after that long and loads the map once more. |
+| `-qaleavecount <n>`, `-qaleavemap <map>` | Repeats the leave `n` times; restarts load `<map>`. |
+| `-qalua <file>[;<file>...]` | Runs Lua files in order in the map's VM; a failing file stops the rest. |
+| `-qagrab` | Keeps cursor catch and edge scrolling on (`-qalog` alone turns them off). |
+| `WarMashQaReport(key, value)` | Writes a value into the log; at most 1000 keys per run. |
+| `WarMashQaExitNow()` | Ends the run like `-qaexit`. |
+| `open_spot.lua` (helper script) | `WarMashQaOpenSpot` and `WarMashQaClearance` find open walkable ground for test units. |
 
-- `-qalog <file>`: write JSON state-dump lines (map load, state every 5 s, exit) to the file; also enables script-error and unknown-global counters.
-- `-qaexit <seconds>`: exit that long after the map has loaded (needs `-loadfile`).
-- `-qaleave <seconds>`: after that long in the map, return to the menu and restart the `-loadfile` map once (needs `-qalog` and `-loadfile`).
-- `-qaleavecount <n>` and `-qaleavemap <map>` (2026-11-16; QA, only with `-qalog`): repeat the `-qaleave` leave-to-menu `n` times; every restart loads `<map>` instead of the `-loadfile` map. `-qalog` gained the `mapDisposed` event {`resources`, `ms`} and `mapLeave.leaveIndex`.
-- `-qalua <file>`: run a Lua file in the map's Lua VM after init (Lua maps, needs `-loadfile`). Several files separated by `;` run in order in the same VM (since 2026-11-16), so a shared helper can be loaded before the test script; all files are read before the first one runs, and a file that does not run stops the rest. Registers the QA-only natives `WarMashQaReport(key, value)` and `WarMashQaFrameInfo(name[, ctx])`, which exist only under `-qalua` and are not a map-facing API.
-- `-qagrab` (2026-11-13; QA): with `-qalog`, keeps cursor catch and edge scrolling on (`-qalog` alone still implies no grab; `-nograb` wins; `CatchCursor=0` in `warsmash.ini` stays off).
-- `WarMashQaReport` keeps up to 500 distinct keys per run (raised to 1000 on 2026-11-12; was 200, extra keys dropped silently); when keys are dropped, one `[qa] WarMashQaReport: more than 500 keys, dropped from: <key>` line goes to stderr (2026-11-11).
-- `WarMashQaReport` key cap raised from 500 to 1000 per run (the `[qa]` drop line now says 1000). (2026-11-12)
-- `-qalog` fields: `state.cineFilter`, `state.userUIEnabled`, `state.luaCaughtErrors`, `exit.luaCaughtErrors`, `exit.luaCaughtErrorMessages` (errors that reached an `xpcall` message handler, at most 20 messages; `pcall` failures are not counted; warcraft-vscode builds wrap callbacks in `xpcall`, so `luaErrors` 0 alone does not prove clean callbacks), `state.worstFrame` (gapMs, simMs, layoutMs, uiPaintMs, `natives` = top 10 by ms, inclusive of nested calls), `stockSprites`, and an extended `sprite` object in frame dumps. (2026-11-11)
-- `-qalog` state records gained (2026-11-11): `state.sounds` (script sounds: file, looping, volume), `state.frameGapMaxMs`, `state.textureFailureCount`, `state.players[].gold` and `.lumber`; the exit record gained `exit.textureFailures` (path to reason; the `CommandButtonsDisabled\DIS*` paths are grouped into one entry) and `exit.textureFailureCount`.
-- Native gaps in `-qalog`: `missingNativeCalls`, `missingNativeNamesCalled`, `stubNativeCallsTotal`, `missingNativesConfig`, `missingNativeCallsConfig`, `missingNativesDeclared` {common, config}, `missingNativesDeclaredNames`, `stubNativeCalls`, and `exit.missingNatives` (name to call count). Stubs are counted from `NativeCallStats.STUB_NAMES`. (2026-11-11)
-- Helper script `open_spot.lua` in the engine repository's QA tools (2026-11-16; a Lua file, not part of the engine: load it first through the `;` list of `-qalua`). It defines `WarMashQaOpenSpot(cx, cy, halfX, halfY[, opts])`, which samples points on a grid around (cx, cy) and returns `x, y, minClearance` of the point with the largest walkable clearance in 8 directions (measured with `IsTerrainPathable` in 64-unit steps up to 2000; `cx, cy, -1` when no sampled point is walkable), and `WarMashQaClearance(x, y)`, which returns the minimum clearance and a table of the 8 clearances, or -1 when the point itself is not walkable. Test scripts use it to put test units on open ground. The engine repository's QA tools also hold self-test scripts for `-qalua` (`frame_batch4.lua` for frames, `timer_probe.lua` for timers).
+## Log fields worth knowing
 
-## Frames and text
+| Field | What it holds |
+|---|---|
+| `exit.missingNatives`, `missingNativeCalls`, `stubNativeCalls` | Missing and stub natives with call counts. |
+| `exit.luaCaughtErrors`, `exit.luaCaughtErrorMessages` | Errors caught by `xpcall` handlers (up to 20 messages). |
+| `state.camera`, `localSelection` | Camera fields and the local player's selection. |
+| `state.worstFrame`, `state.frameGapMaxMs` | The slowest frame and its top 10 natives. |
+| `hud` | World frame, hero buttons, tooltip, buff bar, multiboard, chat, FPS text. |
+| `state.healthBars` | Floating bars and text tags. |
+| `damageEvents` (exit) | Counts and last values of damage events. |
+| `mapLoaded.phases`, `loadCost` | Load time by phase and cost bucket. |
+| `state.mapTextures`, `groundTextures`, `exit.textureFailures` | Textures served from the map, ground tiles, failed paths. |
+| `iconPreload` | Icon loading progress and frame cost. |
 
-- `-qaclick <frameName[#ctx]> <seconds>`: fire a click on a script frame once (needs `-qalog` and `-loadfile`).
-- `-qahideorigin <seconds>`: call the hide-origin-frames path once.
-- `-qahover`, `-qawheel`, `-qamouseup <name[#ctx]|-> <seconds>`: fire a mouse-enter/leave, wheel or mouse-up on the named script frame (`-` for none) after that many seconds.
-- `-qadump <namePrefix>`: dump the state of script frames whose name starts with the prefix.
-- `WarMashQaFrameDump(tag)`: Lua function defined only in `-qalua` chunks; writes a `frameDump` event with `tag` and `gameTurn`. (2026-11-11)
-- `-qadumpat <turn>`: take the frame dump at that game turn. (2026-11-11)
-- Text layout QA (2026-11-11): `WarMashQaTextLayout(frame)` is a Lua function defined only in `-qalua` chunks; it returns JSON text for a TEXT frame (rect, lineCount, lines, textLeft/textRight, firstLineTop, pitch, segmentRects, segmentsOverlap, clippedSegments, clipOverflowingLines). Every `-qalog` state record has `state.stockTexts`: the same layout record for the four resource bar texts (`ResourceBarGoldText`, `ResourceBarLumberText`, `ResourceBarSupplyText`, `ResourceBarUpkeepText`; `found` false when the UI lacks one) plus `localPlayer` {index, gold, lumber, foodUsed, foodCap}.
-- `WarMashQaStockFrameDump(tag)`: Lua function defined only in `-qalua` chunks; writes a `stockFrameDump` event (native HUD frame tree). `-qadumpat` writes it too. (2026-11-11)
+## Frames and HUD
 
-## HUD: command card, tooltips, hero buttons, multiboard, health bars, portrait
+| Hook | What it does |
+|---|---|
+| `-qaclick <frame[#ctx]> <s>` | Clicks a script frame once. |
+| `-qahover`, `-qawheel`, `-qamouseup <frame[#ctx]> <s>` | Fires mouse enter, wheel or mouse-up on a script frame. |
+| `-qahideorigin <s>` | Calls `BlzHideOriginFrames` once. |
+| `-qadump <prefix>`, `-qadumpat <turn>` | Dumps script frames by name prefix, at a given game turn. |
+| `-qatooltip <s> <slot>` | Shows a command card tooltip (slot 100+i: hero button i). |
+| `-qahealthbars on` or `-qahealthbars off` | Overrides "Always show Health Bars" for one run. |
+| `-qaherobuttonclick <s> <index>` | Clicks a hero button. |
+| `WarMashQaFrameInfo`, `WarMashQaFrameJson`, `WarMashQaFrameDump`, `WarMashQaStockFrameDump` | Frame state, by frame or name (JSON). |
+| `WarMashQaTextLayout(frame)` | Line and segment layout of a TEXT frame (JSON). |
+| `WarMashQaHudInfo()` | World frame, hero name bar, menu buttons, resource texts, minimap (JSON). |
+| `WarMashQaCommandCard()` | The 4x3 command card with hotkeys, icons and disabled state (JSON). |
+| `WarMashQaShowTooltip(slot)`, `WarMashQaTooltipInfo()` | Shows a tooltip and reports its box (JSON). |
+| `WarMashQaHeroButtons()`, `WarMashQaHeroButtonClick(i)`, `WarMashQaHeroHotkey(i)` | Hero button state, click and F-key press (JSON). |
+| `WarMashQaMultiboard()`, `WarMashQaMultiboardMinimizeClick()` | Drawn multiboard state and its minimize button. |
+| `WarMashQaHealthBars()`, `WarMashQaHoldAlt(held)`, `WarMashQaHoverUnit(u)` | Floating bar state, Alt and hover simulation. |
+| `WarMashQaHotkeyMode(mode)` | Hotkey mode for the run: 0 letters, 1 grid, -1 config. |
+| `WarMashQaPortraitInfo()`, `WarMashQaPortraitClick([right])` | Portrait state and a click on it. |
+| `WarMashQaReadPixels`, `WarMashQaSetStockFrameVisible`, `WarMashQaStockOnScreen` | Pixel readback and stock frame checks. |
+| `WarMashQaArmUnitTarget(orderId)` | Arms a unit-target command of the selected unit. |
+| `WarMashQaIconPreload()` | Icon loading state (JSON). |
 
-- HUD QA (2026-11-12; `-qalua` only, QA only, not in real WC3): Lua functions `WarMashQaHudInfo()` (JSON text of the world frame and 3D view rect, hero name bar, top menu buttons, gold and lumber texts, minimap) and `WarMashQaFrameJson(frame | name[, ctx])` (JSON text of one frame). `-qalog` state records gain a `hud` object with the same HUD data.
-- `-qalua` only Lua functions: `WarMashQaReadPixels(tag, x, y, w, h[, png])`, `WarMashQaSetStockFrameVisible(name, bool)`, `WarMashQaPortraitInfo()`, `WarMashQaStockOnScreen(prefix)`. `WarMashQaFrameInfo` also resolves native frames by name (context 0). (2026-11-12)
-- JVM switch `-Dwarmash.qa.portraitInPass=true` (QA only). (2026-11-12)
-- `-qatooltip <gameSeconds> <slot>` (needs `-qalog` and `-loadfile`): shows the tooltip of command card slot 0..11 once at that game time and writes event `qatooltip` {slot, tooltip}. Every `-qalog` `state` record now also has `hud.tooltip`, `hud.hotkeyOverlay` {enabled, lettersDrawn, letters[]} and `hud.buffBar` {statusLabel, bar, icons[10]}. QA only, 2026-11-12.
-- `-qalua` only Lua functions: `WarMashQaCommandCard()` returns JSON text of the 4x3 command card of the current selection (`activeCommandOrderId`, `activeCommandAbility`, `subMenuDepth`, `uiOrdersIssued` and `slots` with row, col, hotkey, visible, orderId, enabled, abilityId, iconPath, autocast, cooldown, tip); `WarMashQaTargetClick(x, y[, right])` and `WarMashQaTargetClick(unit[, right])` press and release at the screen position of that world point or unit through the map screen input path, so an active targeted command is finished like by a mouse click (a frame over the point takes the click); returns JSON text, or `{"error":"not a unit or point"}`; `WarMashQaIconPreload()` returns the `iconPreload` object as JSON text plus `frameMsMaxSinceLastQuery`, `onDemandFrameMsMaxSinceLastQuery`, `lastFrameMs`. (2026-11-12)
-- Launch argument `-qahealthbars on|off` (2026-11-12; WarMash only): overrides the "Always show Health Bars" option for this run; the saved preference is never written, and the Options screen still shows the saved value. Any other value is ignored with a stderr line.
-- `WarMashQaHealthBars()` (also `state.healthBars` in `-qalog` records) returns `alwaysShowHealthBars`, `altHeld`, `allUnitBarsShown`, `unitBarsCapped`, `textTags` [{`text`, `windowPx`, `visible`, `color`, `ageSeconds`, ...}] and `bars`. Each bar has `isHero`, `unitHandle`, `unitType`, `rect`, `originWindowPx`, `anchorWindowPx`, `standMaxZ`, `overheadZ`, `boundsMaxZ`, `anchorSource` ("stand" by default). A hero box entry adds `levelText`, `levelRect`, `hpRect`, `manaRect` (when mana is shown) and their fills. `hud.alwaysShowHealthBars` and `hud.alwaysShowHealthBarsOverride` are in the `hud` object. (2026-11-12)
-- Lua functions: `WarMashQaHealthBars()` returns JSON text of the floating unit bars shown now; `WarMashQaHoldAlt(held)` acts as if Alt were held (returns false without a UI); `WarMashQaHoverUnit(unit|nil)` makes the floating bars treat the unit as hovered (nil clears); `WarMashQaHotkeyMode(mode)` sets the hotkey mode for the run (0 letters, 1 grid, -1 back to `warsmash.ini`). `WarMashQaKeyPress` is unchanged. `WarMashQaFrameInfo` also finds command card frames such as `SmashCommandButton_N`. (2026-11-12)
-- `WarMashQaCommandCard()` gained fields `hiddenCommands` [{`orderId`, `abilityHandle`, `menuButton`}] (off-grid buttons: not shown, no click, no hotkey), `effectiveHotkeyMode`, `lastHotkeyKey` and `lastHotkeySlot` (last key that reached the command card and the row-major slot it resolved to, -1 none); `uiOrdersIssued` was already there. With a hero selected it also reports `heroSkillPoints` and `heroLearnableLevels`. (2026-11-12)
-- Hero button QA (2026-11-12; QA only, not in real WC3): launch arguments `-qaspawn <gameSeconds> <rawcode>` (creates that unit for the local player at its start location through the `CreateUnit` path, once; event `qaspawn`) and `-qaherobuttonclick <gameSeconds> <index>` (repeatable; left click on that hero button through its click handler; event `qaherobuttonclick`); both need `-qalog` and `-loadfile`, else a stderr warning. `-qalua` functions `WarMashQaHeroButtons()` (JSON text of the buttons: hero, rects, icon, bars, indicator, flags) and `WarMashQaHeroButtonClick(index)` (adds selection and camera target). Every `-qalog` state record has `hud.heroButtons` with per-button data and paint-order fields. `WarMashQaMultiboard()` gained `arrowRect` and `arrowSizeUnits`.
-- Multiboard QA (2026-11-12; `-qalua` only, QA only, not in real WC3): `WarMashQaMultiboard()` returns JSON text of the drawn board (displayed, drawn, minimized, title, rects, cells, `interfaceShown`, `userClicks`); `WarMashQaMultiboardMinimizeClick()` clicks the minimize button through its click handler. Every `-qalog` state record has `hud.multiboard` (null when no board). `WarMashQaHealthBars()` / `state.healthBars` gained `containerVisible` (false while `ShowInterface(false)` hides the bars).
-- Tooltip and hotkey QA (2026-11-12; `-qalua` only, QA only): Lua functions `WarMashQaShowTooltip(slot)` (shows the tooltip of command card slot 0..11 as a hover would, -1 hides) and `WarMashQaTooltipInfo()` (JSON text of the tooltip box); `WarMashQaCommandCard()` slots gain `hotkeyOverlay` {enabled, text, shown, rect, buttonRect}, filled on Lua maps only.
-- Hero tooltip and multiboard QA (2026-11-13; QA only): `WarMashQaShowTooltip(slot)` and `-qatooltip <sec> <slot>` accept slot 100+i as a hover on hero button i; an out-of-range slot hides. `WarMashQaTooltipInfo()` gained `backgroundDrawnRectUi`, `borderRectUi` and `simple` {visible, unplacedByScript, engineShown, shown, painted, pointCount, enginePlaced, rectUi, text}. `WarMashQaMultiboard()` gained `titleVisibleRect`, `bodyVisibleRect`, `buttonVisibleRect`, `visibleFromWindowTopRightUnits`, `borderInsetXUnits`, `borderInsetYUnits`.
-- Command card QA (2026-11-16; `-qalua` only, QA only): each `WarMashQaCommandCard()` slot gained `disabled` (the button is drawn disabled), `commandOrderId` (the order the button stands for, also while disabled, when `orderId` is 0), `disabledArt` (the icon's disabled art is shown) and `iconTint` (brightness multiplier of the icon: 0.45 on a disabled button without disabled art, else 1). An empty slot reports false, 0, false and 1.
-- Ability and portrait QA (2026-11-16; `-qalua` only, QA only): `WarMashQaArmUnitTarget(orderId)` arms the first ability of the selected unit that accepts itself for that order, skipping the activation check, and returns `{armed, orderId}`. `WarMashQaPortraitClick([right])` presses and releases at the portrait centre through the real handlers and returns screen x/y, frame centre, unprojected point, `activeBefore`, `activeAfter`, `ordersIssued`, `issued` and `lastOrder`. `WarMashQaHeroButtonClick(i)` now also returns `activeBefore`, `activeAfter`, `ordersIssued`, `issued` and `lastOrder`.
+## Units, input and camera
 
-## Units, selection, camera and input
+| Hook | What it does |
+|---|---|
+| `-qaspawn <s> <rawcode>` | Creates a unit for the local player at its start location. |
+| `-qaselect <s>`, `-qaselectcycle <s>` | Selects a hero, or cycles through unit types every 0.5 s. |
+| `-qakey <s> <key>` | Presses a key (LibGDX name, case-sensitive). |
+| `-qachat <s> <n>` | Posts `n` chat lines. |
+| `-qafogprobe <s>` | Compares the visibility natives with the raw fog of war. |
+| `-qaplace <s> <rawcode> <dx> <dy>`, `-qabuildmode <s> <rawcode> <hold>` | Building placement checks and build mode. |
+| `WarMashQaUnitInfo(u[, detail])` | Unit state: screen position, guard, pause, buffs, speed and more (JSON). |
+| `WarMashQaKeyPress(name)`, `WarMashQaChat(line)`, `WarMashQaChatType(text)` | Key presses and chat input. |
+| `WarMashQaTargetClick`, `WarMashQaPointerPress`, `WarMashQaPointerRelease` | Clicks at a world point or unit. |
+| `WarMashQaMouseMove(x, y)` | Fires a mouse move event at a ground point. |
+| `WarMashQaRayPickAt(unit)`, `WarMashQaCursorAt(x, y)`, `WarMashQaCursorInfo()` | Picking and cursor tint. |
+| `WarMashQaCanPlace`, `WarMashQaBuildMode`, `WarMashQaBuildModeInfo` | Placement checks (JSON). |
+| `WarMashQaShopInfo(unit[, player])` | What a shop sells and its stock (JSON). |
 
-- `-qalog` state records and frame dumps gained `localSelection` (the local player's selected units). `WarMashQaUnitInfo(u[, detail])` is a Lua function defined only in `-qalua` chunks; it returns JSON text describing the unit (2026-11-11).
-- Camera QA (2026-11-11): `-qalog` `state.camera` (angle of attack, field of view, rotation, far z, near z, bounds); `WarMashQaUnitInfo` also returns `screenNormalized`, `screenPx` and `onScreen`; `WarMashQaKeyPress(name)` (Lua, `-qalua` only) sends a key down and up through the map screen input path.
-- `-qaselect <seconds>` (needs `-qalog` and `-loadfile`; JASS and Lua maps): selects a hero of the local player, else any unit of theirs. Writes event `qaselect`; later `-qalog` records have `state.portrait` with a pixel readback. (2026-11-12)
-- `-qaselectcycle <gameSeconds>` (needs `-qalog` and `-loadfile`, else a stderr warning): from that game time, every 0.5 game seconds, clears the selection and selects a unit of the next distinct unit type of the local player (alive, not hidden) through the script selection path; waits up to 2 game seconds for the HUD to apply it. Events `qaselectcycle` {unitType, handle, applied, frameMs, waitFrames, onDemand deltas, onDemandFrameMsMax, iconFrameMsMax, gameTurn, preloadDone, preloadRemaining} per step and `qaselectcycleDone` {types} at the end. (2026-11-12)
-- `-qakey <gameSeconds> <key>` (repeatable; needs `-qalog` and `-loadfile`): presses the LibGDX key name (case-sensitive, for example "B", "Escape") through the map screen input path at that game time. Event `qakey` {key, pressed, selectedType, frameMs, onDemand deltas, iconFrameMsMax}, written at the next frame. (2026-11-12)
-- Chat QA (2026-11-11): `WarMashQaChat(line)` (Lua, `-qalua` only) types the line and sends it through the real key path, returns true when sent. `WarMashQaChatType(text)` opens the chat box and types without sending, returns whether the box is open. `WarMashQaKeyPress` now logs an unknown LibGDX key name; names are case-sensitive ("Enter", "Escape", "F1", "Forward Delete", "Insert"; "Delete" is Backspace). `-qalog` state records gain `chat` {open, submitted, lastLine, text, rect [x, y, w, h] in screen pixels, y up}.
-- Launch argument `-qachat <gameSeconds> <n>` (needs `-qalog` and `-loadfile`): posts `n` chat lines at that game time; `-qalog` gets a `qachat` event and `hud.chat`. `-qauitexturekeys`: the exit record lists the sorted UI texture cache keys (`uiTextureKeys`) to compare runs. (2026-11-13)
-- `-qalua` functions `WarMashQaRayPickAt(unit)` and `WarMashQaCursorAt(x, y)`; `WarMashQaHoverUnit(unit|nil)` now also drives the hover cursor colour. `-qalog` `hud.fps` reports the FPS text. (2026-11-13)
-- Mouse event QA (2026-11-13; `-qalua` only, QA only): `WarMashQaMouseMove(x, y)` fires a local mouse move whose ground point is (x, y) (`EVENT_PLAYER_MOUSE_MOVE`) and returns JSON text. `WarMashQaUnitInfo` gained `damageBonus`, `defenseBonus`, `defense`, `stunned`, `lifeRegenTotal`, `manaRegenTotal`, `attackSpeedModifier` and `moveSpeed`.
-- Unit and effect QA (2026-11-13; `-qalua` only, QA only): `WarMashQaUnitInfo` gained `renderX`, `renderY`, `renderLag`, `renderLagMax`, `renderTrailNow`, `scriptSequenceIndex`, `scriptTimeScale`, `animationSpeed`, `abilities`, `paused`, `currentAttacks` and `sightRadius`; `WarMashQaEffectInfo` gained `deathStarts`, `parented`, `parentName` and `worldLocation`.
-- Cursor QA (2026-11-13; `-qalua` only, QA only): `WarMashQaCursorInfo()` returns JSON text of `state.cursor` (cursor state, targeting tint, sprite draw facts; `{}` without a map UI). `WarMashQaPointerPress(x, y[, right])` or `(unit[, right])` presses the button at that world point or unit and returns JSON text; `WarMashQaPointerRelease()` releases it on a later frame (`WarMashQaTargetClick` does both at once).
-- Locust and pause QA (2026-11-13; `-qalua` only): `WarMashQaUnitInfo` reports `pausedEx` and `locust`; `WarMashQaTargetClick`, `WarMashQaPointerPress` and `WarMashQaPointerRelease` clear the pointer position used by the targeting tint.
-- Guard QA (2026-11-13; `-qalua` only, QA only): `WarMashQaUnitInfo(u)` gained `guard` {enabled, creepGuard, homeSet, homeX, homeY, homeFacing, leashed, returning, restoringFacing} and `behaviorOrder` (the active behavior's order id, also for engine-started behaviors).
-- Play-test QA (2026-11-13; `-qalua` only, QA only): `WarMashQaUnitInfo` gained `flyHeight`, `flyHeightTarget`, `defaultFlyHeight`, `paused`, `pausedEx` and `guard.waitingForLostTarget`; `WarMashQaHeroButtons` entries gained `iconDarkened`; `WarMashQaEffectInfo` gained `scriptEffect`, `particles2Alive`, `ribbonsAlive`, `meshesHidden`, `drainSeconds` and `allowParticleSpawn`.
-- Hero hotkey and unit QA (2026-11-16; `-qalua` only, QA only): `WarMashQaHeroHotkey(index)` (index 0..6) presses the hero hotkey and returns the `WarMashQaHeroButtons` fields plus `pressed`, `selectionCount`, `selectedHandle`, `cameraTargetX`, `cameraTargetY`. `WarMashQaUnitInfo` gained `invulnerable`, `invisLevels`, `visibleTo`, `behavior`, `behaviorCategory` and `behaviorTarget`.
+## Effects, sound and performance
 
-## Effects and sound
+Runs with `-qamem`, `-qadsverify` or `-qablpverify` are slow: never use them for timing.
 
-- `WarMashQaEffectInfo(effect)`: Lua function defined only in `-qalua` chunks; returns JSON text with the stored script state and render state of a special effect (2026-11-12).
-- Effect QA (2026-11-15; QA only, not map-facing): `WarMashQaEffectScan(substring)` (Lua, `-qalua` only) writes one `qaEffectScan` event per live script effect whose model path contains the substring, then `qaEffectScanTotals`, and returns the totals as JSON text. `-qalog` events `scriptPointEffect` / `scriptPointEffectDestroy` (`AddSpecialEffect(Loc)` and `DestroyEffect`: id, model, x, y, z, scale, placeholder, frame, gameTurn) and `scriptPointEffectMove`; `attachSample` events gained `carrierTypeId` and `carrierHandle`.
-- Effect watch QA (2026-11-15; `-qalua` only, QA only): `WarMashQaEffectWatch(substring, maxFrames)` writes one `qaEffectScan` batch per rendered frame for up to `maxFrames` (cap 600) and returns JSON `{armed, substring, frames}`. `qaEffectScan` gained `viewerFrame`, `gameTurn`, `simTicksThisFrame`, `instanceUpdateFrame`, `dirty`, `stale`, `cullFrame`, bounds, alpha, `carrier` and `attachNodeScreenPx`; `-qalog` `state` records gained `viewerFrame` and `simTicksThisFrame`.
-- Sound and smoothing QA (2026-11-15; QA only): `-qalog` `state` and exit records gained `sounds3d` {`started`, `droppedByDistance`}; `qaEffectScan` gained `drawnLocal` and `smoothingPending`.
-
-## Gameplay probes
-
-- Damage event QA (2026-11-12, damage events; QA only): the `-qalog` exit record has `damageEvents` {`damagingFired`, `damagedFired`, `attackedFired` (hits or attack swings that had a registered trigger, since launch), `depthLimitSkips`, `lastDamagingIn`, `lastDamagingOut`, `lastDamagedIn`, `lastDamagedOut`, `lastAttackType`, `lastDamageType`, `lastWeaponType`, `lastIsAttack`}.
-- `-qafogprobe <seconds>` (2026-11-16; QA only, needs `-qalog` and `-loadfile`): scouts, then compares the visibility natives with the raw fog of war and writes a `fogProbe` event.
-- `-qaplace <seconds> <rawcode> <dx> <dy>` (2026-11-16; QA only, same needs; may be repeated): asks whether the local player can place that building at its start location plus (dx, dy), with the refusal reason. `-qabuildmode <seconds> <rawcode> <hold>`: enters the build placement mode for that building with a selected builder and holds it for `hold` seconds. Lua (only with `-qalua`): `WarMashQaCanPlace(player, rawcode, x, y)`, `WarMashQaBuildMode(rawcode|nil)`, `WarMashQaBuildModeInfo()`, each returning JSON text.
-- Effect and shop QA (2026-11-16; `-qalua` only, QA only): `WarMashQaEffectInfo` gained `sequenceStart`, `sequenceEnd`, `sequenceLoopMode`, `playingOnce` and `animationQueue`. New `WarMashQaShopInfo(unit[, playerIndex])` returns JSON text about a shop for that player: `itemsSold`, `unitsSold`, `typeUnitsSold`, `stockInitialized`, `gameTick` and per-slot entries (`slot`, `kind`, `typeId`, `disabled`, `iconShowing`); the full field list is in the engine source (`QaStateLogger.qaShopInfo`).
-
-## Loading, textures, performance and memory
-
-Several of these switches slow the game down (`-qamem`, `-qadsverify`, `-qablpverify`): never use such a run to measure time.
-
-- `-qanoloadcost` (only with `-qalog`): keeps the load phases, turns the cost buckets and slowest-asset tracking off. (2026-11-11)
-- `-qalog` map load record `mapLoaded` gained `phases`, `phasesTotalMs`, `unaccountedMs` (consistency check only), `preLoad`, `loadTasks` {count, tasksMs, betweenTasksMs}, `loadCost` and `slowestAssets`. New event `firstFrame`; records carry `sinceLaunchMs`. `state` and `exit` carry `loadCost` (cumulative since launch), `loadCostAfterLoad` and `loadCostOn`; `worstFrame.loadCost`. (2026-11-11)
-- Ground texture QA (2026-11-11): a one-time `groundTextures` event in `-qalog` (per ground tile: id, `requested` path, `resolved` and `resolvedSource` naming the file actually read (`resolved` is null for a slot that did not load), `fromMap` boolean (true when the map's own file was used), corner count, image size, fallback flag) and `state.groundLayerBaseGpu`, `state.groundLayerBaseCpu`, `state.groundLayerBaseReportedNames`. The GPU array reads all zeros in the turn-0 record, before the first upload.
-- Map texture QA (2026-11-11): `-qalog` `state.mapTextures` = `{ground, cliff, water, ui, minimap, model, shadow, splat, fallbacks}`, the number of textures served from the map archive per kind since map load (reset when the map closes); `fallbacks` counts undecodable map files that fell back to the game's file. `model` is the catch-all for everything loaded through the model texture path, including selection circles, effect splats, lightning and team-colour textures; `shadow` and `splat` count only the terrain shadow and ubersplat call sites.
-- `-qablpverify` (results only with `-qalog`): every BLP decoded on the direct path is also decoded on the old ImageIO path and compared byte for byte. (2026-11-12)
-- The `-qalog` exit record always has `blpDirectDecoded`, `blpFallbacks` (files decoded the old way), `blpDirectFailures` and `blpFallbackPaths` (path, reason). Under `-qablpverify` it also has `blpVerify` {`checked`, `mismatched`, `oldFailed`, `fallbacks`, `directFailures`, `byKind` (per kind: checked, mismatched), `mismatches` (first 20: path, kind, mode, pixel, oldRgba, newRgba, differingPixels, optional note)}. (2026-11-12)
-- `-qalog` `state` and `exit` records have `iconPreload`: `eager`, `budgetMs` (always), and in deferred mode `queued`, `loaded`, `skipped`, `remaining`, `done`, `onDemand*`, `otherOnDemand*`, `pumpFrames`, `msMaxPerFrame`, `msTotal`, `doneAtMs`, `doneAtTurn`, `lateFrameMsMax`, `frameMsMax`, `worstFrame` {pumpMs, onDemandMs, otherMs, creationMs, loads, slowestPath, slowestMs, gcCount}, `pumpSkippedFrames`, `creationLoads`, `creationMsTotal`, `creationFrameMsMax`, `syncLoaded`, `syncMs`, `slowLoads` (10 slowest), `loadHistogram` (loads below 0.5, 1, 2, 5, 10 ms and above) and `uiTextureCount`. Event `iconPreloadDone` (deferred mode only) once when the warm-up finishes, same fields. The exit record also has `uiTextureKeysHash`, `textureFailurePathsDistinct` and `textureFailurePathsHash` (order-independent fingerprints for comparing an eager and a deferred run). (2026-11-12)
-- `-qadsverify` (results only with `-qalog`, else a stderr warning): every folder data source lookup that the file index answers is also checked on disk and the disk answer is used. The exit event gets `dsVerify` {`folderChecks`, `folderMismatches`, `offThreadLookups` (lookups from a thread other than the first), `firstLookupThread`, `firstMismatchPaths` (first 20)}. Folder lookups run about 15 times slower: never use these runs for timing. (2026-11-12)
-- Every `-qalog` exit event has `dsIndex` {`rebuilds`, `rebuildMs`, `layers` [{`path`, `entries`, `diskOnlyPrefixes`, `indexOn`, `rebuilds`, `lastWalkMs`}]}. (2026-11-12)
-- Compound data source lookups (2026-11-12) are answered from a per-compound layer cache: no script-visible change. `-qadsverify` also compares every cached answer with a full scan (`dsVerify.compoundChecks`, `dsVerify.compoundMismatches`); `loadCost.dsCompound` reports the cost bucket.
-- `-qaperf` (needs `-qalog`, else it does nothing): turns on the frame profiler and the `qaPerf` qalog event. Under it the per-effect `scriptPointEffect` log lines are not written (a flushed write per effect would be measured as creation cost). (2026-11-15)
-- `-qanovsync`: turns vsync and the 60 fps cap (foreground and background) off in the launcher config, so frame gaps show the real frame cost. The driver or compositor can still sync the window. (2026-11-15)
-- `-qalua` only Lua functions: `WarMashQaPerfBegin(tag)` starts a measuring window (no return value; a non-string tag counts as ""); `WarMashQaPerfEnd()` ends it and returns the `qaPerf` event as JSON text; `WarMashQaPerfFrames()` returns the number of frames rendered in the open window (-1 when none is open); `WarMashQaPerfSnapshot()` returns the profiler counters as JSON text; `WarMashQaModelInfo(path)` returns JSON counts of what a model contains (geosets, emitters, ribbons and so on); `WarMashQaEffectCandidates()` returns the effect preload candidate paths as a JSON array; `WarMashQaExitNow()` ends the run like `-qaexit` (exit event reason `qalua`, no return value). (2026-11-15)
-- `-qalog` fields: `state.textureCpuData` and `exit.textureCpuData` {`released`, `releasedBytes`, `reloads`, `reloadFailures`} (texture CPU pixel copies freed after upload, cumulative since launch); `state.pathfindingProcessors` (players whose pathfinding grid exists in the current simulation; absent before a simulation exists). (2026-11-15)
-- `-qamem` (2026-11-16; QA only, needs `-qalog`): adds a `memory` object to the `-qalog` records and `liveGlSites` to `mapDisposed`. It wraps GL calls, so never use it for timing runs. Without `-qalog` it is ignored with a warning on stderr. Lua (only with `-qalua`): `WarMashQaMemory()` returns the `memory` object as JSON text, `WarMashQaGlSites()` the creation sites of live GL objects (top 40 per kind); both return `"{}"` without `-qamem`.
-- Batching QA (2026-11-16; `-qalua` only, QA only): `WarMashQaBatchCompare(tag[, "name:x:y:z;..."[, files]])` redraws one frame with emitter merging on and off and writes event `qaBatchCompare` with keys `bc.<tag>.<pair>.maxRgb` and `bc.<tag>.<pair>.diffPixels`. `WarMashQaModelInfo` gained `p2`, `ribbonLayers`, `meshLayerFilters`; `-qaperf` counts gained `keyEmitterDraws`, `keySimCurrent`, `keyAdjacent`, `keyCommuting`.
-- Performance QA (2026-11-16; QA only): `qaPerf` gained `splitAvgMs` (`emitterGroup`, `emitterFill`, `emitterUpload`, `emitterDraw`, `emitterGl`, `meshGroup`, `glErrorCheck`) and `countsAvg` (`drawCalls`, `emittersDrawn`, `emittersEmpty`, `emitterGroups`, `emitterObjectsDrawn`, `emitterUploadBytes`, `meshGroups`, `glErrorChecks`, `mergedDraws`, `batchFlushes`); the snapshot gained `destroyedBreakdown`, `heapCommittedMb`, `processCommittedMb`, `directBufferMb` and `directBufferCount`. JVM property `-Dwarmash.noEmitterBatch=true` turns the additive emitter merging off.
-- JVM switch `-Dwarmash.noEmitterGlCache=true` (2026-11-16; deliberate, diagnostic): turns the emitter GL-call cache off (the cache skips GL calls whose value is already set; no picture change intended). `WarMashQaBatchCompare(tag, points, files, "cache")`: optional 4th argument `"cache"` compares the picture with the cache on and off instead of the merge; the event has `mode` ("merge" or "cache"). `-qaperf` counts gained `glCallsIssued`, `glCallsSkipped`, `emitterBlocks`.
+| Hook | What it does |
+|---|---|
+| `WarMashQaEffectInfo(effect)` | Script and render state of an effect (JSON). |
+| `WarMashQaEffectScan(text)`, `WarMashQaEffectWatch(text, frames)` | Logs live effects whose model path contains the text. |
+| `WarMashQaModelInfo(path)`, `WarMashQaEffectCandidates()` | Model contents and preload candidates (JSON). |
+| `-qaperf`, `WarMashQaPerfBegin`, `WarMashQaPerfEnd`, `WarMashQaPerfFrames`, `WarMashQaPerfSnapshot` | Frame profiler and measuring windows. |
+| `-qanovsync` | Turns vsync and the 60 fps cap off. |
+| `-qanoloadcost` | Turns load-cost tracking off. |
+| `-qamem`, `WarMashQaMemory()`, `WarMashQaGlSites()` | Memory and live GL object reports. |
+| `-qablpverify` | Checks every BLP decode against the old decoder. |
+| `-qadsverify` | Checks every folder file lookup against the disk. |
+| `-qauitexturekeys` | Lists UI texture cache keys in the exit record. |
+| `WarMashQaBatchCompare(tag[, points[, files[, "cache"]]])` | Compares a frame drawn with emitter merging or GL caching on and off. |
+| `-Dwarmash.qa.portraitInPass=true` | JVM switch for portrait drawing checks. |
