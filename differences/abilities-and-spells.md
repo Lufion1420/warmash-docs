@@ -60,7 +60,8 @@ Details:
 | Channel cast after a walk into range | bugfix | The cast runs normally and FINISH fires at its end; before, it ended at once with ENDCAST only. Failing for lack of mana no longer leaves the unit stuck. |
 | Channel: `SPELL_FINISH` / `SPELL_ENDCAST` timing | bugfix | Fire in the tick the follow-through ends, after that tick's timers, as measured. |
 | Ability-builder (JSON) channels: end events | deliberate | Same order as Channel by analogy; a cut channel fires ENDCAST only. |
-| `BlzPauseUnitEx` during a Channel cast | bugfix | Ends the cast and re-issues the order at the unpause, as measured. |
+| `BlzPauseUnitEx` during a Channel cast | bugfix | Ends the cast; at the unpause a cast cut before its EFFECT is re-issued, as measured. |
+| `BlzPauseUnitEx` unpause after the EFFECT of a Channel cast | deliberate | Reforged re-issues the order, so one order can cast several times; WarMash does not, and the unit takes its next order or goes idle. |
 | `BlzPauseUnitEx` in the CAST or EFFECT of an instant Channel | bugfix | EFFECT, FINISH and ENDCAST fire in one tick and the order is not re-issued, as measured. |
 | Paused instant Channel: target lost before EFFECT | unverified | A dead, hidden or untargetable target ends the cast with ENDCAST, no EFFECT, no mana. |
 | Paused instant Channel: target lost after EFFECT | works | FINISH and ENDCAST still fire. |
