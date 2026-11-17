@@ -5,254 +5,217 @@ nav_order: 6
 
 # Changelog
 
-User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no releases yet). Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Lines marked "QA" concern the [test hooks](qa-hooks.html).
+User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no releases yet). Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
 ### Added
-- `BlzGetUnitRealField(unit, UNIT_RF_SELECTION_SCALE)` returns the unit type's selection scale (was 0), as measured in Reforged 3.0.1.24371: not changed by Bloodlust or `SetUnitScale`. A unit type without the field reads 1 (unverified); `BlzSetUnitRealField` for it still returns false, 2026-11-16.
-- QA: `-qalua` takes several files separated by `;` (run in order in one VM); helper script `open_spot.lua` with `WarMashQaOpenSpot` and `WarMashQaClearance`, 2026-11-16.
-- Shops sell units: `IssueNeutralImmediateOrderById` with a unit id buys a mercenary or tavern hero for the ordering player (gold, lumber, food and stock checks; stock rules unverified, no sell event or tavern revive yet); `IssueNeutralTargetOrder(ById)` `neutralinteract` sets the shop selection for the ordering player. QA: `WarMashQaShopInfo`, more `WarMashQaEffectInfo` fields, 2026-11-16.
-- `UnitDamagePoint`, `IssueBuildOrder` by unit name, `IssueNeutralImmediateOrderById` (shop items; units too), `IssueNeutralPointOrder`, `IssueNeutralPointOrderById`, `IssueNeutralTargetOrder`, `IssueNeutralTargetOrderById`, 2026-11-16.
-- Lua 5.3 map support: maps with `war3map.lua` load and run (bundled 3.0.1 `common.j`/`blizzard.j`), 2026-11-10.
-- Reforged Frame API natives (`Blz*` frame creation, points, text, events, `BlzFrameSetScale`), 2026-11-11.
-- `BlzHideOriginFrames` hides the stock HUD, 2026-11-11.
-- Reforged and `Convert*` natives (all 40 `Convert*`, `BlzUnitDisableAbility`, `CreateImage` family stored only, `SetTerrainPathable`, `CreateDeadDestructable`), 2026-11-11.
-- Frame events now fire: checkbox, edit box, slider, popup menu, mouse enter/leave/up and mouse wheel, 2026-11-11.
-- The minimap is a scriptable frame (`MiniMapFrame`, `ORIGIN_FRAME_MINIMAP`): move, resize, hide, scale, reparent, 2026-11-11.
-- `StopSound`, `KillSoundWhenDone`, `SetSoundVolume` and `ClearMapMusic` work on `CreateSound` sounds; `StartSound` on a playing looping sound does nothing, 2026-11-11.
-- Cinematic filters work: `SetCineFilter*`, `DisplayCineFilter`, `IsCineFilterDisplayed`, `CinematicFadeBJ` (BLEND and ADDITIVE exact, KEYALPHA approximated), 2026-11-11.
-- `BlzGetAbilityStringLevelField` (14 string fields), `IsPlayerAlly`, `IsPlayerEnemy`, `TriggerRemoveAction`, `TriggerClearActions`; `EnableUserUI` tracks state only, 2026-11-11.
-- `BlzFrameSetModel` on a SPRITE frame draws models without a matching camera in screen space (UI models); `BlzFrameSetSpriteAnimate` plays animations, 2026-11-11.
-- `GetHeroStr`, `GetHeroAgi`, `GetHeroInt`, `GetHeroLevel`, `GetUnitLevel`, `GetHeroXP`, `BlzGetUnitBaseDamage`, `BlzGetUnitAttackCooldown`, `BlzIsUnitInvulnerable`, `BlzUnitHideAbility`; partial: `BlzGetUnitRealField` (16 fields), `BlzGetAbilityRealLevelField`/`BlzGetAbilityIntegerLevelField` (9 fields), `SetPlayerState` in the config phase (`ALLIED_VICTORY`, `GIVES_BOUNTY`), 2026-11-11.
-- `TriggerRegisterPlayerChatEvent`, `GetEventPlayerChatString`, `GetEventPlayerChatStringMatched` work from the local player's chat input (Enter opens a one-line box, Enter sends, Escape cancels); chat is local only, no echo line, 2026-11-11.
-- `Multiboard*` (27 natives) and `Quest*` (21 natives) are stored-only: getters read back, nothing is drawn, the two quest dialog natives are no-ops, 2026-11-11.
-- Hashtable `RemoveSaved*`, `FlushParentHashtable`, `FlushChildHashtable`, 2026-11-11.
-- QA: `WarMashQaChat`, `WarMashQaChatType` in `-qalua` chunks and `chat` in `-qalog` records, 2026-11-11.
-- QA: `WarMashQaFrameDump`, `-qadumpat`, and Lua caught-error and worst-frame fields in `-qalog`, 2026-11-11.
-- Selection natives: `SelectUnit`, `ClearSelection`, `GroupEnumUnitsSelected`, `IsUnitSelected` (local player only); `SyncSelections`, `EnableSelect`, `EnablePreSelect`, `EnableDragSelect`, `BlzEnableSelections` are stubs, 2026-11-11.
-- `IssuePointOrder` and the hidden native `BlzGetHeroPrimaryStat`, 2026-11-11.
-- Camera: `SetCameraField`, `AdjustCameraField`, `GetCameraField`, `GetCameraEyePosition*`, `GetCameraTargetPosition*`; F1 to F3 select heroes and a second press centres the camera on the hero; camera noise natives are stubs, roll and local pitch/yaw/roll are stored only, 2026-11-11.
-- QA: `groundTextures` event (per tile `requested`, `resolved`, `resolvedSource`, `fromMap`) and `state.groundLayerBase*` fields in `-qalog`, 2026-11-11.
-- QA: `state.camera`, `WarMashQaKeyPress`, unit screen position in `WarMashQaUnitInfo`, 2026-11-11.
-- QA: `localSelection` in `-qalog` records, `WarMashQaUnitInfo` in `-qalua` chunks, 2026-11-11.
-- `DecUnitAbilityLevel`; `BlzSetAbilityIntegerLevelField` and `BlzSetAbilityRealLevelField` are stubs (value stored per ability instance and read back, no gameplay effect), 2026-11-11.
-- QA: `WarMashQaTextLayout` in `-qalua` chunks and `state.stockTexts` in `-qalog` records, 2026-11-11.
-- `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzGetUnitMaxHP`, `BlzGetUnitMaxMana`, `BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`, `BlzGetUnitSkin`, 2026-11-11.
-- `BlzSetUnitSkin` and `BlzCreateUnitWithSkin` change model, portrait, tint and sounds (not checked in game); `BlzGetUnitIntegerField` for `UNIT_IF_PRIMARY_ATTRIBUTE` and `UNIT_IF_TINTING_*` (other fields return 0); `BlzSetUnitRealField` for `UNIT_RF_SIGHT_RADIUS` only (other fields return false), 2026-11-11.
-- `CreateTimer` and `CreateGroup` work in `config()` and in `blizzard.j` global initialisers, 2026-11-11.
-- QA: `WarMashQaReport` keeps up to 500 keys per run (was 200) and logs one `[qa]` line when keys are dropped, 2026-11-11.
-- `BlzSetUnitRealField` sets HP regeneration, mana regeneration, acquisition range and turn rate (with gameplay effect); `BlzSetUnitIntegerField` exists, `UNIT_IF_UNIT_CLASSIFICATION` stored only, 2026-11-11.
-- QA: `WarMashQaTextLayout` reports `clippedSegments` and `clipOverflowingLines`, 2026-11-11.
-- QA: `-qanoloadcost`, load phase and load cost fields, missing and stub native counts in `-qalog`, `WarMashQaStockFrameDump` in `-qalua` chunks, 2026-11-11.
 
-- `UnitApplyTimedLife`, `GetHeroProperName`, `BlzSetHeroProperName`; `BlzGetUnitBooleanField` for 12 fields read from the unit type (`uatg`, `ufhp` and unknown fields return false), 2026-11-12.
-
-- QA: `-qatooltip <gameSeconds> <slot>`; `-qalog` state records carry `hud.tooltip`, `hud.hotkeyOverlay` and `hud.buffBar`, 2026-11-12.
-- QA: `-qaselect`, `WarMashQaReadPixels`, `WarMashQaSetStockFrameVisible`, `WarMashQaPortraitInfo`, `WarMashQaStockOnScreen`, `state.portrait` in `-qalog`, 2026-11-12.
-- `-deferredicons` launch argument (opt-in): ability, unit and item icons load in the background after the map is shown; default stays eager. `-eagericons` forces the default, `-iconbudget <ms>` sets the per-frame budget (default 2). Known limits: one-off stalls of about 9 to 14 ms during the warm-up, up to about 60 ms in a frame that creates many new unit types, 2026-11-12.
-- QA: `-qaselectcycle`, `-qakey`, `WarMashQaCommandCard`, `WarMashQaTargetClick`, `WarMashQaIconPreload`, `iconPreload` and exit texture fingerprints in `-qalog`, `WarMashQaReport` key cap 1000, 2026-11-12.
-
-- QA: `WarMashQaHealthBars`, `WarMashQaHoldAlt`, `WarMashQaHoverUnit`, `WarMashQaHotkeyMode` and the `WarMashQaCommandCard` fields `hiddenCommands`, `effectiveHotkeyMode`, `lastHotkeyKey`, `lastHotkeySlot` in `-qalua` chunks, 2026-11-12.
-- Option "Always show Health Bars" (Options > Gameplay, default on): a floating bar over every visible unit on screen, Alt hides them; off shows bars only on hover, drag-select preview and Alt. Heroes get one gold box with level, HP and mana; other units an HP bar plus a mana bar when they have mana. Bar height follows the Stand sequence extent. Bars hide with `ShowInterface(false)`. The "*" for 3-digit levels is unverified. 2026-11-12.
-- QA: `-qahealthbars on|off` (overrides the option for one run), `state.healthBars`, `hud.alwaysShowHealthBars`, and per-bar `isHero`, `levelText`, `standMaxZ`, `originWindowPx` and `textTags` in `WarMashQaHealthBars()`, 2026-11-12.
-- Multiboards are drawn (top right, title, rows, icons, working minimize button); one board at a time, item widths apply on the next `MultiboardDisplay(true)` or minimize change, `ShowInterface(false)` hides it. `Multiboard*` is no longer stored-only (the `Quest*` natives still are). Known gaps and unverified choices are in [Differences from Warcraft III](wc3-differences.html), 2026-11-12.
-- QA: `WarMashQaMultiboard`, `WarMashQaMultiboardMinimizeClick`, `hud.multiboard` in `-qalog` states, `containerVisible` in `WarMashQaHealthBars()`, 2026-11-12.
-- Real hero buttons: `BlzGetOriginFrame` with `ORIGIN_FRAME_HERO_BAR`, `HERO_BUTTON`, `HERO_HP_BAR`, `HERO_MANA_BAR`, `HERO_BUTTON_INDICATOR` return working frames (hero icon, bars, level-up indicator; click selects, second click centres the camera, targeting commands target the hero). Layout, dead-hero click and `BlzHideOriginFrames` behavior are unverified, see [Differences from Warcraft III](wc3-differences.html), 2026-11-12.
-- QA: `-qaspawn`, `-qaherobuttonclick`, `WarMashQaHeroButtons`, `WarMashQaHeroButtonClick`, `hud.heroButtons`, `arrowRect` in `WarMashQaMultiboard()`, 2026-11-12.
-- Removed the unwired "Show Unit Life Bars" select from Options > Gameplay, 2026-11-12.
-- QA: `-qadsverify`, `dsVerify` and `dsIndex` in the `-qalog` exit event, 2026-11-12.
-- Channel (`ANcl`) abilities are real: mana cost, cooldown, range, area, casting time, follow-through (`Ncl1`), target type, options, art duration, disable other abilities and base order string per level, with spell events CHANNEL, CAST, EFFECT, FINISH, ENDCAST (unit, player-unit and game variants). Non-standard order strings (for example `warstomp`) get WarMash-only order ids. Differences and unverified choices are in [Differences from Warcraft III](wc3-differences.html), 2026-11-12.
-- `GetSpellAbility`, `GetSpellTargetDestructable`, `GetSpellTargetItem`, `BlzGetUnitAbilityCooldown`, `BlzGetUnitAbilityManaCost`, `BlzGetAbilityCooldown`, `UnitResetCooldown`, `GetWidgetLife`, `SetWidgetLife`; `BlzSetUnitAbilityCooldown` is real for Channel and other Java spells and stored only for the rest; `BlzSet/GetAbility*LevelField` act on Channel casts (`Ncl1` to `Ncl4` readable), 2026-11-12.
-- Damage events: `EVENT_UNIT_DAMAGING` / `EVENT_PLAYER_UNIT_DAMAGING` (before armor) and `EVENT_UNIT_DAMAGED` / `EVENT_PLAYER_UNIT_DAMAGED` (after armor, before life loss) fire, with `GetEventDamage`, `GetEventDamageSource`, `BlzGetEventDamageTarget`, `BlzSetEventDamage` and the attack, damage and weapon type getters and setters plus `BlzGetEventIsAttack`. A damage set to 0 blocks the hit, a negative value heals. Trigger actions of these events run inside the event. Nesting is limited to 32 levels. Details and unverified choices in [Differences from Warcraft III](wc3-differences.html), 2026-11-12.
-- `EVENT_UNIT_ATTACKED` / `EVENT_PLAYER_UNIT_ATTACKED` fire at the start of each attack swing against a unit (`GetAttacker`, `GetTriggerUnit`), 2026-11-12.
-- QA: `damageEvents` in the `-qalog` exit record, 2026-11-12.
-- 23 `BlzSpecialEffect*` natives work (position, height, scale, orientation, colour, alpha, time scale, time, play, sub-animations, local getters); `BlzSetSpecialEffectYaw` keeps pitch and roll. Attached effects ignore position, orientation and alpha; sub-animations ROOTED, ENTANGLE, BERSERK are ignored. `DestroyEffect` on a time-scale-0 effect still removes it; `AddSpecialEffect` with an empty path returns a placeholder handle instead of nil; `SetSoundPosition` works for 3D sounds (ignored on 2D). Unverified details in [Differences from Warcraft III](wc3-differences.html), 2026-11-12.
-- QA: `WarMashQaEffectInfo(effect)` in `-qalua` chunks, 2026-11-12.
-- `ReviveHero`, `ReviveHeroLoc`, `IsUnitOwnedByPlayer`, `IsTerrainPathable` (walkability, flyability, buildability and floatability; blight, any, peon harvest and amphibious are stubs returning false). `ReviveHero` returns true only for a dead hero, places it at the nearest free point and takes it out of an altar queue; position, facing and event behavior are unconfirmed against WC3. Details in [Differences from Warcraft III](wc3-differences.html), 2026-11-12.
-- QA: `WarMashQaShowTooltip`, `WarMashQaTooltipInfo` and `hotkeyOverlay` in `WarMashQaCommandCard` (`-qalua` chunks), 2026-11-12.
-- QA: `WarMashQaHudInfo`, `WarMashQaFrameJson` in `-qalua` chunks and a `hud` object in `-qalog` state records, 2026-11-12.
-- The minimap shows a camera box (white outline of the camera's ground footprint) on all maps; Reforged draws a larger rectangle than WarMash's trapezoid, 2026-11-12.
-- Mouse and key events: `EVENT_PLAYER_MOUSE_MOVE/DOWN/UP` with `BlzGetTriggerPlayerMouseX/Y/Position/Button`; `BlzTriggerRegisterPlayerKeyEvent` with `BlzGetTriggerPlayerKey/MetaKey/IsKeyDown`. Local player only, not synced, no key repeat, 2026-11-13.
-- `BlzGetUnitCollisionSize`, `GetDestructableTypeId`, `GetDestructableOccluderHeight`, `GetTerrainType` (nearest corner, unverified), `BlzSetAbilityIcon`, `BlzItemRemoveAbility`, `UnitDropItemPoint`, per-item `BlzSetItem*`/`BlzGetItem*` name, description, tooltip and icon overrides, `BlzSetItemBooleanField` (4 fields), 2026-11-13.
-- `GetChangingUnit`, `GetChangingUnitPrevOwner` and the change-owner events fire from `SetUnitOwner` and Charm; `CameraSet*Noise` is a real sway; `DisplayTimedTextFromPlayer`, `EndGame`, `GetDefaultDifficulty`, `UnitSuspendDecay` work; `RestartGame` and `ChangeLevel` leave to the menu. `PauseGame`, `DisplayLoadDialog`, `PingMinimap`, `UnitAddIndicator`, `VolumeGroupSetVolume`, `AddItemToStock`, `RemoveItemFromStock`, `DestroyUbersplat`, `RemoveWeatherEffect` are stubs; `GetSellingUnit`, `GetRescuer`, `GetSoldItem` return null, 2026-11-13.
-- `BlzSetAbilityIntegerLevelField` / `BlzSetAbilityRealLevelField` now change spell-base, JASS-defined and ability-builder abilities and the item attack, defense and attribute bonuses (on the next level change or Inc/DecUnitAbilityLevel); still stored only for item life/mana bonuses and abilities with no class. `BlzGetAbility*LevelField` knows every meta-data field. `Inc/Dec/SetUnitAbilityLevel` re-apply data when a script set fields. `UnitHasItem` implemented. Storm Bolt (`AHtb`) and Attribute Bonus (`Aamk`) base abilities work, 2026-11-13.
-- QA: `WarMashQaMouseMove` and more `WarMashQaUnitInfo` fields (damageBonus, defenseBonus, defense, stunned, lifeRegenTotal, manaRegenTotal, attackSpeedModifier, moveSpeed), 2026-11-13.
-- Base abilities Cripple (`Acri`), Drunken Haze (`ANdh`), cleave (`ANca`) and item sight bonus (`AIsi`) work, so map helpers built on them (slow, silence, cleave) take effect (they did nothing before). Cleave splits nothing among targets and the splash is not an attack (both unverified); `BlzGetUnitRealField(UNIT_RF_SIGHT_RADIUS)` returns the value without ability bonuses. Known gaps: `AIsr` reduces only `ATTACK_TYPE_NORMAL` spell damage, overlapping Drunken Haze or silence from one caster ends the disarm early, base abilities `Aclf`, `Aspb`, `Aens`, `Aprg`, `AEer`, `Assk` still do nothing, 2026-11-13.
-- QA: `WarMashQaUnitInfo` gained render position and lag, script sequence and time scale, abilities, paused, current attacks and sight radius; `WarMashQaEffectInfo` gained `deathStarts`, `parented`, `parentName`, `worldLocation`, 2026-11-13.
-- QA: `WarMashQaShowTooltip` and `-qatooltip` accept slot 100+i for hero button i; `WarMashQaTooltipInfo` and `WarMashQaMultiboard` gained visible-rect and simple-tip fields, 2026-11-13.
-- `RemoveGuardPosition`, `RecycleGuardPosition`, `SetUnitCreepGuard`, `RemoveAllGuardPositions` (semantics inferred), 2026-11-13.
-- QA: `WarMashQaUnitInfo` gained `guard` and `behaviorOrder`, 2026-11-13.
-- Targeting cursor tints red over a valid enemy and green over a valid own or allied target; QA: `-qagrab`, `WarMashQaCursorInfo`, `WarMashQaPointerPress`, `WarMashQaPointerRelease`, 2026-11-13.
-- Effect models named in the map script or in changed object data are preloaded during the loading screen so the first `AddSpecialEffect` does not stutter (`-nopreloadfx` turns it off), 2026-11-13.
-- `BlzGetOriginFrame(ORIGIN_FRAME_CHAT_MSG)` is the real chat area: sent lines show as `[All] Name: text` with the name in the player colour and fade after 10 s (+1 s); chat is still local only; `BlzDisplayChatMessage` is still missing, 2026-11-13.
-- QA: `-qachat`, `-qauitexturekeys`, `WarMashQaRayPickAt`, `WarMashQaCursorAt`; `WarMashQaHoverUnit` drives the hover cursor colour, 2026-11-13.
-- QA: `WarMashQaEffectScan(substring)` in `-qalua` chunks; `-qalog` events `scriptPointEffect`, `scriptPointEffectDestroy`, `scriptPointEffectMove` and `attachSample` fields `carrierTypeId` / `carrierHandle`, 2026-11-15.
-- QA: `WarMashQaEffectWatch(substring, maxFrames)` in `-qalua` chunks, frame fields in `qaEffectScan`, `viewerFrame` and `simTicksThisFrame` in `-qalog` states, 2026-11-15.
-- QA: `-qaperf` frame profiler and `-qanovsync`; `-qalua` hooks `WarMashQaPerfBegin/End/Frames/Snapshot`, `WarMashQaModelInfo`, `WarMashQaEffectCandidates`, `WarMashQaExitNow`; `-qalog` fields `textureCpuData` and `pathfindingProcessors`, 2026-11-15.
-
-- QA: `-qamem` (with `-qalog`) adds a `memory` object to records; `WarMashQaBatchCompare`, `qaBatchCompare` event, more `WarMashQaModelInfo` and `-qaperf` fields, 2026-11-16.
-- `IsUnitVisible`, `IsUnitFogged`, `IsUnitMasked`, `IsUnitDetected`, `IsUnitInvisible`, `IsVisibleToPlayer`, `IsFoggedToPlayer`, `IsMaskedToPlayer`, `IsLocationVisibleToPlayer`, `IsLocationFoggedToPlayer`, `IsLocationMaskedToPlayer`, `IsUnitPaused`, `IsUnitInTransport`, `IsUnitLoaded`, `GetHeroSkillPoints`, `UnitInventorySize`, `IsPointBlighted`. `IsUnitInvisible` is true only for a unit with an invisibility state that the player cannot see; real 1.29.2 gives true for any unseen unit (Reforged unmeasured), 2026-11-16.
-- `UnitCountBuffsEx`, `UnitHasBuffsEx`, `UnitRemoveBuffs`, `UnitRemoveBuffsEx` on a per-buff classification (most rows inferred); a summon's timed-life buff is class "neither" and is not counted by the (magic, physical) = (false, false) filter; `UnitUseItem`, `UnitUseItemPoint`, `UnitUseItemTarget` (true exactly when the order is accepted); `IsUnitIllusion` (always false, no illusions yet); `GetPlayerUnitCount`, 2026-11-16.
-- QA: `-qafogprobe`, `-qaplace`, `-qabuildmode`, Lua `WarMashQaCanPlace`, `WarMashQaBuildMode`, `WarMashQaBuildModeInfo`, `WarMashQaMemory`, `WarMashQaGlSites`, `WarMashQaBatchCompare` mode `"cache"`, `-Dwarmash.noEmitterGlCache=true`; `installDist` start scripts honour `WARMASH_HEAP`; `-qamem` without `-qalog` is ignored with a warning, 2026-11-16.
-- Ability classes Ensnare (`Aens`), Bloodlust (`Ablo`, autocast), Unholy Frenzy (`Auhf`) and Polymorph (`Aply`); map abilities on these bases did nothing before. A spell armed on the cursor targets the selected unit by a click on its portrait. QA: `WarMashQaArmUnitTarget`, `WarMashQaPortraitClick`, more fields from `WarMashQaHeroButtonClick`, 2026-11-16.
-
-- `UnitModifySkillPoints` (false for a delta of 0, a non-hero and a negative delta at 0 points; a positive delta is capped at the levels the hero can still learn; rules from jassdoc, unverified) and `GetUnitDefaultMoveSpeed` (the unit type's base speed). QA: `WarMashQaCommandCard` slots gained `disabled`, `commandOrderId`, `disabledArt`, `iconTint`, 2026-11-16.
+- `BlzGetUnitRealField(unit, UNIT_RF_SELECTION_SCALE)` returns the unit type's selection scale (was 0), as measured in Reforged 3.0.1.24371: not changed by… (2026-11-16)
+- Shops sell units: `IssueNeutralImmediateOrderById` with a unit id buys a mercenary or tavern hero for the ordering player… (2026-11-16)
+- `UnitDamagePoint`, `IssueBuildOrder` by unit name, `IssueNeutralImmediateOrderById` (shop items; units too), `IssueNeutralPointOrder`… (2026-11-16)
+- Lua 5.3 map support: maps with `war3map.lua` load and run (bundled 3.0.1 `common.j`/`blizzard.j`) (2026-11-10)
+- Reforged Frame API natives (`Blz*` frame creation, points, text, events, `BlzFrameSetScale`) (2026-11-11)
+- `BlzHideOriginFrames` hides the stock HUD (2026-11-11)
+- Reforged and `Convert*` natives (all 40 `Convert*`, `BlzUnitDisableAbility`, `CreateImage` family stored only, `SetTerrainPathable`, `CreateDeadDestructable`) (2026-11-11)
+- Frame events now fire: checkbox, edit box, slider, popup menu, mouse enter/leave/up and mouse wheel (2026-11-11)
+- The minimap is a scriptable frame (`MiniMapFrame`, `ORIGIN_FRAME_MINIMAP`): move, resize, hide, scale, reparent (2026-11-11)
+- `StopSound`, `KillSoundWhenDone`, `SetSoundVolume` and `ClearMapMusic` work on `CreateSound` sounds (2026-11-11)
+- Cinematic filters work: `SetCineFilter*`, `DisplayCineFilter`, `IsCineFilterDisplayed`, `CinematicFadeBJ` (BLEND and ADDITIVE exact, KEYALPHA approximated) (2026-11-11)
+- `BlzGetAbilityStringLevelField` (14 string fields), `IsPlayerAlly`, `IsPlayerEnemy`, `TriggerRemoveAction`, `TriggerClearActions` (2026-11-11)
+- `BlzFrameSetModel` on a SPRITE frame draws models without a matching camera in screen space (UI models) (2026-11-11)
+- `GetHeroStr`, `GetHeroAgi`, `GetHeroInt`, `GetHeroLevel`, `GetUnitLevel`, `GetHeroXP`, `BlzGetUnitBaseDamage`, `BlzGetUnitAttackCooldown`… (2026-11-11)
+- `TriggerRegisterPlayerChatEvent`, `GetEventPlayerChatString`, `GetEventPlayerChatStringMatched` work from the local player's chat input… (2026-11-11)
+- `Multiboard*` (27 natives) and `Quest*` (21 natives) are stored-only: getters read back, nothing is drawn, the two quest dialog natives are no-ops (2026-11-11)
+- Hashtable `RemoveSaved*`, `FlushParentHashtable`, `FlushChildHashtable` (2026-11-11)
+- Selection natives: `SelectUnit`, `ClearSelection`, `GroupEnumUnitsSelected`, `IsUnitSelected` (local player only) (2026-11-11)
+- `IssuePointOrder` and the hidden native `BlzGetHeroPrimaryStat` (2026-11-11)
+- Camera: `SetCameraField`, `AdjustCameraField`, `GetCameraField`, `GetCameraEyePosition*`, `GetCameraTargetPosition*` (2026-11-11)
+- `DecUnitAbilityLevel` (2026-11-11)
+- `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`… (2026-11-11)
+- `BlzSetUnitSkin` and `BlzCreateUnitWithSkin` change model, portrait, tint and sounds (not checked in game) (2026-11-11)
+- `CreateTimer` and `CreateGroup` work in `config()` and in `blizzard.j` global initialisers (2026-11-11)
+- `BlzSetUnitRealField` sets HP regeneration, mana regeneration, acquisition range and turn rate (with gameplay effect) (2026-11-11)
+- `UnitApplyTimedLife`, `GetHeroProperName`, `BlzSetHeroProperName` (2026-11-12)
+- `-deferredicons` launch argument (opt-in): ability, unit and item icons load in the background after the map is shown (2026-11-12)
+- Option "Always show Health Bars" (Options > Gameplay, default on): a floating bar over every visible unit on screen, Alt hides them
+- Multiboards are drawn (top right, title, rows, icons, working minimize button) (2026-11-12)
+- Real hero buttons: `BlzGetOriginFrame` with `ORIGIN_FRAME_HERO_BAR`, `HERO_BUTTON`, `HERO_HP_BAR`, `HERO_MANA_BAR`, `HERO_BUTTON_INDICATOR` return working… (2026-11-12)
+- Removed the unwired "Show Unit Life Bars" select from Options > Gameplay (2026-11-12)
+- Channel (`ANcl`) abilities are real: mana cost, cooldown, range, area, casting time, follow-through (`Ncl1`), target type, options, art duration, disable other… (2026-11-12)
+- `GetSpellAbility`, `GetSpellTargetDestructable`, `GetSpellTargetItem`, `BlzGetUnitAbilityCooldown`, `BlzGetUnitAbilityManaCost`, `BlzGetAbilityCooldown`… (2026-11-12)
+- Damage events: `EVENT_UNIT_DAMAGING` / `EVENT_PLAYER_UNIT_DAMAGING` (before armor) and `EVENT_UNIT_DAMAGED` / `EVENT_PLAYER_UNIT_DAMAGED`… (2026-11-12)
+- `EVENT_UNIT_ATTACKED` / `EVENT_PLAYER_UNIT_ATTACKED` fire at the start of each attack swing against a unit (`GetAttacker`, `GetTriggerUnit`) (2026-11-12)
+- 23 `BlzSpecialEffect*` natives work (position, height, scale, orientation, colour, alpha, time scale, time, play, sub-animations, local getters) (2026-11-12)
+- `ReviveHero`, `ReviveHeroLoc`, `IsUnitOwnedByPlayer`, `IsTerrainPathable`… (2026-11-12)
+- The minimap shows a camera box (white outline of the camera's ground footprint) on all maps (2026-11-12)
+- Mouse and key events: `EVENT_PLAYER_MOUSE_MOVE/DOWN/UP` with `BlzGetTriggerPlayerMouseX/Y/Position/Button` (2026-11-13)
+- `BlzGetUnitCollisionSize`, `GetDestructableTypeId`, `GetDestructableOccluderHeight`, `GetTerrainType` (nearest corner, unverified), `BlzSetAbilityIcon`… (2026-11-13)
+- `GetChangingUnit`, `GetChangingUnitPrevOwner` and the change-owner events fire from `SetUnitOwner` and Charm (2026-11-13)
+- `BlzSetAbilityIntegerLevelField` / `BlzSetAbilityRealLevelField` now change spell-base, JASS-defined and ability-builder abilities and the item attack, defense… (2026-11-13)
+- Base abilities Cripple (`Acri`), Drunken Haze (`ANdh`), cleave (`ANca`) and item sight bonus (`AIsi`) work, so map helpers built on them… (2026-11-13)
+- `RemoveGuardPosition`, `RecycleGuardPosition`, `SetUnitCreepGuard`, `RemoveAllGuardPositions` (semantics inferred) (2026-11-13)
+- Targeting cursor tints red over a valid enemy and green over a valid own or allied target (2026-11-13)
+- Effect models named in the map script or in changed object data are preloaded during the loading screen so the first `AddSpecialEffect` does not stutter… (2026-11-13)
+- `BlzGetOriginFrame(ORIGIN_FRAME_CHAT_MSG)` is the real chat area: sent lines show as `[All] Name: text` with the name in the player colour and fade after 10 s… (2026-11-13)
+- `IsUnitVisible`, `IsUnitFogged`, `IsUnitMasked`, `IsUnitDetected`, `IsUnitInvisible`, `IsVisibleToPlayer`, `IsFoggedToPlayer`, `IsMaskedToPlayer`… (2026-11-16)
+- `UnitCountBuffsEx`, `UnitHasBuffsEx`, `UnitRemoveBuffs`, `UnitRemoveBuffsEx` on a per-buff classification (most rows inferred) (2026-11-16)
+- Ability classes Ensnare (`Aens`), Bloodlust (`Ablo`, autocast), Unholy Frenzy (`Auhf`) and Polymorph (`Aply`) (2026-11-16)
+- `UnitModifySkillPoints`… (2026-11-16)
 
 ### Changed
-- Unholy Frenzy's life drain is a damage event from the caster once per second, not an attack (measured in Reforged 3.0.1.24371; was a silent life loss). The amount stays the ability's DataB per second. The drain now wakes sleepers and makes an idle enemy target retaliate or a worker flee, also on an invulnerable target at 0 damage. Unverified: attack type chaos and damage type universal, 2026-11-16.
-- `BlzUnitDisableAbility` and `BlzUnitHideAbility` keep separate state. Disable is a counter (N disables need N enables, never negative) and each open disable keeps its own `hideUI`; hide is a plain on/off switch; the command card updates at once. No call order leaves an ability stuck or shows an icon another system hid. The state survives hero learning, level changes and morphs of permanent abilities, 2026-11-16.
-- An ability hidden by `BlzUnitHideAbility` refuses script and player orders like a disabled one (measured in Reforged 3.0.1.24371); a cast already running finishes and passives keep working. Before, script orders to a hidden ability worked, 2026-11-16.
-- Ability-builder (JSON) channels fire `SPELL_FINISH` then `SPELL_ENDCAST` in the tick their channel ends, after that tick's script timers; a cut channel fires `SPELL_ENDCAST` only (was one tick later, ENDCAST before FINISH; inferred from the measured Channel rule). Replaces the line below, 2026-11-16.
-- Script-created units (`CreateUnit` family, `CreateCorpse`, `BlzCreateUnitWithSkin`) start in Stand instead of Birth; an effect animation played by `BlzPlaySpecialEffect` with a type other than STAND or WALK runs once then falls to Stand or holds; a Channel with blank `Animnames` plays no cast animation; an instant Channel paused by `BlzPauseUnitEx` in its own EFFECT is not re-issued at the unpause (all from the map author's Reforged comparison, unmeasured), 2026-11-16.
-- Ability-builder (JSON) channels end one tick later like Java Channel abilities when a channel-tick action ends them, 2026-11-16.
-- Ability target flags: hero/nonhero, organic/mechanical, ancient/nonancient and the alliance flags (player, allies, friend, enemies, neutral) listed together are alternatives instead of all required, for all abilities and `IssueTargetOrder`; "enemy,neutral" abilities also accept Neutral Passive units. The neutral rule is unverified, 2026-11-13.
-- `BlzSetUnitAbilityCooldown` called from the cast's own spell-effect handler re-times the cooldown that cast just started (Channel and ability-builder spells), 2026-11-13.
-- `AddSpecialEffectTarget` matches attachment points case-insensitively, ignores "ref", prefers the fewest extra tokens; an unmatched name attaches to origin and a model without attachments follows the unit (inferred), 2026-11-13.
-- Lua maps show each command button's hotkey on a dark square in its top-left corner (letter or grid key; none on passives or Escape/Cancel); JASS maps show none. Text whose effective scale is below 0.05 is not drawn (WarMash's own threshold, unverified), 2026-11-12.
-- Lua maps show Quests (F9) enabled and "Log (F12)" as the fourth top menu button (they still open nothing); JASS maps keep the old menu. A frame cleared with `BlzFrameClearAllPoints` and given no new point is no longer drawn or hit (unverified WC3 rule). Side effect: `BlzFrameGetChild(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), i)` indices shift by one more (`SmashFloatingBars` 0, `SmashWorldFrame` 1), 2026-11-12.
-- Floating health/mana bars over units are sized in frame units, anchored at the model's `Overhead Ref` attachment (else the top of its bounds), shown on hover and for all units while Alt is held, and drawn under all UI and script frames. (Since 2026-11-12 the bar height uses the Stand extent, see the "Always show Health Bars" line.) The engine's `SmashFloatingBars` frame is now the first child of the game UI root, so `BlzFrameGetChildrenCount` / `BlzFrameGetChild` on `ORIGIN_FRAME_GAME_UI` see one more child, 2026-11-12.
-- Folder data sources (`[DataSources]` folder entries, folder maps) answer lookups from an in-memory file index, rebuilt when a map starts or a map list is built; a file added to or deleted from such a folder while a map runs is not seen until the next map start. Booty Bay load time about 4.1 s to about 3.0 s (folder lookups about 1.2 s to under 0.1 s), 2026-11-12.
-- Hashtables keep one slot per value type (integer, real, boolean, string, handle) per key instead of one value per key, 2026-11-11.
-- Clicking an item or destructable empties the unit selection, as in WC3, 2026-11-11.
-- BLP textures are decoded straight into the texture buffer. Textures are byte-identical to the old path (0 mismatches on 2548 / 2990 / 2401 textures on Booty Bay and two large custom maps); measured map load time 7.5 s to 3.9 s (Booty Bay), 11.0 s to 5.5 s and about 7.5 s to 4.0 s (the custom maps; the last against an older baseline), 2026-11-12.
-- `BlzGetUnitAbilityByIndex` lists newest first and skips abilities the engine adds by itself, 2026-11-11.
-- `BlzFrameSetTexture` with `""` or `NONE` clears the texture; blank model paths clear the model without a load failure; `BlzFrameSetModel` on a hidden frame loads on first show, 2026-11-11.
-- Single-player start of a non-melee map: only the local player's slot is `PLAYING`, other user slots are `EMPTY`, 2026-11-11.
-- Frame draw order follows WC3: per parent, by level then creation, children above their parent, 2026-11-11.
-- `BlzFrameGetChild` / `BlzFrameGetChildrenCount` work on buttons; `BlzFrameSetScale` follows the parent's scale and scales point offsets, 2026-11-11.
-- Hero button hover shows a one-line tip of its own instead of the command tooltip box, 2026-11-13.
-- Idle units return to their guard position after a chase; auto-acquire picks by priority, then distance, 2026-11-13.
-- Hover and targeting cursor is tinted red over enemies, green over own and allied units, yellow over neutral passive units, items and destructables; the FPS text moved to the top right and is smaller, 2026-11-13.
-- Attack orders end when the target dies or turns undetected-invisible, invulnerable, Locust or hidden, also mid-chase; an unfinished swing is cancelled without damage or cooldown (WC3 behavior unverified), 2026-11-13.
-- `BlzSetUnitFacingEx` also cancels a pending `SetUnitFacing` turn, 2026-11-13.
 
-- Clicking a unit that the active spell's target list excludes shows the target error text and sound and casts nothing (was: cast at the point under the unit); deliberate, WC3 behavior unverified, 2026-11-15.
-- Guards walk home at once when their chase target turns invulnerable, hidden or Locust (was: after 5 s); deliberate, WC3 behavior unverified, 2026-11-15.
-- Chat input closes on a mouse click as well as Esc, has a translucent fill and a centred box; FPS text margins widened, 2026-11-15.
-- Big maps need far less memory: peak about 7.2 GB to 3.2 GB on a large custom map, about 3.0 GB to 1.2 GB on a stock melee map. Each player's pathfinding grid is now built on that player's first move order (15 to 37 ms, once), 2026-11-15.
-- Many effects are cheaper: particle, ribbon and lightning draws upload only the bytes in use, and additive particle emitters of the same model emitter and texture are drawn together (stress script on a large custom map, 800 particle effects: 35.6 to 20.3 ms work per frame). Many copies of one additive particle model cost much less than many different models. Ribbons and ground splats use the current scene's fog. `-Dwarmash.noEmitterBatch=true` turns merging off; QA `qaPerf` gained split timings and counts, 2026-11-16.
-- Leaving a map to the menu releases the map's memory and GL objects. Default game heap for `runGame` and `debug` is 3g (`-PgameHeap=<size>` or env `WARMASH_HEAP`; an `-Xmx` in `JAVA_TOOL_OPTIONS` still wins; `installDist` scripts pass `-Xmx3g`). QA: `-qaleavecount <n>`, `-qaleavemap <map>`, `mapDisposed` event, 2026-11-16.
+- Unholy Frenzy's life drain is a damage event from the caster once per second, not an attack (measured in Reforged 3.0.1.24371; was a silent life loss) (2026-11-16)
+- `BlzUnitDisableAbility` and `BlzUnitHideAbility` keep separate state (2026-11-16)
+- An ability hidden by `BlzUnitHideAbility` refuses script and player orders like a disabled one (measured in Reforged 3.0.1.24371) (2026-11-16)
+- Ability-builder (JSON) channels fire `SPELL_FINISH` then `SPELL_ENDCAST` in the tick their channel ends, after that tick's script timers (2026-11-16)
+- Script-created units (`CreateUnit` family, `CreateCorpse`, `BlzCreateUnitWithSkin`) start in Stand instead of Birth (2026-11-16)
+- Ability-builder (JSON) channels end one tick later like Java Channel abilities when a channel-tick action ends them (2026-11-16)
+- Ability target flags: hero/nonhero, organic/mechanical, ancient/nonancient and the alliance flags (player, allies, friend, enemies, neutral) listed together… (2026-11-13)
+- `BlzSetUnitAbilityCooldown` called from the cast's own spell-effect handler re-times the cooldown that cast just started (Channel and ability-builder spells) (2026-11-13)
+- `AddSpecialEffectTarget` matches attachment points case-insensitively, ignores "ref", prefers the fewest extra tokens (2026-11-13)
+- Lua maps show each command button's hotkey on a dark square in its top-left corner (letter or grid key; none on passives or Escape/Cancel) (2026-11-12)
+- Lua maps show Quests (F9) enabled and "Log (F12)" as the fourth top menu button (they still open nothing) (2026-11-12)
+- Floating health/mana bars over units are sized in frame units, anchored at the model's `Overhead Ref` attachment (else the top of its bounds), shown on hover… (2026-11-12)
+- Folder data sources (`[DataSources]` folder entries, folder maps) answer lookups from an in-memory file index, rebuilt when a map starts or a map list is built (2026-11-12)
+- Hashtables keep one slot per value type (integer, real, boolean, string, handle) per key instead of one value per key (2026-11-11)
+- Clicking an item or destructable empties the unit selection, as in WC3 (2026-11-11)
+- BLP textures are decoded straight into the texture buffer (2026-11-12)
+- `BlzGetUnitAbilityByIndex` lists newest first and skips abilities the engine adds by itself (2026-11-11)
+- `BlzFrameSetTexture` with `""` or `NONE` clears the texture (2026-11-11)
+- Single-player start of a non-melee map: only the local player's slot is `PLAYING`, other user slots are `EMPTY` (2026-11-11)
+- Frame draw order follows WC3: per parent, by level then creation, children above their parent (2026-11-11)
+- `BlzFrameGetChild` / `BlzFrameGetChildrenCount` work on buttons (2026-11-11)
+- Hero button hover shows a one-line tip of its own instead of the command tooltip box (2026-11-13)
+- Idle units return to their guard position after a chase (2026-11-13)
+- Hover and targeting cursor is tinted red over enemies, green over own and allied units, yellow over neutral passive units, items and destructables (2026-11-13)
+- Attack orders end when the target dies or turns undetected-invisible, invulnerable, Locust or hidden, also mid-chase (2026-11-13)
+- `BlzSetUnitFacingEx` also cancels a pending `SetUnitFacing` turn (2026-11-13)
+- Clicking a unit that the active spell's target list excludes shows the target error text and sound and casts nothing (was: cast at the point under the unit) (2026-11-15)
+- Guards walk home at once when their chase target turns invulnerable, hidden or Locust (was: after 5 s) (2026-11-15)
+- Chat input closes on a mouse click as well as Esc, has a translucent fill and a centred box (2026-11-15)
+- Big maps need far less memory: peak about 7.2 GB to 3.2 GB on a large custom map, about 3.0 GB to 1.2 GB on a stock melee map (2026-11-15)
+- Many effects are cheaper: particle, ribbon and lightning draws upload only the bytes in use, and additive particle emitters of the same model emitter and… (2026-11-16)
+- Leaving a map to the menu releases the map's memory and GL objects (2026-11-16)
 
 ### Fixed
-- An order given by script inside a condition of an issued-target-order trigger no longer replaces the outer order's target or makes it fail, 2026-11-16.
-- Slow (also Thunder Clap) and the move speed upgrades no longer write an active speed buff into the unit's base speed (270 drifted to 380 after Bloodlust plus Thunder Clap). How WC3 combines a slow with a percentage speed buff is unverified, 2026-11-16.
-- A disabled command button whose icon has no disabled art is drawn dark (45 percent brightness, WarMash's own value): a silenced hero's buttons, `BlzUnitDisableAbility`, `BlzPauseUnitEx` and missing requirements now look disabled, 2026-11-16.
-- Crash fix: `SetWidgetLife`, `SetUnitState(UNIT_STATE_LIFE)` and heals on a killed unit are ignored, its life stays 0 until a real revive (`ReviveHero`, resurrection, reincarnation). Before, the unit became alive without its place in the world and its next step crashed the game, 2026-11-16.
-- Regions: a unit already standing in the area added by `RegionAddRect`, `RegionAddCell` or `RegionAddCellAtLoc` is inside at once (`IsUnitInRegion`) and gets no enter event at its next move (a map that made its units before its region handled them twice); based on the map author's Reforged observation, not probed, 2026-11-16.
-- `GetUnitMoveSpeed` and `BlzGetUnitRealField(UNIT_RF_SPEED)` return the buffed speed unrounded (Bloodlust on 270 reads 337.5, was 338); `IsUnitDetected` is true for any unit inside a detector of the player; a Channel fires `SPELL_FINISH` and `SPELL_ENDCAST` in the tick its follow-through ends, after that tick's script timers (was one tick later). All three measured in Reforged 3.0.1.24371, 2026-11-16.
-- The Ensnare net is negative physical and not dispellable by `UnitRemoveBuffs`, `UnitRemoveBuffsEx`, `UnitCountBuffsEx` and `UnitHasBuffsEx` (was negative magic); measured in Reforged 3.0.1.24371, 2026-11-16.
-- Aerial Shackles (`Amls`) ends its channel after its duration, fires ENDCAST and removes its buffs; non-stacking aura display buffs keep their other sources when the shown buff leaves; a targeted order on a unit the caster cannot see reports the visibility error first, 2026-11-16.
-- `BlzSetSpecialEffectTime` with time scale 0 holds the set frame, including the last frame of a looping sequence (it wrapped to the start), 2026-11-16.
-- Shop purchases: an item purchase after a refused immediate order works; `neutralinteract` on a shop with 2 or more items no longer throws; purchase orders only work for the player named in the order id, 2026-11-16.
-- Ethereal targets are refused by every physical target spell (Channel with the physical option, ability-builder `physicalSpell`); Ensnare is a physical spell: it hits magic-immune units and refuses ethereal ones (unverified against WC3), 2026-11-16.
-- `UnitRemoveBuffs*` with two builder auras of different polarity removes only the matching one; map-defined Ensnare, Bloodlust and Unholy Frenzy buff ids count by their base ability; an idle autocaster that cannot cast auto-attacks; an ability added while polymorphed is disabled at once; a spell freed during a disarm is usable at once, 2026-11-16.
-- `SetUnitVertexColor` clamps each component to 0..255 (values above 255 brightened the model); a passive alias of an item ability gets no command button even with `aite=0`, 2026-11-16.
-- `GetUnitAbilityLevel` returns the real level (was 1 for any ability the unit had); buffs read at least 1, 2026-11-13.
-- `SetUnitX` / `SetUnitY` and other script moves draw the unit at the scripted position within one tick (was drawn approaching at walk speed); `IssueImmediateOrder` "stop" returns true; `SetUnitTimeScale` survives animation changes; `SetUnitAnimationByIndex` loops keep their index (both inferred); `DestroyEffect` on a Death-only model plays Death once, 2026-11-13.
-- `SetUnitFlyHeight` honours its rate argument (was instant); `UnitAddItem` returns a boolean, 2026-11-13.
-- Trigger conditions: every condition of a trigger now runs and the results are ANDed (WarMash stopped at the first false one), and `Not` negates its boolexpr (it returned it unchanged). A damage library's "damaged" listeners on one map, and with them its floating damage text, now run. Inferred from a map that works in Reforged, not measured, 2026-11-12.
-- Cancelling a supply-blocked altar revive or unit-train queue entry no longer returns food it never paid, 2026-11-12.
-- `ORIGIN_FRAME_UNIT_PANEL_BUFF_BAR` and its label are real frames (move, scale, hide work); once a script fetches `ORIGIN_FRAME_TOOLTIP` or `ORIGIN_FRAME_UBERTOOLTIP` and places the uber text, the tooltip box follows the text, stays on screen and draws above all UI on every map, 2026-11-12.
-- `BlzGetOriginFrame(ORIGIN_FRAME_WORLD_FRAME)` is a real frame below the stock UI: once a script fetches it, its rect sets the 3D viewport (edges on the UI root's edges stretch to the window edges) and its children draw under the stock UI; before, a stand-in drew above the stock UI and the 3D view stayed in the band between top bar and console, 2026-11-12.
-- `BlzGetFrameByName` finds the info-panel stat frames (`InfoPanelIcon*`, hero attributes) with create contexts 0, 1, 2 and 6; `SimpleClassValue`, `SimpleHeroLevelBar` and `SimpleProgressIndicator` follow a script-moved `SimpleNameValue`; the hero XP bar is full at max level, 2026-11-12.
-- `GetHandleId` of an attack type returns the `common.j` index (`ATTACK_TYPE_NORMAL` 0 to `ATTACK_TYPE_HERO` 6) instead of an engine-internal number (inferred from a map's lookup table, not measured in WC3); units without a thorns effect no longer deal a zero-damage return hit, 2026-11-12.
-- Command buttons with an off-grid `Buttonpos` (for example -2147483648 in `CommandFunc.txt`, such as CmdStop and CmdAttackGround on one map) are hidden and cannot be used by the player: no click, and the hotkey does not fire in letter or grid mode. Script orders still work; `BlzUnitHideAbility` is unchanged. A map `CommandFunc.txt` with a missing section no longer throws a NullPointerException, 2026-11-12.
-- Script TEXT frames are drawn after the other frames of their root-level frame tree, so a TEXT child is no longer covered by a later-sibling BACKDROP (for example HP and mana bar texts over a bar fill). The rule is a best fit to a reference screenshot, not measured, 2026-11-12.
-- Hero skill points are capped at the number of levels the hero can still learn; the hero-skill "+" button shows only with points and something learnable. Stock command buttons are anchored to the console UI, and stock buttons whose points a script cleared are not drawn, 2026-11-12.
-- `GetSpellTargetX`/`Y`/`Loc` no longer throw for unit-target and no-target casts; `BlzEndUnitAbilityCooldown` also ends Channel and other non-ability-builder cooldowns, 2026-11-12.
-- `BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT)` returns the portrait model frame; once fetched, the 3D portrait is drawn in that frame's rect and follows its position, parent, visibility and draw order. WarMash does not copy Reforged's offset quirk (about 30 px right at 16:9), so a map tuned by eye needs its offset re-adjusted; frame alpha and scale are not applied, 2026-11-12.
-- Inventory parts follow `ConsoleUI` when a script re-anchors it (position only, not visibility, alpha or scale), 2026-11-12.
-- `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzSetUnitArmor` read back exactly the value set while buffs are active; max HP is at least 1, 2026-11-11.
-- `BlzGetUnitRealField(UNIT_RF_SCALING_VALUE)` returns the unit type's scale, not changed by `SetUnitScale`, 2026-11-11.
-- `BlzSetUnitSkin` updates the selected unit's portrait and selection circle at once, 2026-11-11.
-- Script TEXT frames of fixed height do not draw whole lines outside the frame; centred multi-line text centres each line, 2026-11-11.
-- `BlzFrameIsVisible` is false when any ancestor is hidden, as in WC3, 2026-11-11.
-- TEXT frames: `BlzFrameSetAbsPoint` offsets are not scaled by `BlzFrameSetScale` (only the font scales), default font height 0.0105, line pitch 0.0095 at scale 1, texts placed by two points wrap at their width, 2026-11-11.
-- Coloured text (`|c`/`|r`) starts after the preceding text and no longer moves a wrapped line up (also FDF texts), 2026-11-11.
-- `IncUnitAbilityLevel`, `SetUnitAbilityLevel`, `SetAbilityLevel` outside the level range clamp to 1..level count instead of throwing, 2026-11-11.
-- `SetHeroStr`/`SetHeroAgi`/`SetHeroInt`: `GetHeroX(false)` now equals the value set; `SetPlayerState` cases `PLACED`, `OBSERVER_ON_DEATH`, `OBSERVER`, `UNFOLLOWABLE` no longer fall through into the next cases, 2026-11-11.
-- Hero agility armor is no longer rounded in the simulation (damage uses fractional armor; display unchanged), 2026-11-11.
-- Textures shipped in the map (`.blp`, `.tga`, `.dds`) now override the game's files of the same name for ground, blight, cliff, water, UI (FDF, `BlzFrameSetTexture`, icons), minimap, model (including HD `_diffuse`/`_normal`/`_orm`), shadow and ubersplat textures; a map `X.tga` also wins over an install `X.blp`. An unreadable map file falls back to the game's file with a log line. Pathing textures and menu screens are not covered. `-qalog` reports `state.mapTextures` counts, 2026-11-11.
-- `BlzGetHeroPrimaryStat` returns STR 0, AGI 1, INT 2 like Reforged 3.0.1 (was 1/2/3), 2026-11-11.
-- Script selection: `SelectUnit` has no 12-unit cap; `GroupEnumUnitsSelected` and the selection events see a script selection change once the game turn is past the change (`IsUnitSelected` at once), as in Reforged (delay model inferred); `RemoveUnit` on a selected unit fires no deselect event, 2026-11-11.
-- Ground tiles draw each tile's own texture; before, every tile used the first tileset entry's texture on multi-tile maps, 2026-11-11.
-- `SetCameraPosition` cancels a running pan, so a finished pan no longer pulls the camera back, 2026-11-11.
-- `EVENT_PLAYER_UNIT_SELECTED`/`DESELECTED` and `EVENT_UNIT_SELECTED`/`DESELECTED` now fire (click, drag, script, death, hide, `RemoveUnit`), 2026-11-11.
-- Frames with two opposite points size from those points; template-less TEXT frames default to a smaller height, 2026-11-11.
-- `BlzFrameClick` on a disabled button no longer fires; `BlzFrameSetText` works on template-less GLUETEXTBUTTON; creating EDITBOX/SLIDER without a template no longer throws, 2026-11-11.
-- `BlzHideOriginFrames(true)` keeps script frames parented to stock frames visible, 2026-11-11.
-- Repeating timers under 0.05 s fire at their real period; timeouts such as 0.65 s no longer fire a tick early; `TimerStart` on a running timer restarts it; paused timers stay frozen; pause then resume in one tick no longer loses the timer; null timers in `PauseTimer`/`ResumeTimer`/`DestroyTimer` do nothing, 2026-11-11.
-- Repeating timers with a timeout under 1 ms fire every 1 ms; `TimerStart` with NaN or negative infinity acts as timeout 0, with +Infinity the timer never fires, 2026-11-11.
-- TGA textures of more types load (RLE, grayscale, image-ID field, top/right origin); a failed `BlzFrameSetTexture` keeps the old texture; a SPRITE frame with an image path draws nothing instead of throwing, 2026-11-11.
-- Multiboard title, body and minimize button borders sit on the Reforged-measured boxes (no squeezed title, no gap between title and body), 2026-11-13.
-- Tiled backdrop backgrounds no longer draw one tile past the inner rect at some window sizes, 2026-11-13.
-- `GroupEnumUnits*` natives clear the group first (as in WC3) and the spatial ones skip Locust units; `GroupEnumUnitsInRangeOfUnit` accepts a null unit, 2026-11-13.
-- `UnitAddAbility('Aloc')` returns true and marks the unit (health bars and spatial group enumerations skip it; still selectable and attackable); `UnitAddAbility` with a null unit returns false, an already-present ability returns false silently, 2026-11-13.
-- "Self" in an ability's targets allowed lets the caster be targeted; the item ability `AIsr` also reduces magic attack damage; the slow buff no longer errors on re-level of a disabled ability, 2026-11-13.
-- A level change from an ability's own spell effect handler re-times the running cast's cooldown (map author's report, not measured), 2026-11-13.
-- Guard leash re-acquire respects auto-attack-disabling buffs and an order inside an autocast order clears the leash, 2026-11-13.
-- Locust (`Aloc`) has full effects while present: unselectable, untargetable, no bars, skipped by spatial group enumerations, walked through by other units; removal restores the unit at once (deliberate difference); `BlzIsUnitSelectable` is false for them, 2026-11-13.
-- `BlzPauseUnitEx` has its own counter and keeps the command card (unusable buttons); passive item-based abilities get no command button; a disabled button without disabled art shows its normal icon; autocast never picks its own caster for "enemies" lists, 2026-11-13.
-- `DestroyEffect` starts a model's death animation at once; live particles and ribbons of a finished effect fade out (up to 5 s) and destroyed effects keep advancing off-screen; `Preload` of a `.mdl`/`.mdx` path loads the model for `AddSpecialEffect`, 2026-11-13.
-- `UnitRemoveAbility(unit, buffId)` removes every instance of the buff (was the first only), 2026-11-13.
-- A dead hero's button icon is drawn darkened (revive restores it), 2026-11-13.
-- Units created by a script in a timer or trigger callback (`CreateUnit`, `CreateUnitAtLoc`, `BlzCreateUnitWithSkin`) act on the next tick instead of the one after (deliberate; fixes a dummy-caster buff being applied twice on one map), 2026-11-13.
-- `AddSpellEffectById`, `AddSpellEffectTargetById`, `AddSpellEffectByIdLoc` follow the `AddSpecialEffect` rule (a model without Stand loops until `DestroyEffect`); `BlzPlaySpecialEffect` with Death replays Death and a play within the particle drain window after `DestroyEffect` is drawn, 2026-11-13.
-- `SetUnitFacing` and `SetUnitFacingTimed` turn gradually at the unit's turn rate (also while paused) instead of instantly; `GetUnitFacing` returns the mid-turn angle, 2026-11-13.
-- `DisplayTextToPlayer` default duration is `len*0.1 + 3` seconds as in WC3, 2026-11-13.
-- `IsUnitType(unit, UNIT_TYPE_ANCIENT)` reads bit 128 set through `BlzSetUnitIntegerField(UNIT_IF_UNIT_CLASSIFICATION)`; targeting still ignores it, 2026-11-13.
-- Effects are drawn at their attachment point or position: a model whose visible mesh hangs on bones of a faded-out geoset no longer freezes at a stale spot (a hand-held effect left behind the hand, a moved projectile drawn at its birth spot; also units, doodads and missiles with such bones), 2026-11-15.
-- `SetUnitFacing` and `SetUnitFacingTimed` turn at turn rate radians per 0.03 s capped at 0.20 (about 382 degrees per second) instead of 688 degrees per second at rate 0.6; the formula is cited, not measured; movement turning is unchanged, 2026-11-15.
-- MDX texture wrap flags apply per model texture entry ("repeat" no longer leaks from one model to every model sharing the texture file); effect models that scroll a clamped sprite sheet look right, a model that relied on the leak now clamps. A layer with an out-of-range texture animation id loads (treated as none) instead of failing the model, 2026-11-15.
-- A unit that replays a looping `SetUnitAnimationByIndex` sequence goes to stand when its pause ends and it is idle; one-shot and queued script animations are left alone (WC3 behavior unverified), 2026-11-15.
 
-- `IsUnitInRangeXY` is a real range check (always returned false before); `UnitDamageTarget` plays the weapon-type hit sound; combat hit sounds are no longer dropped at large camera distances (distance measured from the camera target, inferred); ribbons whose visibility keys are all outside the playing animation do not emit (trails on custom missiles keyed only in Death); the chat input box is opaque and drawn above other UI except tooltips; script-moved effects are drawn smoothed between ticks (up to 50 ms behind the script position); 2026-11-15.
-- `UnitApplyTimedLife` draws no target art for its buff (summoned clones no longer burn when a map passes a buff with art); timer and expiry unchanged, 2026-11-15.
-- `BlzPauseUnitEx` during a Channel cast ends the cast at once and the unpause re-issues the unit's order (measured in Reforged 3.0.1); `GetUnitCurrentOrder` returns 851973 in between. Creeps walk home 5 s after first passing 1000 from home (was: at once), 2026-11-15.
-- With `BlzFrameClearAllPoints` on `ORIGIN_FRAME_TOOLTIP` and no new point, the hero button tip is placed above the hovered icon by the engine (was: not drawn; Reforged unprobed), 2026-11-15.
-- QA: `sounds3d` in `-qalog` states and exit, `drawnLocal` and `smoothingPending` in `qaEffectScan`, 2026-11-15.
-- Attackers drop a target that turns invulnerable or (undetected) invisible; a running backswing may finish (exact Reforged timing unmeasured). QA: `WarMashQaUnitInfo` fields `invulnerable`, `invisLevels`, `visibleTo`, `behavior`, `behaviorCategory`, `behaviorTarget`, 2026-11-16.
-
-- `GroupEnumUnitsInRect`, `InRange`, `InRangeOfLoc` and their Counted forms return dead units (decaying corpses, about 90 to 100 s) until the corpse is gone, as in WC3 1.29.2; filter with `UnitAlive`. Removed and hidden units are not returned. Reforged unmeasured, 2026-11-16.
-- `IsUnitType` with `UNIT_TYPE_POISONED`, `POLYMORPHED`, `PLAGUED` returns false instead of a script error; `BlzGetUnitArmor`, `GetUnitDefense`, `GetUnitCastPoint`, `GetUnitCastBackswingPoint`, `UnitGetTemporaryDefenseBonus` with a null unit return 0; `GetSpellTargetUnit`/`GetSpellTargetLoc` outside a spell event return null, 2026-11-16.
-- Altar hero revive gold, lumber and time are capped at `HeroMaxReviveCostGold`, `HeroMaxReviveCostLumber`, `HeroMaxReviveTime` (missing or 0 means no cap), 2026-11-16.
-- A `CreateSound` sound that was never killed is released when the map closes; leaving a map frees all model, UI, minimap and combat-sound resources of that map, 2026-11-16.
-- Special-effect ground splats, ubersplats and ribbons under distance fog no longer take the fog setting of the effect drawn before them (their tint changed from frame to frame); what real WC3 shows is unmeasured, 2026-11-16.
-- `GetPlayerStructureCount` counts living structures only (was every unit); `GetPlayerTypedUnitCount` with `includeUpgrades` counts upgraded tiers (keep and castle under "townhall"), is null-safe and excludes dead units, 2026-11-16.
-- Building placement by order or script at a spot partly or fully off the pathing grid is refused with Cantplace, 2026-11-16.
-- Effects whose non-looping sequence holds its last frame keep their global sequences running (a point effect with only Birth and Death pulsates until `DestroyEffect`; was frozen), 2026-11-16.
-- An attacker drops a living target that turns invulnerable, hidden, Locust or undetected-invisible at once, also mid-backswing (a kill still plays the backswing), 2026-11-16.
-- Hero level-up art: one effect per gain call (was one per level), attached to the hero at its scale, none for a hidden or dead hero; one-shot engine art (impact, death-explode, revive, level-up) finishes while off-screen, 2026-11-16.
-- Models spawned by a model's event objects leave the scene after their sequence and particles ended, at most 5 s later (were kept on their last frame for good); pooled particle instances and destroyed sprite frames release their textures (about 295 textures leaked per 24 kills), 2026-11-16.
-- A snared unit stops walking and `GetUnitMoveSpeed` / `BlzGetUnitRealField(UNIT_RF_SPEED)` read 0 while snared (a move order still walked before); `IsUnitType(u, UNIT_TYPE_POLYMORPHED)` is true while polymorphed (was always false); the script scale from `SetUnitScale` / `BlzSetUnitSkin` is kept apart from buff scale, so Bloodlust growth ends cleanly; `ConvertAbilityDisableType(7)` is valid (WarMash-only POLYMORPH), 2026-11-16.
+- An order given by script inside a condition of an issued-target-order trigger no longer replaces the outer order's target or makes it fail (2026-11-16)
+- Slow (also Thunder Clap) and the move speed upgrades no longer write an active speed buff into the unit's base speed… (2026-11-16)
+- A disabled command button whose icon has no disabled art is drawn dark (45 percent brightness, WarMash's own value): a silenced hero's buttons… (2026-11-16)
+- Crash fix: `SetWidgetLife`, `SetUnitState(UNIT_STATE_LIFE)` and heals on a killed unit are ignored, its life stays 0 until a real revive… (2026-11-16)
+- Regions: a unit already standing in the area added by `RegionAddRect`, `RegionAddCell` or `RegionAddCellAtLoc` is inside at once (`IsUnitInRegion`) and gets no… (2026-11-16)
+- `GetUnitMoveSpeed` and `BlzGetUnitRealField(UNIT_RF_SPEED)` return the buffed speed unrounded (Bloodlust on 270 reads 337.5, was 338) (2026-11-16)
+- The Ensnare net is negative physical and not dispellable by `UnitRemoveBuffs`, `UnitRemoveBuffsEx`, `UnitCountBuffsEx` and `UnitHasBuffsEx` (was negative magic) (2026-11-16)
+- Aerial Shackles (`Amls`) ends its channel after its duration, fires ENDCAST and removes its buffs (2026-11-16)
+- `BlzSetSpecialEffectTime` with time scale 0 holds the set frame, including the last frame of a looping sequence (it wrapped to the start) (2026-11-16)
+- Shop purchases: an item purchase after a refused immediate order works (2026-11-16)
+- Ethereal targets are refused by every physical target spell (Channel with the physical option, ability-builder `physicalSpell`) (2026-11-16)
+- `UnitRemoveBuffs*` with two builder auras of different polarity removes only the matching one (2026-11-16)
+- `SetUnitVertexColor` clamps each component to 0..255 (values above 255 brightened the model) (2026-11-16)
+- `GetUnitAbilityLevel` returns the real level (was 1 for any ability the unit had) (2026-11-13)
+- `SetUnitX` / `SetUnitY` and other script moves draw the unit at the scripted position within one tick (was drawn approaching at walk speed) (2026-11-13)
+- `SetUnitFlyHeight` honours its rate argument (was instant) (2026-11-13)
+- Trigger conditions: every condition of a trigger now runs and the results are ANDed (WarMash stopped at the first false one), and `Not` negates its boolexpr… (2026-11-12)
+- Cancelling a supply-blocked altar revive or unit-train queue entry no longer returns food it never paid (2026-11-12)
+- `ORIGIN_FRAME_UNIT_PANEL_BUFF_BAR` and its label are real frames (move, scale, hide work) (2026-11-12)
+- `BlzGetOriginFrame(ORIGIN_FRAME_WORLD_FRAME)` is a real frame below the stock UI: once a script fetches it, its rect sets the 3D viewport… (2026-11-12)
+- `BlzGetFrameByName` finds the info-panel stat frames (`InfoPanelIcon*`, hero attributes) with create contexts 0, 1, 2 and 6 (2026-11-12)
+- `GetHandleId` of an attack type returns the `common.j` index (`ATTACK_TYPE_NORMAL` 0 to `ATTACK_TYPE_HERO` 6) instead of an engine-internal number… (2026-11-12)
+- Command buttons with an off-grid `Buttonpos` (for example -2147483648 in `CommandFunc.txt`, such as CmdStop and CmdAttackGround on one map) are hidden and… (2026-11-12)
+- Script TEXT frames are drawn after the other frames of their root-level frame tree, so a TEXT child is no longer covered by a later-sibling BACKDROP… (2026-11-12)
+- Hero skill points are capped at the number of levels the hero can still learn (2026-11-12)
+- `GetSpellTargetX`/`Y`/`Loc` no longer throw for unit-target and no-target casts (2026-11-12)
+- `BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT)` returns the portrait model frame (2026-11-12)
+- Inventory parts follow `ConsoleUI` when a script re-anchors it (position only, not visibility, alpha or scale) (2026-11-12)
+- `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzSetUnitArmor` read back exactly the value set while buffs are active (2026-11-11)
+- `BlzGetUnitRealField(UNIT_RF_SCALING_VALUE)` returns the unit type's scale, not changed by `SetUnitScale` (2026-11-11)
+- `BlzSetUnitSkin` updates the selected unit's portrait and selection circle at once (2026-11-11)
+- Script TEXT frames of fixed height do not draw whole lines outside the frame (2026-11-11)
+- `BlzFrameIsVisible` is false when any ancestor is hidden, as in WC3 (2026-11-11)
+- TEXT frames: `BlzFrameSetAbsPoint` offsets are not scaled by `BlzFrameSetScale` (only the font scales), default font height 0.0105, line pitch 0.0095 at scale… (2026-11-11)
+- Coloured text (`|c`/`|r`) starts after the preceding text and no longer moves a wrapped line up (also FDF texts) (2026-11-11)
+- `IncUnitAbilityLevel`, `SetUnitAbilityLevel`, `SetAbilityLevel` outside the level range clamp to 1..level count instead of throwing (2026-11-11)
+- `SetHeroStr`/`SetHeroAgi`/`SetHeroInt`: `GetHeroX(false)` now equals the value set (2026-11-11)
+- Hero agility armor is no longer rounded in the simulation (damage uses fractional armor; display unchanged) (2026-11-11)
+- Textures shipped in the map (`.blp`, `.tga`, `.dds`) now override the game's files of the same name for ground, blight, cliff, water, UI… (2026-11-11)
+- `BlzGetHeroPrimaryStat` returns STR 0, AGI 1, INT 2 like Reforged 3.0.1 (was 1/2/3) (2026-11-11)
+- Script selection: `SelectUnit` has no 12-unit cap (2026-11-11)
+- Ground tiles draw each tile's own texture (2026-11-11)
+- `SetCameraPosition` cancels a running pan, so a finished pan no longer pulls the camera back (2026-11-11)
+- `EVENT_PLAYER_UNIT_SELECTED`/`DESELECTED` and `EVENT_UNIT_SELECTED`/`DESELECTED` now fire (click, drag, script, death, hide, `RemoveUnit`) (2026-11-11)
+- Frames with two opposite points size from those points (2026-11-11)
+- `BlzFrameClick` on a disabled button no longer fires (2026-11-11)
+- `BlzHideOriginFrames(true)` keeps script frames parented to stock frames visible (2026-11-11)
+- Repeating timers under 0.05 s fire at their real period (2026-11-11)
+- Repeating timers with a timeout under 1 ms fire every 1 ms (2026-11-11)
+- TGA textures of more types load (RLE, grayscale, image-ID field, top/right origin) (2026-11-11)
+- Multiboard title, body and minimize button borders sit on the Reforged-measured boxes (no squeezed title, no gap between title and body) (2026-11-13)
+- Tiled backdrop backgrounds no longer draw one tile past the inner rect at some window sizes (2026-11-13)
+- `GroupEnumUnits*` natives clear the group first (as in WC3) and the spatial ones skip Locust units (2026-11-13)
+- `UnitAddAbility('Aloc')` returns true and marks the unit (health bars and spatial group enumerations skip it; still selectable and attackable) (2026-11-13)
+- "Self" in an ability's targets allowed lets the caster be targeted (2026-11-13)
+- A level change from an ability's own spell effect handler re-times the running cast's cooldown (map author's report, not measured) (2026-11-13)
+- Guard leash re-acquire respects auto-attack-disabling buffs and an order inside an autocast order clears the leash (2026-11-13)
+- Locust (`Aloc`) has full effects while present: unselectable, untargetable, no bars, skipped by spatial group enumerations, walked through by other units (2026-11-13)
+- `BlzPauseUnitEx` has its own counter and keeps the command card (unusable buttons) (2026-11-13)
+- `DestroyEffect` starts a model's death animation at once (2026-11-13)
+- `UnitRemoveAbility(unit, buffId)` removes every instance of the buff (was the first only) (2026-11-13)
+- A dead hero's button icon is drawn darkened (revive restores it) (2026-11-13)
+- Units created by a script in a timer or trigger callback (`CreateUnit`, `CreateUnitAtLoc`, `BlzCreateUnitWithSkin`) act on the next tick instead of the one… (2026-11-13)
+- `AddSpellEffectById`, `AddSpellEffectTargetById`, `AddSpellEffectByIdLoc` follow the `AddSpecialEffect` rule (a model without Stand loops until `DestroyEffect`) (2026-11-13)
+- `SetUnitFacing` and `SetUnitFacingTimed` turn gradually at the unit's turn rate (also while paused) instead of instantly (2026-11-13)
+- `DisplayTextToPlayer` default duration is `len*0.1 + 3` seconds as in WC3 (2026-11-13)
+- `IsUnitType(unit, UNIT_TYPE_ANCIENT)` reads bit 128 set through `BlzSetUnitIntegerField(UNIT_IF_UNIT_CLASSIFICATION)` (2026-11-13)
+- Effects are drawn at their attachment point or position: a model whose visible mesh hangs on bones of a faded-out geoset no longer freezes at a stale spot… (2026-11-15)
+- `SetUnitFacing` and `SetUnitFacingTimed` turn at turn rate radians per 0.03 s capped at 0.20 (about 382 degrees per second) instead of 688 degrees per second… (2026-11-15)
+- MDX texture wrap flags apply per model texture entry ("repeat" no longer leaks from one model to every model sharing the texture file) (2026-11-15)
+- A unit that replays a looping `SetUnitAnimationByIndex` sequence goes to stand when its pause ends and it is idle (2026-11-15)
+- `IsUnitInRangeXY` is a real range check (always returned false before)
+- `UnitApplyTimedLife` draws no target art for its buff (summoned clones no longer burn when a map passes a buff with art) (2026-11-15)
+- `BlzPauseUnitEx` during a Channel cast ends the cast at once and the unpause re-issues the unit's order (measured in Reforged 3.0.1) (2026-11-15)
+- With `BlzFrameClearAllPoints` on `ORIGIN_FRAME_TOOLTIP` and no new point, the hero button tip is placed above the hovered icon by the engine… (2026-11-15)
+- Attackers drop a target that turns invulnerable or (undetected) invisible (2026-11-16)
+- `GroupEnumUnitsInRect`, `InRange`, `InRangeOfLoc` and their Counted forms return dead units (decaying corpses, about 90 to 100 s) until the corpse is gone, as… (2026-11-16)
+- `IsUnitType` with `UNIT_TYPE_POISONED`, `POLYMORPHED`, `PLAGUED` returns false instead of a script error (2026-11-16)
+- Altar hero revive gold, lumber and time are capped at `HeroMaxReviveCostGold`, `HeroMaxReviveCostLumber`, `HeroMaxReviveTime` (missing or 0 means no cap) (2026-11-16)
+- A `CreateSound` sound that was never killed is released when the map closes (2026-11-16)
+- Special-effect ground splats, ubersplats and ribbons under distance fog no longer take the fog setting of the effect drawn before them… (2026-11-16)
+- `GetPlayerStructureCount` counts living structures only (was every unit) (2026-11-16)
+- Building placement by order or script at a spot partly or fully off the pathing grid is refused with Cantplace (2026-11-16)
+- Effects whose non-looping sequence holds its last frame keep their global sequences running… (2026-11-16)
+- An attacker drops a living target that turns invulnerable, hidden, Locust or undetected-invisible at once, also mid-backswing (a kill still plays the backswing) (2026-11-16)
+- Hero level-up art: one effect per gain call (was one per level), attached to the hero at its scale, none for a hidden or dead hero (2026-11-16)
+- Models spawned by a model's event objects leave the scene after their sequence and particles ended, at most 5 s later (were kept on their last frame for good) (2026-11-16)
+- A snared unit stops walking and `GetUnitMoveSpeed` / `BlzGetUnitRealField(UNIT_RF_SPEED)` read 0 while snared (a move order still walked before) (2026-11-16)
 
 ### WC3 compatibility
-- Measured in Reforged 3.0.1.24371 on 2026-11-16 (run r3d) and matching: the attack dice upgrade raises the number of dice, not the base damage (`BlzGetUnitDiceNumber` 1 to 4 after three levels of `Rhme`, `BlzGetUnitBaseDamage` unchanged); an instant Channel paused in its own EFFECT casts once. Not matched yet: Reforged fires FINISH and ENDCAST of that paused instant cast in the EFFECT tick (WarMash: ENDCAST only) and its first Unholy Frenzy drain step comes with the buff (WarMash: one second later). `IsUnitInvisible` in Reforged is true for an undetected invisible unit and false under a detector; a plain unit in fog was not measured, 2026-11-16.
-- 2026-11-16, deliberate differences from Reforged 3.0.1.24371 (measured there): `BlzUnitHideAbility` is an on/off switch, Reforged counts hides (N hides need N unhides); `BlzUnitDisableAbility(false, hideUI=true)` after `(true, true)` enables the ability, Reforged keeps it refused until a `(false, false)`. Unverified: hiding Move or Attack by script blocks those orders; a unit that was inside a grown region fires a leave event when it walks out. Closed differences from the line below: Channel `SPELL_ENDCAST` timing, `IsUnitDetected` and move speed rounding now match Reforged.
-- Data version, 2026-11-16 (documented, no code change): maps that are not flagged melee read the 1.29 `Custom_V1` balance files, so the Tavern sells 5 heroes (Reforged data: 8) and Ensnare is 12 s / 3 s on heroes / cooldown 16 (Reforged: 9 / 3 / 15). Kept on purpose; this explains the "5 of its 8 heroes" note below.
-- Measured in Reforged 3.0.1.24371 on 2026-11-16: `UnitDamagePoint` rules (delay, source, allies and neutrals hit, radius plus collision size, removed or killed source still deals the damage, destructables untouched), `SetUnitVertexColor` clamps to 0..255, Ensnare (hits magic-immune units, ethereal caster and target refused, net 9 s / heroes 3 s), Bloodlust 337.5 move speed for 60 s, Polymorph keeps life and max life. Known differences: ENDCAST of a Channel fires one 0.05 s tick after Reforged; `BlzGetUnitBaseDamage` includes upgrades, Reforged does not; `IsUnitDetected` is true in Reforged only inside a detector's range. Details in [Differences from Warcraft III](wc3-differences.html).
-- Unverified, 2026-11-16: tavern and mercenary unit sales (`UNIT_STOCK_*`, `UNIT_SALE_*` switches); on one custom map a script-created Tavern lists 5 of its 8 heroes (map data read).
-- Channel `SPELL_FINISH` / `SPELL_ENDCAST` fire one tick (0.05 s) later for a follow-through time above the instant value (inferred from one map's spell, deliberate); `SetUnitVertexColor` clamping is inferred, not measured; `UnitDamagePoint` rules (delay, collision size, source hit) are unverified switches; `IssueNeutralImmediateOrder` (string form) stays missing, 2026-11-16.
-- Missing or different on purpose (2026-11-16): move speed rounding (open question). `IsUnitIllusion` always returns false (WarMash cannot create illusions yet). `UnitUseItem` and `UnitUseItemTarget` return false for a potion at full life and for a target item used without a target (WC3 true); `UnitUseItemPoint` returns true when the order is accepted (WC3 always false). Differences from 1.29.2 kept on purpose: `BlzIsUnitInvulnerable` returns the real flag; the weapon index of `BlzGetUnitBaseDamage` is 0-based; it includes upgrades (open question).
-- `IsUnitPaused` is implemented and counts `PauseUnit` only, not `BlzPauseUnitEx` (WC3 keeps it false under `BlzPauseUnitEx`); `IsUnitInRange*` subtracting the first unit's collision size is unverified against WC3, 2026-11-15.
-- `SetUnitState` clamps life and mana to the maximum (fixes stretched floating bars on summoned clones); status bar fills are clamped to [0, 1]; `UnitApplyTimedLife` with duration 0 or less expires on the next tick, huge durations no longer overflow and re-timing keeps explode-on-death, 2026-11-12.
-- Channel unverified or different (2026-11-12): follow-through 0 is an instant cast, a stun before EFFECT ends the cast, orders before EFFECT interrupt instead of queueing, Disable Other Abilities greys only spell and item abilities, target art is not spawned, `GetTriggerPlayer` is nil in spell events. Missing for a large custom map's spell code, since implemented (`BlzSpecialEffect*` and `SetSoundPosition` 2026-11-12; `UnitApplyTimedLife`, `ReviveHero`, `ReviveHeroLoc`, `IsUnitOwnedByPlayer`, `IsTerrainPathable` implemented since 2026-11-12). Damage events are implemented since the later 2026-11-12 entry below.
-- Damage events (2026-11-12), unverified or different: outside a damage event the getters return 0 / null; DAMAGED is skipped only when a handler set 0 or less in DAMAGING and fires for a hit that is 0 after armor (1.31.1+ behaviour); nesting stops firing events at 32 levels; a handler that makes the target invulnerable cancels the hit; `KillUnit` in a DAMAGING handler still fires DAMAGED; ATTACKED timing against DAMAGING is not confirmed. Other events still queue code actions until after the tick.
-- Also recorded 2026-11-12: a map's `CommandFunc.txt` replaces the stock file (a missing section uses the built-in one); the direct BLP decoder falls back to the old path for JPEG BLPs with an implausible size (no change for valid textures).
-- Known gaps recorded in [Differences from Warcraft III](wc3-differences.html): `[FrameDef]` skin section, `.png` textures, 2026-11-11 (the non-zero-context `BlzGetFrameByName` and `ORIGIN_FRAME_WORLD_FRAME` gaps are closed since 2026-11-12, except contexts 3, 4, 5, 7).
-- Stock heroes always get their first proper name (WarMash reads the Proper Names list but the used-names count is probably 0; real WC3 picks among the first "Proper Names Used" entries), 2026-11-12.
-- Also missing (static inventory of a large custom map, 2026-11-12; `BlzGetUnitBooleanField`, `UnitApplyTimedLife`, `ReviveHero`, `ReviveHeroLoc`, `IsTerrainPathable`, `IsUnitOwnedByPlayer` since implemented): `BlzSetUnitBooleanField`, `BlzSetSpecialEffectPositionLoc`, `BlzResetSpecialEffectMatrix` (not called by that map); `GetChangingUnitPrevOwner` returns null, `SetUnitFlyHeight` ignores the rate, `SetUnitFacingTimed` ignores the duration, `ORIGIN_FRAME_CHAT_MSG` and `ORIGIN_FRAME_UNIT_MSG` are placeholders.
-- Still missing: `BlzSetAbilityIcon`, `CreateQuest`/`QuestSet*`, `Multiboard*`, `BlzSetUnitIntegerField`; partial: `BlzSetUnitRealField` (sight radius only), `BlzGetUnitIntegerField` (primary attribute and tint only); `EnableUserUI` does not block input, 2026-11-11.
-- TEXT frames still differ: overflowing text is not cut off, multi-line centred text aligns each line left, `BlzFrameSetEnable` has no visual effect, `BlzFrameSetTextSizeLimit` is a stub, `BlzFrameSetFont` applies the height only (`GetUnitAbilityLevel` returns the real level since 2026-11-13), 2026-11-11.
-- Selection stubs (stored only): `EnableSelect`, `EnablePreSelect`, `EnableDragSelect`, `BlzEnableSelections`; `BlzIsUnitSelectable` is always true. The selection delay model and the fog rule are unverified against WC3, 2026-11-11.
-- Unverified or different (2026-11-13): mouse and key events are local only and not synced; key events do not repeat; `GetTerrainType` uses the nearest corner; the change-owner player event fires on the previous owner; `SetUnitFacingTimed` ignores the duration; `BlzSetItemBooleanField` supports 4 fields; ability-field behavior at unchanged levels is unverified; `UnitAddItem` false for a carried item is inferred. `GetChangingUnitPrevOwner`, `SetUnitFlyHeight` and `BlzSetAbilityIcon` are no longer missing.
-- Gaps recorded 2026-11-13: a paused unit still accepts orders (WC3 rule unverified); item heal and mana abilities and some spell classes fire no spell events; `DestroyEffect` waited for the current Stand loop (fixed 2026-11-13, see Fixed).
-- In-game unimplemented natives for Lua maps went from 930 to 865 (see [Differences from Warcraft III](wc3-differences.html)), 2026-11-11.
-- `BlzGetOriginFrame(ORIGIN_FRAME_TOOLTIP, 0)` returns the one-line hero-button hover tip (deliberate difference); command tooltips follow only `ORIGIN_FRAME_UBERTOOLTIP`. After a script clears its points with no new one the engine places it above the hovered hero icon (since 2026-11-15; earlier it drew nothing); a single point without a size gives a zero-size box (known limitation). Default: 0.002 above the hero icon, 2026-11-13.
-- Guard leash (2026-11-13, rules partly inferred): idle units remember a guard position and return home after an auto-acquired chase (600 / 5 s / 1000 from game data); orders are never leashed; a script move over 128 re-homes (deliberate deviation). Auto-acquire picks highest `prio`, then nearest. `GetUnitCurrentOrder` reads 0 or the last order during such attacks (WC3 probably reports attack; unverified). Creep sleep natives (`UnitAddSleep` and related) and call-for-help are not implemented.
-- Unverified or different (2026-11-13): `Aloc` is only partial (still selectable and attackable; deliberate: removal restores the unit fully), group enumeration clearing awaits a reference run, the `AIsr` damage types and the self-target reading are inferred.
-- 2026-11-13 (unverified, deliberate): `SetUnitFlyHeight` clamps at 0 for unit types with default fly height 0 or less; paused units switch from the engine walk animation to stand; timed spell buffs with the same buff id replace each other (one icon, timer restarts); guards whose chase target turns invulnerable, hidden or Locust stayed and walked home after 5 s (changed 2026-11-15: they walk home at once); a script effect without a Stand sequence loops until `DestroyEffect`; `BlzSetSpecialEffectAlpha`/`Color` do not reach particles and ribbons (as in WC3 per jassdoc). Gap found: a map helper that writes 128 with `BlzSetUnitIntegerField(UNIT_IF_UNIT_CLASSIFICATION, ...)` does not change targeting, because the field is stored only, so those units stay targetable.
-- Script facing, lost-attack-target and chat-fade rules are WarMash choices not confirmed against WC3; see [Differences from Warcraft III](wc3-differences.html), 2026-11-13.
-- F1 to F7 select the local player's first seven heroes (stock WC3: F1 to F3); heroes 4 to 7 get the tooltip title "Name (F4)" to "Name (F7)", a second press centres the camera; a map that binds F4 to F7 itself still gets the key events and now also the selection. QA: `WarMashQaHeroHotkey(index)`, 2026-11-16.
-- Ensnare, Bloodlust, Unholy Frenzy and Polymorph (2026-11-16), unverified or inferred: air units are targeted as ground while ensnared; Ensnare interrupts channels (cited) and hits magic-immune targets but refuses ethereal ones, from an unmeasured classic guide; the net missile is not modelled; Unholy Frenzy raised no damage event and skipped invulnerable units (changed later on 2026-11-16, see Changed); Polymorph keeps move, stop, hold and patrol, sets life absolute with max life unchanged and applies its level limit to Neutral Hostile units only; script scale stays after a scale buff ends. A click on the own portrait with an armed attack or move command shows the target error instead of a point order.
+
+- Measured in Reforged 3.0.1.24371 on 2026-11-16 (run r3d) and matching: the attack dice upgrade raises the number of dice, not the base damage… (2026-11-16)
+- 2026-11-16, deliberate differences from Reforged 3.0.1.24371 (measured there): `BlzUnitHideAbility` is an on/off switch, Reforged counts hides…
+- Data version, 2026-11-16 (documented, no code change): maps that are not flagged melee read the 1.29 `Custom_V1` balance files, so the Tavern sells 5 heroes…
+- Measured in Reforged 3.0.1.24371 on 2026-11-16: `UnitDamagePoint` rules…
+- Unverified, 2026-11-16: tavern and mercenary unit sales (`UNIT_STOCK_*`, `UNIT_SALE_*` switches)
+- Channel `SPELL_FINISH` / `SPELL_ENDCAST` fire one tick (0.05 s) later for a follow-through time above the instant value… (2026-11-16)
+- Missing or different on purpose (2026-11-16): move speed rounding (open question)
+- `IsUnitPaused` is implemented and counts `PauseUnit` only, not `BlzPauseUnitEx` (WC3 keeps it false under `BlzPauseUnitEx`) (2026-11-15)
+- `SetUnitState` clamps life and mana to the maximum (fixes stretched floating bars on summoned clones) (2026-11-12)
+- Channel unverified or different (2026-11-12): follow-through 0 is an instant cast, a stun before EFFECT ends the cast, orders before EFFECT interrupt instead…
+- Damage events (2026-11-12), unverified or different: outside a damage event the getters return 0 / null
+- Also recorded 2026-11-12: a map's `CommandFunc.txt` replaces the stock file (a missing section uses the built-in one)
+- Known gaps recorded in [Differences from Warcraft III](wc3-differences.html): `[FrameDef]` skin section, `.png` textures, 2026-11-11…
+- Stock heroes always get their first proper name… (2026-11-12)
+- Also missing…
+- Still missing: `BlzSetAbilityIcon`, `CreateQuest`/`QuestSet*`, `Multiboard*`, `BlzSetUnitIntegerField` (2026-11-11)
+- TEXT frames still differ: overflowing text is not cut off, multi-line centred text aligns each line left, `BlzFrameSetEnable` has no visual effect… (2026-11-11)
+- Selection stubs (stored only): `EnableSelect`, `EnablePreSelect`, `EnableDragSelect`, `BlzEnableSelections` (2026-11-11)
+- Unverified or different (2026-11-13): mouse and key events are local only and not synced
+- Gaps recorded 2026-11-13: a paused unit still accepts orders (WC3 rule unverified)
+- In-game unimplemented natives for Lua maps went from 930 to 865 (see [Differences from Warcraft III](wc3-differences.html)) (2026-11-11)
+- `BlzGetOriginFrame(ORIGIN_FRAME_TOOLTIP, 0)` returns the one-line hero-button hover tip (deliberate difference) (2026-11-13)
+- Guard leash (2026-11-13, rules partly inferred): idle units remember a guard position and return home after an auto-acquired chase…
+- Unverified or different (2026-11-13): `Aloc` is only partial (still selectable and attackable; deliberate: removal restores the unit fully), group enumeration…
+- 2026-11-13 (unverified, deliberate): `SetUnitFlyHeight` clamps at 0 for unit types with default fly height 0 or less
+- Script facing, lost-attack-target and chat-fade rules are WarMash choices not confirmed against WC3 (2026-11-13)
+- F1 to F7 select the local player's first seven heroes (stock WC3: F1 to F3) (2026-11-16)
+- Ensnare, Bloodlust, Unholy Frenzy and Polymorph (2026-11-16), unverified or inferred: air units are targeted as ground while ensnared
