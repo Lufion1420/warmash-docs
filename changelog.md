@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `EVENT_UNIT_PAWN_ITEM` and `EVENT_PLAYER_UNIT_PAWN_ITEM` fire (before the drop event, inline within pawn range), with `GetSellingUnit`, `GetBuyingUnit`… (2026-11-19)
 - `[FrameDef]` in war3mapSkin.txt overrides string ids at game UI setup (2026-11-19)
 - `EVENT_UNIT_DROP_ITEM`, `EVENT_PLAYER_UNIT_DROP_ITEM`, `EVENT_UNIT_HERO_LEVEL`, `EVENT_PLAYER_HERO_LEVEL` fire (rules unverified against WC3), with new natives… (2026-11-19)
 - Spell Book (`Aspb`) opens a sub-card of its listed abilities (2026-11-17)
@@ -113,6 +114,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Drop events: `RemoveItem`, item death and a used-up charge fire `EVENT_UNIT_DROP_ITEM` (`GetItemTypeId` is 0 afterwards) (2026-11-19)
 - `BlzGetOriginFrame(ORIGIN_FRAME_UNIT_MSG)` is the real message frame (`DisplayTextToPlayer` lines follow and hide with it; default rect unverified), and… (2026-11-19)
 - Map object data changes at index above 0 on a field the base row lacks (button positions, per-level tooltips, attack-2 missile fields) are kept (2026-11-19)
 - An effect whose model has Birth and Death but no Stand appears once and holds its last frame until `DestroyEffect` (2026-11-19)

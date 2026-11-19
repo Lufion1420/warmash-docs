@@ -64,7 +64,7 @@ Details:
 | `ReviveHero`, `ReviveHeroLoc` | works | Fire no revive events; refused when the food cap would be exceeded. |
 | Altar revive gold, lumber and time | bugfix | Capped by the `HeroMaxRevive*` gameplay constants. |
 | `UnitModifySkillPoints` | unverified | Capped at what the hero can still learn; the real native's documented bugs are not copied. |
-| `EVENT_UNIT_HERO_LEVEL`, `EVENT_PLAYER_HERO_LEVEL`, `GetLevelingUnit` | unverified | Now fire once per level gained, unit list then player list; `GetHeroLevel` is that step's level; from a kill they run before the death events. |
+| `EVENT_UNIT_HERO_LEVEL`, `EVENT_PLAYER_HERO_LEVEL`, `GetLevelingUnit` | bugfix | One event pair per `SetHeroLevel`, `AddHeroXP` or `SetHeroXP` call with the final level, as in Reforged; unit list then player list; from a kill they run before the death events. |
 | Hero level-up art | deliberate | One effect per gain call, not one per level gained. |
 | Hero skill points | unverified | The "+" button shows only when the hero has points and something to learn. |
 
