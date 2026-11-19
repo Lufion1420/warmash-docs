@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Combat state (WarMash-only): `WMS_EVENT_UNIT_COMBAT_ENTER`/`LEAVE` and `WMS_EVENT_PLAYER_UNIT_COMBAT_ENTER`/`LEAVE` events, plus `WmsIsUnitInCombat`… (2026-11-20)
 - `BlzGetOriginFrame(ORIGIN_FRAME_MINIMAP_BUTTON, 0..4)` and `BlzGetFrameByName` for `MinimapButtonBar`, `MinimapSignalButton`, `MiniMapTerrainButton`… (2026-11-19)
 - `EVENT_UNIT_PAWN_ITEM` and `EVENT_PLAYER_UNIT_PAWN_ITEM` fire (before the drop event, inline within pawn range), with `GetSellingUnit`, `GetBuyingUnit`… (2026-11-19)
 - `[FrameDef]` in war3mapSkin.txt overrides string ids at game UI setup (2026-11-19)
