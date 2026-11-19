@@ -14,7 +14,8 @@ Interface parts that continue [UI frames](ui-frames.html).
 | Native | Status | What differs |
 |---|---|---|
 | `BlzHideOriginFrames` | unverified | Hides the stock HUD; `false` restores it; script children stay visible. |
-| `BlzGetOriginFrame` for message frames, `ConsoleUIBackdrop`, `CommandBarFrame`, `SimpleHeroLevelBar`, `Leaderboard*` | gap | Empty placeholder frames. |
+| `BlzGetOriginFrame` for `CommandBarFrame`, `Leaderboard*` | gap | Empty placeholder frames. |
+| `BlzGetFrameByName("ConsoleUIBackdrop", 0)` | bugfix | A real art-less root frame drawn below the stock frames; its real rect and type are unknown. |
 | Minimap (`MiniMapFrame`, `ORIGIN_FRAME_MINIMAP`) | works | The real minimap; frame natives take effect. |
 | Minimap draw order | unverified | Drawn below all root-level script frames. |
 | Minimap when `ConsoleUI` moves | gap | Does not follow. |
@@ -29,7 +30,7 @@ Interface parts that continue [UI frames](ui-frames.html).
 | Hero XP bar at max level | unverified | Shown full. |
 | Minimap camera box | unverified | A trapezoid outline; Reforged shows a larger rectangle. |
 | Top menu buttons on Lua maps | deliberate | Reforged labels; the buttons open nothing. |
-| `ORIGIN_FRAME_UNIT_MSG` | gap | Placeholder: moving it has no effect. |
+| `ORIGIN_FRAME_UNIT_MSG` | bugfix | The real message frame: `DisplayTextToPlayer` lines follow it and hide with it; default rect is WarMash's old message position. |
 | Status bar fill | bugfix | Clamped to 0..1. |
 | FPS text | deliberate | Top right, smaller. |
 
@@ -61,6 +62,7 @@ Details:
 | Command button hotkey letters | deliberate | Lua maps show each button's hotkey, as in Reforged; JASS maps show none. |
 | Escape in a sub-card | deliberate | Closes one level (spell book, build menu, hero skills) and does not cancel targeting; cancelling targeting returns to the sub-card. |
 | Passive item-based abilities | deliberate | Get no command button. |
+| Passive ability with no button position | deliberate | Gets no command button; Reforged hides some passives even with one and draws item passives without one. |
 | Disabled button without disabled art | bugfix | Normal icon at 45 percent brightness. |
 | Cursor tint | deliberate | Red over enemies, green over own or allied units, yellow over neutral units and objects. |
 

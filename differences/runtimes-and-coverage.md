@@ -50,6 +50,7 @@ A map with `war3map.lua` is a Lua map. Data a non-melee map does not override co
 | Model texture with replaceable id 21 or an unmapped id | deliberate | Gets an empty texture without a file lookup or a failure count. |
 | Model texture path `war3mapImported\X.blp` | unverified | Does not fall back to `X.blp` at the archive root; fix the import path. |
 | Missing BLP texture file | works | Logs one line and the texture stays empty. |
+| Map object data changes at index above 0 | bugfix | Fields the base row lacks (button positions, per-level tooltips, attack-2 missile fields) are kept instead of dropped. |
 | Map textures vs game textures | deliberate | A map file of the same base name wins, also across `.blp`, `.tga` and `.dds`. |
 
 ## Native coverage and constants

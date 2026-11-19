@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `[FrameDef]` in war3mapSkin.txt overrides string ids at game UI setup (2026-11-19)
 - `EVENT_UNIT_DROP_ITEM`, `EVENT_PLAYER_UNIT_DROP_ITEM`, `EVENT_UNIT_HERO_LEVEL`, `EVENT_PLAYER_HERO_LEVEL` fire (rules unverified against WC3), with new natives… (2026-11-19)
 - Spell Book (`Aspb`) opens a sub-card of its listed abilities (2026-11-17)
 - UI and command-card icons decode on the worker threads too (`blpAsync.submitted` counts them) (2026-11-17)
@@ -71,6 +72,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- Command card: a passive ability with no button position (no `Buttonpos`/`Researchbuttonpos` x or y) gets no button (2026-11-19)
 - Mouse wheel zooms along the distance only and keeps the camera angle, field of view and far plane (2026-11-19)
 - Spell Book honors Shared Spell Cooldown: casting a listed ability puts the book on the same cooldown (2026-11-19)
 - `RemoveUnit` on a hero that died normally releases its tech-tree count once (`GetPlayerTechCount`, hero training limit) (2026-11-17)
@@ -111,6 +113,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `BlzGetOriginFrame(ORIGIN_FRAME_UNIT_MSG)` is the real message frame (`DisplayTextToPlayer` lines follow and hide with it; default rect unverified), and… (2026-11-19)
+- Map object data changes at index above 0 on a field the base row lacks (button positions, per-level tooltips, attack-2 missile fields) are kept (2026-11-19)
 - An effect whose model has Birth and Death but no Stand appears once and holds its last frame until `DestroyEffect` (2026-11-19)
 - `RemoveUnit` on an already removed unit does nothing (2026-11-17)
 - Model textures with replaceable id 21 or an unmapped id get an empty texture without a failed lookup (2026-11-17)

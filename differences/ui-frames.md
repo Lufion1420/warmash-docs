@@ -59,7 +59,7 @@ Details:
 | `BlzFrameSetTexture` with "" or `NONE` | unverified | Clears the texture. |
 | `.png` texture paths | gap | Do not load. |
 | Texture by bare file name | deliberate | Exact path only, plus an extension swap. |
-| `[FrameDef]` in war3mapSkin.txt | gap | Not applied. |
+| `[FrameDef]` in war3mapSkin.txt | works | Overrides string ids at game UI setup; `GetLocalizedString` and `GetLocalizedHotkey` return them. A TRIGSTR value resolves through the map's string table (unverified in Reforged); an unresolvable one keeps the stock text. |
 | `BuildTimeIndicator` skin key | gap | Ignored. |
 | Tiled BACKDROP | bugfix | Tiles stay inside the inner rect. |
 | SPRITE frame given an image path | unverified | Draws nothing, one log line. |
