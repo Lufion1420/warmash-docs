@@ -81,7 +81,7 @@ Details:
 | Locust (`UnitAddAbility` / `UnitRemoveAbility` with `'Aloc'`) | deliberate | Full Locust effects while present; removing it restores the unit at once (WC3 keeps them). |
 | `SetUnitTimeScale` | unverified | Kept across animation changes. |
 | `SetUnitAnimationByIndex` | unverified | A looping animation replays until any other animation request. |
-| `BlzSetUnitSkin`, `BlzCreateUnitWithSkin` | works | Change model, portrait, tint and sounds; the animation and a script vertex colour reset. |
+| `BlzSetUnitSkin`, `BlzCreateUnitWithSkin` | works | Change model, portrait, tint and sounds; the animation, a script vertex colour and the script scale reset; `SetUnitScale` afterwards is absolute. |
 | `SetUnitVertexColor` | bugfix | Components clamp to 0..255, as measured. |
 | `SetUnitScale` with a scale buff | deliberate | Drawn scale is script scale times the buff bonus; the script scale survives the buff. |
 | `GetChangingUnitPrevOwner`, `SetUnitFlyHeight` | works | Both work now; see their rows in Players and Movement. |
