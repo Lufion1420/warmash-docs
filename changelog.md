@@ -116,6 +116,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `SetUnitX`/`SetUnitY` moves of more than 120 units within one script step (timer fire or trigger run) draw the unit at the new point at once, like Reforged (2026-11-19)
 - Drop events: `RemoveItem`, item death and a used-up charge fire `EVENT_UNIT_DROP_ITEM` (`GetItemTypeId` is 0 afterwards) (2026-11-19)
 - `BlzGetOriginFrame(ORIGIN_FRAME_UNIT_MSG)` is the real message frame (`DisplayTextToPlayer` lines follow and hide with it; default rect unverified), and… (2026-11-19)
 - Map object data changes at index above 0 on a field the base row lacks (button positions, per-level tooltips, attack-2 missile fields) are kept (2026-11-19)
