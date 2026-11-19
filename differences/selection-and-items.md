@@ -42,5 +42,12 @@ Shop purchases by script or UI work; the stock rules are unverified. Sell events
 | `IssueNeutralImmediateOrderById` | partial | Buys items and units; no rally point or tavern revive yet. |
 | `EVENT_PLAYER_UNIT_SELL`, `EVENT_PLAYER_UNIT_SELL_ITEM`, `EVENT_UNIT_SELL`, `EVENT_UNIT_SELL_ITEM` | bugfix | Fire synchronously during the purchase, on the shop and its owner; order against the pickup event is unmeasured. |
 | `EVENT_PLAYER_UNIT_PAWN_ITEM`, `EVENT_UNIT_PAWN_ITEM` | gap | Not implemented. |
+| `EVENT_UNIT_DROP_ITEM`, `EVENT_PLAYER_UNIT_DROP_ITEM` | unverified | Now fire, unit list then player list, once per drop, before the item leaves; `UnitHasItem` is still true inside. |
+| Drop events: what counts as a drop | unverified | Ground drop, give, pawn or sell, `UnitDropItemPoint`, `UnitRemoveItem` and death drops fire; `RemoveItem`, used-up charges and slot swaps stay silent. |
+| Drop event from inside its own handler | unverified | A nested drop of the same item, or a death drop after the handler kills the dropper, fires nothing. |
+| Give item | unverified | Fires the drop event, then the receiver's pickup event. |
+| `UnitRemoveItemFromSlot`, `UnitDropItemSlot`, `UnitDropItemTarget` | works | Implemented (were missing); `UnitDropItemSlot` swaps slots without an event. |
+| Drop natives on an undroppable item | gap | Return true. |
+| Handler that kills the giver during a give | gap | The give still completes. |
 | `IssueNeutralPointOrder`, `IssueNeutralPointOrderById`, `IssueNeutralTargetOrder`, `IssueNeutralTargetOrderById` | unverified | `neutralinteract` sets the shop selection for the ordering player only. |
 | `IssueNeutralImmediateOrder` (string form) | gap | Not implemented on purpose. |

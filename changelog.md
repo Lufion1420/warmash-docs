@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `EVENT_UNIT_DROP_ITEM`, `EVENT_PLAYER_UNIT_DROP_ITEM`, `EVENT_UNIT_HERO_LEVEL`, `EVENT_PLAYER_HERO_LEVEL` fire (rules unverified against WC3), with new natives… (2026-11-19)
 - Spell Book (`Aspb`) opens a sub-card of its listed abilities (2026-11-17)
 - UI and command-card icons decode on the worker threads too (`blpAsync.submitted` counts them) (2026-11-17)
 - Big maps load about 25% faster: texture decoding runs on worker threads (2026-11-17)
@@ -70,6 +71,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- Mouse wheel zooms along the distance only and keeps the camera angle, field of view and far plane (2026-11-19)
+- Spell Book honors Shared Spell Cooldown: casting a listed ability puts the book on the same cooldown (2026-11-19)
 - `RemoveUnit` on a hero that died normally releases its tech-tree count once (`GetPlayerTechCount`, hero training limit) (2026-11-17)
 - `BlzPauseUnitEx(u, false)` no longer re-issues a Channel cast that the pause cut after its EFFECT (Reforged does, so one order can cast several times) (2026-11-17)
 - `CAMERA_FIELD_FARZ`: the camera far plane is raised to what the view needs, so zooming out no longer cuts the far ground to black… (2026-11-17)
@@ -108,6 +111,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- An effect whose model has Birth and Death but no Stand appears once and holds its last frame until `DestroyEffect` (2026-11-19)
 - `RemoveUnit` on an already removed unit does nothing (2026-11-17)
 - Model textures with replaceable id 21 or an unmapped id get an empty texture without a failed lookup (2026-11-17)
 - `GetUnitCurrentOrder` reads 0 after a stop, or after the running ability is removed or disabled mid-cast (it kept the old order) (2026-11-17)

@@ -12,12 +12,15 @@ parent: Differences from Warcraft III
 | Native | Status | What differs |
 |---|---|---|
 | Camera setup field slots 7 to 13 | gap | Accepted and ignored. |
-| `SetCameraField`, `AdjustCameraField` | unverified | Interpolated over the duration; the mouse wheel drops the script values. |
+| `SetCameraField`, `AdjustCameraField` | unverified | Interpolated over the duration; Insert and Delete drop the script values. |
 | `CAMERA_FIELD_ROLL` and the local pitch, yaw and roll fields | stored-only | The view does not change. |
 | `GetCameraField` | unverified | Radians for angles. |
 | `GetCameraEyePositionX/Y/Z/Loc`, `GetCameraTargetPositionX/Y/Z/Loc` | unverified | Implemented. |
 | `SetCameraPosition` | bugfix | Cancels a running pan. |
 | `CAMERA_FIELD_ZOFFSET` | deliberate | Replaces the preset height until the camera is reset. |
+| Mouse wheel zoom | deliberate | Changes only the distance (WC3 steps presets and changes the angle); range 500 up to the largest preset or script distance. |
+| `GetCameraField(CAMERA_FIELD_TARGET_DISTANCE)` | deliberate | Returns the wheel-zoomed distance; a script distance replaces the wheel zoom, and a camera reset clears it. |
+| Wheel and script camera fields | deliberate | The wheel keeps script angle, rotation, field of view and far plane; Insert and Delete presets still use their own far plane. |
 | `CAMERA_FIELD_FARZ` | deliberate | The far plane is raised when the view needs more, so zooming out no longer cuts the ground to black; larger values apply, `GetCameraField` returns the set value. |
 | `CameraSetSourceNoise`, `CameraSetTargetNoise` and their Ex forms | bugfix | A sinusoidal sway (shape inferred). |
 | Camera bounds | unverified | The target is clamped every frame, as in a Reforged run. |
@@ -37,7 +40,8 @@ Effects attached to a unit ignore position, orientation and alpha. Images are no
 | `BlzSpecialEffectAddSubAnimation`, `RemoveSubAnimation`, `ClearSubAnimations` | partial | `ROOTED`, `ENTANGLE` and `BERSERK` are ignored. |
 | `AddSpecialEffectTarget` attachment names | unverified | Case-insensitive token match; an unknown name attaches to origin. |
 | `DestroyEffect` | bugfix | Death plays once, at once; particles fade out. |
-| Effect whose model has no Stand | unverified | Loops until `DestroyEffect`. |
+| Effect whose model has no Stand | unverified | Holds its last frame until `DestroyEffect`. |
+| Effect with only Birth and Death | bugfix | Appears once and holds its last frame; before, Birth restarted in a loop. Reforged: pulses until destroyed. |
 | `DestroyEffect` at time scale 0 | deliberate | Death plays at speed 1 so the effect is removed. |
 | `BlzSetSpecialEffectAlpha`, `BlzSetSpecialEffectColor` on particles | unverified | Do not reach particles and ribbons. |
 | `BlzSetSpecialEffectPositionLoc`, `BlzResetSpecialEffectMatrix` | gap | Not implemented. |

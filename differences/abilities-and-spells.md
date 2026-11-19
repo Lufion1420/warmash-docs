@@ -94,7 +94,8 @@ Details:
 | `Aclf`, `Aprg`, `AEer` | gap | Do nothing: no engine class yet. |
 | Spell Book (`Aspb`) | partial | The book button opens a sub-card of the listed abilities, keyed by base order id; children cast normally with their own spell events. |
 | Spell Book children | unverified | Shown only in the book and hidden per ability; removing the book removes them, disabling keeps them; Minimum and Maximum are ignored. |
-| Spell Book shared cooldown (`spb2`) | gap | Has no effect by default; a cast without a target closes the book. |
+| Spell Book shared cooldown (`spb2`) | unverified | Casting a listed ability puts the book on the same cooldown; siblings keep their own; a cast without a target closes the book. |
+| Cooldown natives on a Spell Book child | unverified | `StartUnitAbilityCooldown`, `BlzSetUnitAbilityCooldown` and `BlzEndUnitAbilityCooldown` move the book too; the last call wins. |
 | Hardened Skin (`Assk`) | unverified | Attacks lose the ignored damage down to the minimum, before armor; attacks only, with chance and ranged or melee flags. |
 | Aerial Shackles (`Amls`) | bugfix | The channel ends after its duration and fires ENDCAST. |
 | Ensnare (`Aens`) | partial | Target cannot move but may attack and cast; hits magic-immune, refuses ethereal, as measured. |
