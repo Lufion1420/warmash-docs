@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `BlzGetOriginFrame(ORIGIN_FRAME_MINIMAP_BUTTON, 0..4)` and `BlzGetFrameByName` for `MinimapButtonBar`, `MinimapSignalButton`, `MiniMapTerrainButton`… (2026-11-19)
 - `EVENT_UNIT_PAWN_ITEM` and `EVENT_PLAYER_UNIT_PAWN_ITEM` fire (before the drop event, inline within pawn range), with `GetSellingUnit`, `GetBuyingUnit`… (2026-11-19)
 - `[FrameDef]` in war3mapSkin.txt overrides string ids at game UI setup (2026-11-19)
 - `EVENT_UNIT_DROP_ITEM`, `EVENT_PLAYER_UNIT_DROP_ITEM`, `EVENT_UNIT_HERO_LEVEL`, `EVENT_PLAYER_HERO_LEVEL` fire (rules unverified against WC3), with new natives… (2026-11-19)
@@ -73,6 +74,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- Mouse-wheel zoom-out limit is the larger of the largest camera preset and 5000 (2026-11-19)
 - Command card: a passive ability with no button position (no `Buttonpos`/`Researchbuttonpos` x or y) gets no button (2026-11-19)
 - Mouse wheel zooms along the distance only and keeps the camera angle, field of view and far plane (2026-11-19)
 - Spell Book honors Shared Spell Cooldown: casting a listed ability puts the book on the same cooldown (2026-11-19)

@@ -19,6 +19,10 @@ Interface parts that continue [UI frames](ui-frames.html).
 | Minimap (`MiniMapFrame`, `ORIGIN_FRAME_MINIMAP`) | works | The real minimap; frame natives take effect. |
 | Minimap draw order | unverified | Drawn below all root-level script frames. |
 | Minimap when `ConsoleUI` moves | gap | Does not follow. |
+| `BlzGetOriginFrame(ORIGIN_FRAME_MINIMAP_BUTTON, 0..4)`, `BlzGetFrameByName` for the minimap button bar and buttons | works | Real clickable frames anchored to `ConsoleUI`, so a map that moves `ConsoleUI` moves them; left click only; positions unverified. |
+| Minimap terrain button | works | Hides and shows the minimap terrain image. |
+| Minimap signal, ally color, creep and formation buttons | stored-only | Click state and textures change, but there is no ping, ally-color mode, creep markers or formation movement; formation starts on. |
+| Creep-camp icon on stock maps | gap | Draws below its square. |
 | `ORIGIN_FRAME_WORLD_FRAME` | bugfix | A real frame: once fetched, its rect sets the 3D view. |
 | Frames parented to the world frame | works | Draw below the stock HUD. |
 | `ORIGIN_FRAME_UNIT_PANEL_BUFF_BAR` and its label | bugfix | Real frames. |

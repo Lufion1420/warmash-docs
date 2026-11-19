@@ -18,7 +18,7 @@ parent: Differences from Warcraft III
 | `GetCameraEyePositionX/Y/Z/Loc`, `GetCameraTargetPositionX/Y/Z/Loc` | unverified | Implemented. |
 | `SetCameraPosition` | bugfix | Cancels a running pan. |
 | `CAMERA_FIELD_ZOFFSET` | deliberate | Replaces the preset height until the camera is reset. |
-| Mouse wheel zoom | deliberate | Changes only the distance (WC3 steps presets and changes the angle); range 500 up to the largest preset or script distance. |
+| Mouse wheel zoom | deliberate | Changes only the distance (WC3 steps presets and changes the angle); zoom-out limit is the larger of the largest preset and 5000, and a script distance widens it. |
 | `GetCameraField(CAMERA_FIELD_TARGET_DISTANCE)` | deliberate | Returns the wheel-zoomed distance; a script distance replaces the wheel zoom, and a camera reset clears it. |
 | Wheel and script camera fields | deliberate | The wheel keeps script angle, rotation, field of view and far plane; Insert and Delete presets still use their own far plane. |
 | `CAMERA_FIELD_FARZ` | deliberate | The far plane is raised when the view needs more, so zooming out no longer cuts the ground to black; larger values apply, `GetCameraField` returns the set value. |
