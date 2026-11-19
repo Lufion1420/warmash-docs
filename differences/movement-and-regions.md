@@ -17,10 +17,10 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 
 | Native | Status | What differs |
 |---|---|---|
-| `SetUnitX`, `SetUnitY` | bugfix | A single script step moving a unit over 120 units draws it at the new point at once; 120 or less glides. |
+| `SetUnitX`, `SetUnitY` | bugfix | A single script step (one timer, trigger or event run) moving a unit over 120 units draws it at the new point at once; 120 or less glides. |
 | `SetUnitPosition`, `SetUnitPositionLoc`, Blink, Mass Teleport, Way Gate | works | Draw the unit at the new point at once. |
 | Short teleports and swaps (under 120 units) | partial | Glide for 0.05 s instead of appearing instantly. |
-| Several script moves of one unit in one tick | partial | Moves from separate timers or early event code can add up past 120 and snap. |
+| Script waiting between `SetUnitX` and `SetUnitY` | partial | The wait splits one jump into two steps, so a diagonal teleport can glide. |
 | Dash moving more than 120 units per timer fire | partial | Snaps every fire instead of gliding. |
 | `SetUnitFacing`, `SetUnitFacingTimed` | bugfix | Turn gradually at the turn rate, at most about 382 degrees per second (cited formula). |
 | `BlzSetUnitFacingEx` | deliberate | Instant; cancels a pending turn. |
