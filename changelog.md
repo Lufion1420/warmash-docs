@@ -119,6 +119,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `StartUnitAbilityCooldown` and `BlzStartUnitAbilityCooldown` on a Spell Book child: only a book cooldown that came from a cast follows the child (2026-11-20)
+- `BlzSetUnitRealField(UNIT_RF_SPEED)` now acts like `SetUnitMoveSpeed` and returns true (was false, no change) (2026-11-20)
 - `StartUnitAbilityCooldown` and `BlzStartUnitAbilityCooldown` on a Spell Book child no longer start an idle book, as measured in Reforged (2026-11-20)
 - `BlzSetUnitSkin` and `BlzCreateUnitWithSkin` reset the model scale to the skin type's scale, like Reforged… (2026-11-20)
 - `IssueTargetOrder` and `IssueTargetOrderById` return false for a nil target or a removed unit, destructable or item (units were an error) (2026-11-20)

@@ -95,8 +95,8 @@ Details:
 | Spell Book (`Aspb`) | partial | The book button opens a sub-card of the listed abilities, keyed by base order id; children cast normally with their own spell events. |
 | Spell Book children | unverified | Shown only in the book and hidden per ability; removing the book removes them, disabling keeps them; Minimum and Maximum are ignored. |
 | Spell Book shared cooldown (`spb2`) | unverified | Casting a listed ability puts the book on the same cooldown; siblings keep their own; a cast without a target closes the book. |
-| `StartUnitAbilityCooldown`, `BlzStartUnitAbilityCooldown` on a Spell Book child | bugfix | An idle book stays at 0, as measured; a book already cooling down from a cast follows the child (unverified). |
-| `BlzSetUnitAbilityCooldown`, `BlzEndUnitAbilityCooldown` on a Spell Book child | unverified | Move the book too; the last call wins. |
+| `StartUnitAbilityCooldown`, `BlzStartUnitAbilityCooldown` on a Spell Book child | bugfix | An idle book stays at 0, as measured; a book cooling down from a cast follows the child; a book cooldown set by script stays (unverified). |
+| `BlzSetUnitAbilityCooldown`, `BlzEndUnitAbilityCooldown` on a Spell Book child | unverified | Move the book too; the last call wins, and ending also frees a book cooldown set by script. |
 | Hardened Skin (`Assk`) | unverified | Attacks lose the ignored damage down to the minimum, before armor; attacks only, with chance and ranged or melee flags. |
 | Aerial Shackles (`Amls`) | bugfix | The channel ends after its duration and fires ENDCAST. |
 | Ensnare (`Aens`) | partial | Target cannot move but may attack and cast; hits magic-immune, refuses ethereal, as measured. |
