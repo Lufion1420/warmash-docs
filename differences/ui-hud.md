@@ -29,7 +29,7 @@ Interface parts that continue [UI frames](ui-frames.html).
 | `ORIGIN_FRAME_HERO_BAR`, `HERO_BUTTON`, `HERO_HP_BAR`, `HERO_MANA_BAR`, `HERO_BUTTON_INDICATOR` | unverified | Real clickable hero icons; not hidden by `BlzHideOriginFrames`. |
 | `ORIGIN_FRAME_PORTRAIT` | deliberate | Drawn exactly in the frame rect; Reforged's offset quirk is not copied. |
 | Multi-selection group icons and transport cargo icons when `ConsoleUI` moves | bugfix | Follow its position, so a map that moves it off screen hides them, as in Reforged. |
-| `BlzFrameSetVisible(ConsoleUI, false)` and build-queue icons | gap | Do not hide or follow the group and cargo icons. |
+| `BlzFrameSetVisible(ConsoleUI, false)` and build-queue icons | bugfix | Hiding `ConsoleUI` also hides the group, cargo and build-queue icons, and they follow a moved `ConsoleUI`. |
 | Inventory parts when `ConsoleUI` moves | bugfix | Follow its position, not its visibility, alpha or scale. |
 | `BlzGetFrameByName` for `InfoPanelIcon*` stat frames | bugfix | Contexts 0, 1, 2 and 6 work; other contexts return nil. |
 | Frames that follow a moved `SimpleNameValue` | bugfix | Class value, level bar and progress indicator move with it. |

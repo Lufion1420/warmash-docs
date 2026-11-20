@@ -123,6 +123,9 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `UnitRemoveAbility`, `GetUnitAbilityLevel`, `BlzGetUnitAbility` on `Aatk` (getters also `Amov`) behave as in Reforged: removal returns true and removes the… (2026-11-20)
+- `GetAbilityLevel(nil)` returns 0 instead of an error (2026-11-20)
+- `BlzEndUnitAbilityCooldown` on a Spell Book child ends the book's cooldown only when that child started it (2026-11-20)
 - `PauseUnit` and `BlzPauseUnitEx` during the casting time, cast point or backswing of an engine or JSON spell freeze the wait… (2026-11-20)
 - `BlzPauseUnitEx` during an engine spell cast (Storm Bolt and similar) cuts it: before EFFECT ENDCAST and a re-issue at the unpause with mana once, after EFFECT… (2026-11-20)
 - `GetUnitCurrentOrder` reads 0 after `ReviveHero`, altar revive, Resurrection and Reincarnation (unverified) (2026-11-20)

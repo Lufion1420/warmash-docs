@@ -29,6 +29,13 @@ BlzUnitHideAbility(hero, FourCC("A000"), false)
 | `BlzUnitHideAbility`: counting | deliberate | An on/off switch: one `false` undoes any number of `true` calls; Reforged counts. |
 | `BlzUnitDisableAbility`, `SetPlayerAbilityAvailable` on `Aatk` | bugfix | No damage, also from a swing in progress and auto-acquire; Reforged accepts the attack order and the unit walks, WarMash refuses it. |
 | `BlzUnitHideAbility` on `Aatk` | deliberate | The attack stays hidden and unusable; Reforged: hiding it has no effect. Visual-only hiding is planned as a `Wms` native. |
+| `UnitRemoveAbility`, `GetUnitAbilityLevel`, `BlzGetUnitAbility` on `Aatk` (getters also `Amov`) | bugfix | Removal returns true and the unit has no attack; the level reads 1, then 0 after removal; the handle is not nil. |
+| Removing `Aatk` during an attack | unverified | Ends the attack without a stop order and drops only queued attack orders; WC3 behavior not confirmed. |
+| `UnitAddAbility(u, 'Aatk')` after a removal | deliberate | Restores the attack; a morph also restores a script-removed attack. |
+| `BlzUnitDisableAbility`, `BlzUnitHideAbility` on `Aatk`, `Amov` | gap | The ability is not found, so the call has no effect. |
+| `BlzEndUnitAbilityCooldown` on a Spell Book child | unverified | Ends the book's cooldown only when that child started it; a script cooldown on the book stays. |
+| `GetAbilityLevel(nil)` | bugfix | Returns 0 instead of raising an error. |
+| Boolean, non-level and array ability field natives (`BlzGet/SetAbilityBooleanField` and similar) | gap | Not implemented. |
 | Ability hidden by `BlzUnitHideAbility`: orders | bugfix | Refuses orders like a disabled ability, as measured; a running cast finishes. |
 | `ConvertAbilityDisableType(7)` | deliberate | Valid in WarMash (disable type POLYMORPH); out of range in WC3. |
 | `SetAbilityDisabled`, `SetAbilityIconShowing` (WarMash only) | deliberate | Script disable and icon switches; `SetAbilityIconShowing` does not refresh the command card by itself. |

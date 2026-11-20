@@ -13,6 +13,7 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 
 | Native | Status | What differs |
 |---|---|---|
+| `IssueTargetOrder`, `UnitUseItemTarget` on a target in fog | unverified | Refused (false); WC3 behavior for script orders not confirmed. |
 | `IssueTargetOrder`, `IssueTargetOrderById` | bugfix | Return false for a nil target or a removed unit, destructable or item; corpses and killed trees stay valid targets. |
 | `IssuePointOrder` | unverified | Same as `IssuePointOrderById`; a nil order string returns false. |
 | `IssueImmediateOrder`, `IssueImmediateOrderById` with "stop" | bugfix | Returns true. |
