@@ -32,6 +32,7 @@ Shop purchases by script or UI work; the stock rules are unverified. Sell and pa
 
 | Native | Status | What differs |
 |---|---|---|
+| Destructable and item natives with a nil handle (`RemoveDestructable`, `KillDestructable`, `GetDestructableX`, `GetItemX`, `SetItemPosition`, `UnitRemoveItem` and similar) | bugfix | Setters do nothing and getters return 0, as in Warcraft III; a second `RemoveDestructable` is a no-op. |
 | `BlzGetItemIntegerField` with `'iarm'` and tint fields | gap | Return 0 with one log line. |
 | `BlzSetItemName`, `BlzSetItemDescription`, `BlzSetItemTooltip`, `BlzSetItemExtendedTooltip`, `BlzSetItemIconPath`, `BlzGetItemTooltip`, `BlzGetItemExtendedTooltip` | works | Per-item overrides; a script icon also replaces the disabled icon. |
 | `BlzItemRemoveAbility` | works | Removes the ability from the item. |
