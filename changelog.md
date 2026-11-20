@@ -124,6 +124,9 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `BlzUnitDisableAbility` and `BlzUnitHideAbility` work on `Aatk` and `Amov`: a disabled attack stops, no auto-acquire, attack orders refused (rules inferred) (2026-11-20)
+- `BlzSetAbilityRealLevelField(ABILITY_RLF_CASTING_TIME)` on ability-builder abilities is read on every cast (2026-11-20)
+- Shadow Strike no longer errors on hit and its slow always ends (2026-11-20)
 - Recasting a map-built channel ability while it channels ends the old channel first (its end actions run before the new cast), so an Aerial Shackles recast… (2026-11-20)
 - `UnitRemoveAbility`, `GetUnitAbilityLevel`, `BlzGetUnitAbility` on `Aatk` (getters also `Amov`) behave as in Reforged: removal returns true and removes the… (2026-11-20)
 - `GetAbilityLevel(nil)` returns 0 instead of an error (2026-11-20)
