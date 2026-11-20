@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Unit response sounds decode on a background worker (2026-11-20)
 - Castless ability-builder item abilities (potions) fire the five spell events in the use tick with the item ability id, then one charge is spent and… (2026-11-20)
 - Ability-builder (JSON) spells wait their Casting Time: CHANNEL, then CAST after it, EFFECT one cast point later (2026-11-20)
 - Engine spells with a Casting Time (Entangle Gold Mine) fire CAST after it and EFFECT one cast point later (2026-11-20)
