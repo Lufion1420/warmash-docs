@@ -129,6 +129,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Max life or mana rescaled from an old maximum of 0 (hero attributes, life/mana items, mana upgrades) keeps the current value instead of becoming NaN (2026-11-20)
+- Raising the max life of a dead unit (`BlzSetUnitMaxHP`, `SetUnitState`, hero stats, life items, HP upgrades) no longer revives it or fires a second death event (2026-11-20)
 - `CreateQuest` quests are required by default (as documented) (2026-11-20)
 - Smart, move and follow orders on a unit stop at the follow range (300 units edge to edge, 100 for buildings) instead of the acquisition range (2026-11-20)
 - `BlzUnitDisableAbility` and `BlzUnitHideAbility` work on `Aatk` and `Amov`: a disabled attack stops, no auto-acquire, attack orders refused (rules inferred) (2026-11-20)
@@ -271,6 +273,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### WC3 compatibility
 
+- `PLAYER_COLOR_BLACK` (`ConvertPlayerColor(24)`) is a valid colour for `SetPlayerColor` and `GetPlayerColor` (2026-11-20)
 - Quests button: enabling a quest enables it on JASS maps (never disabled again) (2026-11-20)
 - Documented differences from Reforged 3.0.1 (measured), 2026-11-20: `BlzSetUnitMaxHP(u, 0)` on a unit with Reincarnation skips the Reincarnation
 - Measured in Reforged 3.0.1.24371 on 2026-11-16 (run r3d) and matching: the attack dice upgrade raises the number of dice, not the base damage… (2026-11-16)

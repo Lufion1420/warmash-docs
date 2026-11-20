@@ -62,7 +62,8 @@ Missing natives are not listed one by one. Stored-only and stub natives are in t
 | Unimplemented natives | gap | 594 declared natives missing in the Lua game VM (count of 2026-11-16); see Details for the list. |
 | A declared native without implementation | gap | Returns nil and logs one line; no error is raised. |
 | `MathRound` | unverified | Half away from zero. |
-| `PLAYER_COLOR_BLACK`, `MAP_RELOADED` | gap | nil. |
+| `PLAYER_COLOR_BLACK` | works | `ConvertPlayerColor(24)` is a valid colour for `SetPlayerColor` and `GetPlayerColor`; the lobby still shows 24 colours. |
+| `MAP_RELOADED` | gap | nil. |
 | `Convert*` anim, subanim, fog style, key and mouse values | gap | Values exist, but no native uses the new ones yet. |
 
 Details:

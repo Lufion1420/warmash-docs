@@ -21,6 +21,8 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | Hero armor from agility | unverified | Damage reduction uses the fractional armor; the display still rounds. |
 | `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzGetUnitMaxHP`, `BlzGetUnitMaxMana`, `BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`, `BlzGetUnitSkin` | works | Raising max HP or mana also raises the current value; lowering clamps it. |
 | Getters after `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana` while buffed | bugfix | Return exactly the value set, also while buffs are active. |
+| Raising max HP of a dead unit (`BlzSetUnitMaxHP`, `SetUnitState` max life, hero stats, life items, HP upgrades) | bugfix | The unit stays dead at life 0 and no second death event fires; only revive paths bring it back. Not measured in Reforged. |
+| Max life or mana change from an old maximum of 0 | bugfix | Keeps the current value clamped to 0 and the new maximum instead of becoming NaN. |
 | `BlzSetUnitMaxHP` with 0 | bugfix | Kills the unit, as measured; `SetWidgetLife` does not revive it. A negative value also kills (unverified). |
 | `BlzSetUnitMaxHP` with 0 on a unit with Reincarnation | deliberate | Reforged triggers the Reincarnation, as measured; WarMash skips it and the unit stays dead. Ankh behaves the same in both. |
 | Reincarnation delay ending with max life 0 | deliberate | Reforged leaves a zombie alive at life 0 without events, as measured; WarMash turns it into a real death. |
