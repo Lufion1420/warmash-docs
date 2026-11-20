@@ -13,7 +13,7 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 
 | Native | Status | What differs |
 |---|---|---|
-| `IssueTargetOrder`, `IssueTargetOrderById` | bugfix | Return false for a nil or removed target. |
+| `IssueTargetOrder`, `IssueTargetOrderById` | bugfix | Return false for a nil target or a removed unit, destructable or item; corpses and killed trees stay valid targets. |
 | `IssuePointOrder` | unverified | Same as `IssuePointOrderById`; a nil order string returns false. |
 | `IssueImmediateOrder`, `IssueImmediateOrderById` with "stop" | bugfix | Returns true. |
 | Orders to a paused unit | gap | A paused unit still accepts orders. |

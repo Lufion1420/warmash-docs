@@ -118,7 +118,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 ### Fixed
 
 - `BlzSetUnitSkin` and `BlzCreateUnitWithSkin` reset the model scale to the skin type's scale, like Reforged… (2026-11-20)
-- `IssueTargetOrder` and `IssueTargetOrderById` return false for a nil or removed target (was an error) (2026-11-20)
+- `IssueTargetOrder` and `IssueTargetOrderById` return false for a nil target or a removed unit, destructable or item (units were an error) (2026-11-20)
 - `SetUnitX`/`SetUnitY` moves of more than 120 units within one script step (timer fire or trigger run) draw the unit at the new point at once, like Reforged (2026-11-19)
 - Drop events: `RemoveItem`, item death and a used-up charge fire `EVENT_UNIT_DROP_ITEM` (`GetItemTypeId` is 0 afterwards) (2026-11-19)
 - `BlzGetOriginFrame(ORIGIN_FRAME_UNIT_MSG)` is the real message frame (`DisplayTextToPlayer` lines follow and hide with it; default rect unverified), and… (2026-11-19)
