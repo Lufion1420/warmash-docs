@@ -13,7 +13,8 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 
 | Native | Status | What differs |
 |---|---|---|
-| `IssueTargetOrder`, `UnitUseItemTarget` on a target in fog | unverified | Refused (false), also `IssueTargetOrderById` and `IssueNeutralTargetOrder(ById)`; WC3 behavior is unknown, not confirmed.
+| `IssueTargetOrder`, `IssueTargetOrderById` attack or move on a unit in fog or under the black mask | gap | Warcraft III returns true and walks there, as measured; WarMash returns false. Smart, Storm Bolt and wand-return orders return false in both. |
+| `IssueTargetOrder`, `UnitUseItemTarget`, `IssueNeutralTargetOrder(ById)` other orders on a target in fog | unverified | Refused (false); WC3 behavior is not confirmed. |
 
 | `IssueTargetOrder`, `IssueTargetOrderById` | bugfix | Return false for a nil target or a removed unit, destructable or item; corpses and killed trees stay valid targets. |
 | `IssuePointOrder` | unverified | Same as `IssuePointOrderById`; a nil order string returns false. |
@@ -28,6 +29,7 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | Attack target turns invulnerable or invisible | unverified | The attacker drops the target and ends the attack order. |
 | Attack target lost mid-chase or mid-backswing | deliberate | The attack ends at once; a swing before its damage point deals nothing. |
 | Smart, move and follow orders on a unit | bugfix | The follower stops about 300 units from the target's edge (100 for buildings), not at its acquisition range; it walks again only well beyond that. |
+| `GetUnitCurrentOrder` while following a friendly unit after smart | gap | Warcraft III reports smart (851971), as measured; WarMash reports move (851986). |
 | `GetUnitMoveFollowBehavior` with a null target | bugfix | Returns null instead of raising an error. |
 
 ## Damage and attack events

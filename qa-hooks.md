@@ -35,6 +35,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `-qablpsync` | Turns off worker-thread BLP decoding at map load (decode on the render thread). |
 | `-qasoundsync` | Decodes script sounds on the render thread instead of the background (for timing comparisons). |
 | `-qablpticksync` | Keeps texture decoding during a script tick on the render thread (for timing comparisons). |
+| `-qareadsync` | Keeps archive reads on the render thread (for timing comparisons). |
 | `-qagrab` | Keeps cursor catch and edge scrolling on (`-qalog` alone turns them off). |
 | `-qacursorpin <x>,<y>` | Pins the cursor position the in-game UI reads (window pixels, top-left origin); the OS cursor does not move. Needs `-qalog` and `-loadfile`. |
 | `WarMashQaReport(key, value)` | Writes a value into the log; at most 1000 keys per run. |
@@ -46,6 +47,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | Field | What it holds |
 |---|---|
 | `exit.missingNatives`, `missingNativeCalls`, `stubNativeCalls` | Missing and stub natives with call counts. |
+| `exit.offThreadReads`, `blpAsync.deferredReads`, `soundAsync.deferredReads` | Archive reads done off the render thread, and reads deferred to workers. |
 | `exit.luaCaughtErrors`, `exit.luaCaughtErrorMessages` | Errors caught by `xpcall` handlers (up to 20 messages). |
 | `state.cursor.edgeScroll` | Edge-scroll counters: frames on the edge, scrolled or not (with reason), focus changes. |
 | `state.camera`, `localSelection` | Camera fields and the local player's selection. |
