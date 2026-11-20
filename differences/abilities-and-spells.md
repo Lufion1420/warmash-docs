@@ -87,10 +87,11 @@ Details:
 | Ability-builder (JSON) spells: stun before EFFECT | bugfix | The cast restarts after the stun and pays mana once. |
 | Ability-builder (JSON) spells: stunned caster dies, is removed, gets a new order or loses the ability | bugfix | The parked cast is dropped: end-channel actions run once and nothing resumes after `ReviveHero`. |
 | `BlzPauseUnitEx` from a spell handler on ability-builder spells | unverified | Cuts the cast with ENDCAST inside the pause call; the unpause re-issues the order if EFFECT had not fired. |
-| `BlzPauseUnitEx` from outside a spell handler on Java spell bases | gap | Does not cut the cast. |
+| `BlzPauseUnitEx` during a Java spell-base cast (Storm Bolt and similar) | bugfix | Before EFFECT: ENDCAST in the pause call, the unpause re-issues the order, mana once; after EFFECT: ENDCAST only, as measured. |
 | Engine spells with a Casting Time (Entangle Gold Mine) | works | CHANNEL at start, CAST after the Casting Time, EFFECT one cast point later; a cut in between gives CHANNEL then ENDCAST. |
 | Casting Time of ability-builder (JSON) spells | gap | Ignored. |
-| Pause during an engine spell's casting time or cast point | gap | The wait does not freeze; CAST and EFFECT fire at once after a long unpause. |
+| Pause during the casting time, cast point or backswing of an engine or JSON spell | unverified | The wait resumes after the unpause; before, CAST, EFFECT and FINISH fired at once. |
+| Pause during a Channel (`ANcl`) cast point | gap | The wait still counts game ticks. |
 | Castless item abilities (ability-builder, e.g. a potion on Brilliance Aura) | works | All five spell events fire in the use tick with the item ability id; then one charge is spent and `EVENT_UNIT_USE_ITEM` fires. |
 | Castless item ability that cannot pay its mana at the cast point | bugfix | Ends with ENDCAST only: no charge spent, no `EVENT_UNIT_USE_ITEM`. |
 | `BlzSetUnitBooleanField` | gap | Not implemented; it is the last missing native that the reference map's spell code calls. |

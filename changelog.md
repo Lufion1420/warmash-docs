@@ -123,6 +123,9 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `PauseUnit` and `BlzPauseUnitEx` during the casting time, cast point or backswing of an engine or JSON spell freeze the wait… (2026-11-20)
+- `BlzPauseUnitEx` during an engine spell cast (Storm Bolt and similar) cuts it: before EFFECT ENDCAST and a re-issue at the unpause with mana once, after EFFECT… (2026-11-20)
+- `GetUnitCurrentOrder` reads 0 after `ReviveHero`, altar revive, Resurrection and Reincarnation (unverified) (2026-11-20)
 - A castless item ability that cannot pay its mana at the cast point ends with ENDCAST only: no charge spent, no `EVENT_UNIT_USE_ITEM` (2026-11-20)
 - Spell events of JSON ability-builder spells follow WC3: CHANNEL and CAST at cast start, EFFECT with mana and cooldown at the cast point, FINISH then ENDCAST at… (2026-11-20)
 - A JSON spell cast restarted after a stun pays mana once (2026-11-20)
