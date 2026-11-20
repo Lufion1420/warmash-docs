@@ -37,7 +37,7 @@ Interface parts that continue [UI frames](ui-frames.html).
 | Frames that follow a moved `SimpleNameValue` | bugfix | Class value, level bar and progress indicator move with it. |
 | Hero XP bar at max level | unverified | Shown full. |
 | Minimap camera box | unverified | A trapezoid outline; Reforged shows a larger rectangle. |
-| Top menu buttons on Lua maps | deliberate | Reforged labels; the buttons open nothing. |
+| Top menu buttons on Lua maps | deliberate | Reforged labels; Quests opens the quest dialog, Log opens nothing. |
 | `ORIGIN_FRAME_UNIT_MSG` | bugfix | The real message frame: `DisplayTextToPlayer` lines follow it and hide with it; default rect is WarMash's old message position. |
 | Status bar fill | bugfix | Clamped to 0..1. |
 | FPS text | deliberate | Top right, smaller. |
