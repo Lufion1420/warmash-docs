@@ -32,6 +32,8 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 | Move speed floor | deliberate | The final speed is at least 1 or the minimum from the map or unit, buffs included (Slow alone on 270 reads 150); speed-0 types stay 0. |
 | Polymorph move speed | works | Uses the sheep type's minimum speed (100). |
 | `BlzSetUnitRealField(UNIT_RF_SPEED)` | deliberate | Acts like `SetUnitMoveSpeed` (same limits) and returns true; not confirmed in Reforged. |
+| `UnitRemoveAbility(u, 'Amov')` | bugfix | Returns true: the unit stops walking and drops move orders but still attacks in range; attack-move to a point is refused. |
+| `UnitAddAbility(u, 'Amov')` | deliberate | Re-adds Amov after a script removal; false otherwise. |
 | `GetUnitDefaultMoveSpeed` | unverified | The unit type's speed from object data; 0 for a null unit. |
 | Slow or speed upgrade while a speed buff is active | bugfix | Change the base speed without baking in the buff; WC3's combination rule is unverified. |
 | `IsTerrainPathable` | partial | Works for walk, fly, build and float pathing; other types return false. |

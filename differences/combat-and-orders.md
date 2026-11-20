@@ -60,6 +60,7 @@ end)
 | `GetHandleId(attacktype)` | bugfix | Returns the `common.j` index, 0 to 6. |
 | `UnitDamageTarget` hit sound | bugfix | Plays the weapon type's sound; `WEAPON_TYPE_WHOKNOWS` is silent. |
 | `UnitDamagePoint` | works | Honours the delay and collision size, hits the source and allies, as measured. |
+| Attack 2 missile art, speed, arc and homing (also `BlzGetUnitWeapon*`) | bugfix | Use attack 2's own values; they used attack 1's. |
 
 ## Buffs
 

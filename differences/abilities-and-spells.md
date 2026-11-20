@@ -97,6 +97,7 @@ Details:
 | Spell Book shared cooldown (`spb2`) | unverified | Casting a listed ability puts the book on the same cooldown; siblings keep their own; a cast without a target closes the book. |
 | `StartUnitAbilityCooldown`, `BlzStartUnitAbilityCooldown` on a Spell Book child | bugfix | An idle book stays at 0, as measured; a book cooling down from a cast follows the child; a book cooldown set by script stays (unverified). |
 | `BlzSetUnitAbilityCooldown`, `BlzEndUnitAbilityCooldown` on a Spell Book child | unverified | Move the book too; the last call wins, and ending also frees a book cooldown set by script. |
+| Stock wands (`wneg`, `sneg`, `wcyc`, `wshs`, `wswd`, `wlsd`, `will`, `woms`) | gap | Their base abilities are not implemented; use and order calls return false. |
 | Hardened Skin (`Assk`) | unverified | Attacks lose the ignored damage down to the minimum, before armor; attacks only, with chance and ranged or melee flags. |
 | Aerial Shackles (`Amls`) | bugfix | The channel ends after its duration and fires ENDCAST. |
 | Ensnare (`Aens`) | partial | Target cannot move but may attack and cast; hits magic-immune, refuses ethereal, as measured. |

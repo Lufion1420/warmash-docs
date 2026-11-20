@@ -119,6 +119,9 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `EVENT_UNIT_USE_ITEM` and `EVENT_PLAYER_UNIT_USE_ITEM` fire on item use (instant items; cast item spells once per landed effect) (2026-11-20)
+- `UnitRemoveAbility(u, 'Amov')` works: the unit stops walking but still attacks (2026-11-20)
+- Attack 2 missile art, speed, arc and homing use attack 2's values (2026-11-20)
 - `StartUnitAbilityCooldown` and `BlzStartUnitAbilityCooldown` on a Spell Book child: only a book cooldown that came from a cast follows the child (2026-11-20)
 - `BlzSetUnitRealField(UNIT_RF_SPEED)` now acts like `SetUnitMoveSpeed` and returns true (was false, no change) (2026-11-20)
 - `StartUnitAbilityCooldown` and `BlzStartUnitAbilityCooldown` on a Spell Book child no longer start an idle book, as measured in Reforged (2026-11-20)
