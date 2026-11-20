@@ -59,7 +59,7 @@ Details:
 | Channel with follow-through time 0 | unverified | Treated as an instant cast (0.001 s). |
 | Channel cast after a walk into range | bugfix | The cast runs normally and FINISH fires at its end; before, it ended at once with ENDCAST only. Failing for lack of mana no longer leaves the unit stuck. |
 | Channel: `SPELL_FINISH` / `SPELL_ENDCAST` timing | bugfix | Fire in the tick the follow-through ends, after that tick's timers, as measured. |
-| Ability-builder (JSON) channels: end events | deliberate | Same order as Channel by analogy; a cut channel fires ENDCAST only. |
+| Ability-builder (JSON) channels: end events | deliberate | Same order as Channel by analogy: FINISH then ENDCAST at the channel end; a cut channel fires ENDCAST only. |
 | `BlzPauseUnitEx` during a Channel cast | bugfix | Ends the cast; at the unpause a cast cut before its EFFECT is re-issued, as measured. |
 | `BlzPauseUnitEx` unpause after the EFFECT of a Channel cast | deliberate | Reforged re-issues the order, so one order can cast several times; WarMash does not, and the unit takes its next order or goes idle. |
 | `BlzPauseUnitEx` in the CAST or EFFECT of an instant Channel | bugfix | EFFECT, FINISH and ENDCAST fire in one tick and the order is not re-issued, as measured. |
@@ -81,7 +81,13 @@ Details:
 | Engine spells: stun after EFFECT | unverified | ENDCAST only; an order given from that ENDCAST runs after the stun. |
 | `BlzPauseUnitEx` from an EFFECT action on Animate Dead or Neutral Charm style channels | bugfix | Stops the channel. |
 | Item heal and mana potions | unverified | Fire all five spell events with the potion's ability id; charge spend and `EVENT_UNIT_USE_ITEM` follow after the script pass. |
-| Ability-builder (JSON) spells: CHANNEL order | gap | CAST fires before CHANNEL, and CHANNEL only after EFFECT on non-channel spells; WC3 fires CHANNEL first. |
+| Ability-builder (JSON) spells: CHANNEL order | bugfix | CHANNEL and CAST fire at cast start, before EFFECT; before, CAST came first and CHANNEL only after EFFECT. |
+| Ability-builder (JSON) spells: FINISH and ENDCAST | bugfix | Both fire at the end of the backswing or channel; before, ENDCAST fired before FINISH on every end. |
+| Ability-builder (JSON) spells with begin-casting actions (transformations) | unverified | Mana and cooldown are paid at cast start, and the morph hand-off fires CHANNEL, CAST, EFFECT, FINISH, ENDCAST in one tick. |
+| Ability-builder (JSON) spells: stun before EFFECT | bugfix | The cast restarts after the stun and pays mana once. |
+| Ability-builder (JSON) spells: stunned caster dies, is removed, gets a new order or loses the ability | bugfix | The parked cast is dropped: end-channel actions run once and nothing resumes after `ReviveHero`. |
+| `BlzPauseUnitEx` from a spell handler on ability-builder spells | unverified | Cuts the cast with ENDCAST inside the pause call; the unpause re-issues the order if EFFECT had not fired. |
+| `BlzPauseUnitEx` from outside a spell handler on Java spell bases | gap | Does not cut the cast. |
 | Entangling-type Aent cast time | gap | The 3 second cast time is ignored. |
 | `BlzSetUnitBooleanField` | gap | Not implemented; it is the last missing native that the reference map's spell code calls. |
 

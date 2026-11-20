@@ -121,6 +121,9 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Spell events of JSON ability-builder spells follow WC3: CHANNEL and CAST at cast start, EFFECT with mana and cooldown at the cast point, FINISH then ENDCAST at… (2026-11-20)
+- A JSON spell cast restarted after a stun pays mana once (2026-11-20)
+- Inferred, not measured: transformation-style spells pay at cast start (2026-11-20)
 - A potion used by order `heal` spends one charge and fires one USE_ITEM (2026-11-20)
 - Casters of engine spells are held for cast point plus backswing (was backswing only) (2026-11-20)
 - `EVENT_UNIT_USE_ITEM` and `EVENT_PLAYER_UNIT_USE_ITEM` fire on item use (instant items; cast item spells once per landed effect) (2026-11-20)
