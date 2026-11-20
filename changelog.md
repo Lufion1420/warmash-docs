@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Spell events (`EVENT_UNIT_SPELL_CHANNEL`/`CAST`/`EFFECT`/`FINISH`/`ENDCAST` and player events) fire for the engine spells and the JSON ability-builder spells… (2026-11-20)
 - `ShowDestructable`, `QueueDestructableAnimation`, `SetDestructableAnimationSpeed`, `SetDestructableMaxLife`, `GetDestructableName` and… (2026-11-20)
 - Combat state (WarMash-only): `WMS_EVENT_UNIT_COMBAT_ENTER`/`LEAVE` and `WMS_EVENT_PLAYER_UNIT_COMBAT_ENTER`/`LEAVE` events, plus `WmsIsUnitInCombat`… (2026-11-20)
 - `BlzGetOriginFrame(ORIGIN_FRAME_MINIMAP_BUTTON, 0..4)` and `BlzGetFrameByName` for `MinimapButtonBar`, `MinimapSignalButton`, `MiniMapTerrainButton`… (2026-11-19)
@@ -76,6 +77,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- Multi-selection group icons and transport cargo icons follow `ConsoleUI`'s position, so a map that moves it off screen hides them, as in Reforged (2026-11-20)
 - Mouse-wheel zoom-out limit is the larger of the largest camera preset and 5000 (2026-11-19)
 - Command card: a passive ability with no button position (no `Buttonpos`/`Researchbuttonpos` x or y) gets no button (2026-11-19)
 - Mouse wheel zooms along the distance only and keeps the camera angle, field of view and far plane (2026-11-19)
@@ -119,6 +121,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- A potion used by order `heal` spends one charge and fires one USE_ITEM (2026-11-20)
+- Casters of engine spells are held for cast point plus backswing (was backswing only) (2026-11-20)
 - `EVENT_UNIT_USE_ITEM` and `EVENT_PLAYER_UNIT_USE_ITEM` fire on item use (instant items; cast item spells once per landed effect) (2026-11-20)
 - `UnitRemoveAbility(u, 'Amov')` works: the unit stops walking but still attacks (2026-11-20)
 - Attack 2 missile art, speed, arc and homing use attack 2's values (2026-11-20)

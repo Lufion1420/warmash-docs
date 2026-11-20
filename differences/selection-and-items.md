@@ -50,6 +50,9 @@ Shop purchases by script or UI work; the stock rules are unverified. Sell and pa
 | `EVENT_PLAYER_UNIT_PAWN_ITEM`, `EVENT_UNIT_PAWN_ITEM`, `GetSellingUnit`, `GetBuyingUnit`, `GetSoldItem` | works | Fire before the drop event, inline within pawn range; seller is the hero, buyer the shop; a nested pawn of the same item is ignored. |
 | Pawn payment | deliberate | Gold arrives in the same tick; Reforged pays about 0.2 s after the events on a walk-then-pawn. |
 | `EVENT_UNIT_USE_ITEM`, `EVENT_PLAYER_UNIT_USE_ITEM` | bugfix | Fire on use (unit, then player), before the used-up drop; cast item spells fire once per landed effect. |
+| Potion used by order `heal` | bugfix | Spends one charge and fires one USE. |
+| `GetItemCharges` right after `UnitUseItem` | unverified | Shows the old count in the same thread; it updates later in the same tick. |
+| `GetSpellAbilityId` in `EVENT_UNIT_USE_ITEM` | unverified | Returns 0. |
 | Item spell cast by order string (`IssueTargetOrder(hero, "charm", u)`) | unverified | Now spends a charge at the landed effect; a cast without an effect keeps the charge. |
 | `EVENT_UNIT_USE_ITEM` for powerups | unverified | Fires after the pickup events. |
 | `UnitUseItemTarget` with a target far out of range | unverified | Returns false instead of walking in; WC3 behavior not confirmed. |

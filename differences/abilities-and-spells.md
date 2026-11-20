@@ -74,7 +74,15 @@ Details:
 | Channel: target art, `RemoveUnit` | gap | No target art; removing the caster fires ENDCAST. |
 | `GetTriggerPlayer` in spell events | gap | Returns nil. |
 | `GetSpellTargetX`, `GetSpellTargetY`, `GetSpellTargetLoc` | unverified | The target point, else the target's position, else 0. |
-| Some engine spells and the item heal and mana abilities | gap | Fire no spell events. |
+| Spell events of the engine spells (Storm Bolt, Polymorph, Charm and similar) and the JSON ability-builder spells | works | CHANNEL and CAST at cast start, EFFECT at the cast point after mana and cooldown, FINISH and ENDCAST after the backswing; a cut gives ENDCAST only. |
+| Engine spells: caster hold time | bugfix | The caster is held for the cast point plus backswing, as measured for Storm Bolt; before, only the backswing. |
+| Engine spells: backswing delay, autocast, cut after EFFECT | unverified | Inferred from Channel behavior, not measured. |
+| Engine spells: stun or sleep before EFFECT | unverified | ENDCAST fires, then the unit casts again after the stun, mana paid once. |
+| Engine spells: stun after EFFECT | unverified | ENDCAST only; an order given from that ENDCAST runs after the stun. |
+| `BlzPauseUnitEx` from an EFFECT action on Animate Dead or Neutral Charm style channels | bugfix | Stops the channel. |
+| Item heal and mana potions | unverified | Fire all five spell events with the potion's ability id; charge spend and `EVENT_UNIT_USE_ITEM` follow after the script pass. |
+| Ability-builder (JSON) spells: CHANNEL order | gap | CAST fires before CHANNEL, and CHANNEL only after EFFECT on non-channel spells; WC3 fires CHANNEL first. |
+| Entangling-type Aent cast time | gap | The 3 second cast time is ignored. |
 | `BlzSetUnitBooleanField` | gap | Not implemented; it is the last missing native that the reference map's spell code calls. |
 
 Details:
