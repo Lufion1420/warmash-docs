@@ -96,7 +96,14 @@ Details:
 | `MultiboardDisplay(board, false)` | gap | Leaves the shown board alone; WC3 closes it. |
 | Multiboard drawing details | unverified | Long text is not clipped; the board is click-through. |
 | Multiboard borders | bugfix | Sit on the boxes measured in Reforged. |
-| `Quest*` (21 natives) | stored-only | Values are kept and read back; there is no quest dialog. |
+| `Quest*` (21 natives) | works | Values are kept and shown in the quest dialog (F9 or the Quests button). |
+| Quest dialog | partial | Main and optional lists with a detail pane; no pause in single player, no scroll bars (3 rows per list), no completed or failed art, no item check boxes. |
+| Quest dialog and keys | unverified | Keys pressed while it is open, and the F9 that opens it, fire no key map events. |
+| `CreateQuest`, `IsQuestRequired` | bugfix | A new quest is required by default, as documented. |
+| `FlashQuestDialogButton` | partial | Enables the Quests button; the 10 s highlight is not drawn. |
+| `ForceQuestDialogUpdate` | bugfix | Refreshes an open quest dialog. |
+| `QuestSetEnabled`, `DestroyQuest` | partial | On JASS maps enabling a quest enables the Quests button and nothing disables it; Lua maps keep it always enabled. |
+| `CreateDefeatCondition`, `DestroyDefeatCondition`, `DefeatConditionSetDescription` | gap | Not implemented; the dialog shows no defeat conditions. |
 
 ### Cinematic filters and interface
 
