@@ -19,9 +19,14 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `BlzGetUnitRealField` | partial | 17 fields (see Details); other fields return 0 with one log line. |
 | `BlzGetUnitRealField(UNIT_RF_SELECTION_SCALE)` | bugfix | Returns the type's selection scale (footman 1.0, knight 1.4), as measured; was 0. |
 | Hero armor from agility | unverified | Damage reduction uses the fractional armor; the display still rounds. |
-| `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzGetUnitMaxHP`, `BlzGetUnitMaxMana`, `BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`, `BlzGetUnitSkin` | works | Raising max HP or mana also raises the current value; lowering clamps it. |
+| `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzGetUnitMaxHP`, `BlzGetUnitMaxMana`, `BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`, `BlzGetUnitSkin` | works | Raising max mana also raises current mana; raising max HP of a living unit leaves life unchanged, as measured; lowering clamps. |
 | Getters after `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana` while buffed | bugfix | Return exactly the value set, also while buffs are active. |
-| Raising max HP of a dead unit (`BlzSetUnitMaxHP`, `SetUnitState` max life, hero stats, life items, HP upgrades) | bugfix | The unit stays dead at life 0 and no second death event fires; only revive paths bring it back. Not measured in Reforged. |
+| Raising max HP of a dead unit (`BlzSetUnitMaxHP`, `SetUnitState` max life, hero stats, life items, HP upgrades) | bugfix | The unit stays dead and no second death event fires, as measured; only revive paths bring it back. |
+| Life of a dead unit after a max-life raise | deliberate | Reforged reads a nonzero corpse life (still dead), as measured; WarMash reads 0. |
+| `SetUnitState(u, UNIT_STATE_MAX_LIFE, x)` | bugfix | Ignored, as measured in Reforged; use `BlzSetUnitMaxHP`. `UNIT_STATE_MAX_MANA` is unchanged and not measured. |
+| Max life changes from `SetHeroStr`, strength gain, `AIlf`/`AIl2`, HP upgrades, Avatar | bugfix | Life moves by the change instead of keeping the ratio, as measured for strength and `AIlf`/`AIl2`; upgrades and Avatar inferred. |
+| Max life drops from item drop, Avatar end, strength loss | unverified | Life drops by the change, at least 1 for a living unit; not measured. |
+| Life bonuses while max-HP buffs or a `BlzSetUnitMaxHP` value are active | bugfix | No longer counted twice. |
 | Max life or mana change from an old maximum of 0 | bugfix | Keeps the current value clamped to 0 and the new maximum instead of becoming NaN. |
 | `BlzSetUnitMaxHP` with 0 | bugfix | Kills the unit, as measured; `SetWidgetLife` does not revive it. A negative value also kills (unverified). |
 | `BlzSetUnitMaxHP` with 0 on a unit with Reincarnation | deliberate | Reforged triggers the Reincarnation, as measured; WarMash skips it and the unit stays dead. Ankh behaves the same in both. |
@@ -88,7 +93,7 @@ Details:
 | Locust (`UnitAddAbility` / `UnitRemoveAbility` with `'Aloc'`) | deliberate | Full Locust effects while present; removing it restores the unit at once (WC3 keeps them). |
 | `SetUnitTimeScale` | unverified | Kept across animation changes. |
 | `SetUnitAnimationByIndex` | unverified | A looping animation replays until any other animation request. |
-| `BlzSetUnitSkin`, `BlzCreateUnitWithSkin` | works | Change model, portrait, tint and sounds; the animation, a script vertex colour and the script scale reset; `SetUnitScale` afterwards is absolute. |
+| `BlzSetUnitSkin`, `BlzCreateUnitWithSkin` | works | Change model, portrait, tint and sounds; the animation, a script vertex colour (as measured) and the script scale reset; `SetUnitScale` afterwards is absolute. |
 | `SetUnitVertexColor` | bugfix | Components clamp to 0..255, as measured. |
 | `SetUnitScale` with a scale buff | deliberate | Drawn scale is script scale times the buff bonus; the script scale survives the buff. |
 | `GetChangingUnitPrevOwner`, `SetUnitFlyHeight` | works | Both work now; see their rows in Players and Movement. |

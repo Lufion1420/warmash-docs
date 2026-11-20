@@ -43,6 +43,7 @@ Shop purchases by script or UI work; the stock rules are unverified. Sell and pa
 | `UnitDropItemPoint` | unverified | Returns true and drops on a later tick; false for a unit that cannot move when the point is out of drop range. |
 | `BlzSetItemBooleanField` | partial | Four fields; others return false. |
 | `UnitAddItem`, `UnitHasItem` | bugfix | `UnitAddItem` returns a boolean. |
+| `UnitAddItemById`, `UnitAddItemToSlotById` on a dead unit | bugfix | Return nil and create no item, as measured; `UnitAddItem` returns false (inferred). |
 | `UnitUseItem`, `UnitUseItemTarget` | deliberate | False when the order is refused (a potion at full life); Reforged returns true. |
 | `UnitUseItemPoint` | deliberate | True when the order is accepted; WC3 always returns false. |
 | `IssueNeutralImmediateOrderById` | partial | Buys items and units; no rally point or tavern revive yet. |

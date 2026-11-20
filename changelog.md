@@ -129,6 +129,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Max life per Reforged 3.0.1 (measured): `SetUnitState(UNIT_STATE_MAX_LIFE, x)` is ignored (2026-11-20)
+- `UnitAddItemById` and `UnitAddItemToSlotById` on a dead unit return nil and create no item (`UnitAddItem` returns false), as measured (2026-11-20)
 - Max life or mana rescaled from an old maximum of 0 (hero attributes, life/mana items, mana upgrades) keeps the current value instead of becoming NaN (2026-11-20)
 - Raising the max life of a dead unit (`BlzSetUnitMaxHP`, `SetUnitState`, hero stats, life items, HP upgrades) no longer revives it or fires a second death event (2026-11-20)
 - `CreateQuest` quests are required by default (as documented) (2026-11-20)
@@ -273,6 +275,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### WC3 compatibility
 
+- `BlzSetUnitSkin` resets the script vertex colour: now measured in Reforged 3.0.1 (2026-11-20)
+- Known difference: a dead unit keeps life 0 after a max-life raise (2026-11-20)
 - `PLAYER_COLOR_BLACK` (`ConvertPlayerColor(24)`) is a valid colour for `SetPlayerColor` and `GetPlayerColor` (2026-11-20)
 - Quests button: enabling a quest enables it on JASS maps (never disabled again) (2026-11-20)
 - Documented differences from Reforged 3.0.1 (measured), 2026-11-20: `BlzSetUnitMaxHP(u, 0)` on a unit with Reincarnation skips the Reincarnation
