@@ -77,6 +77,9 @@ Effects attached to a unit ignore position, orientation and alpha. Images are no
 | `KillSoundWhenDone`, `SetSoundVolume`, `ClearMapMusic` | partial | Work on `CreateSound` handles only, not label or MIDI sounds. |
 | `StartSound` on a playing looping sound | unverified | Does nothing; a refused start is retried by the next call. |
 | Decoded sound data | deliberate | Shared per file; only memory and start time differ. |
+| `CreateSound` decoding | deliberate | The handle is valid at once and the file decodes in the background; a `StartSound` before that finishes plays a frame or so late. |
+| `TriggerWaitForSound`, `GetSoundDuration` on a decoding sound | deliberate | The wait still counts from `StartSound`; the duration call decodes the sound right away. |
+| `CreateSoundFromLabel` | deliberate | The file loads at the sound's first play. |
 | `SetSoundPosition` | partial | Used at the next start; `SetSoundDistances` and `AttachSoundToUnit` are missing. |
 | Sounds never killed | bugfix | Released when the map closes. |
 | 3D sound distance | unverified | Measured from the camera target. |

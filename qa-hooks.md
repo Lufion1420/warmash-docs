@@ -33,6 +33,8 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `-qaleavecount <n>`, `-qaleavemap <map>` | Repeats the leave `n` times; restarts load `<map>`. |
 | `-qalua <file>[;<file>...]` | Runs Lua files in order in the map's VM; a failing file stops the rest. |
 | `-qablpsync` | Turns off worker-thread BLP decoding at map load (decode on the render thread). |
+| `-qasoundsync` | Decodes script sounds on the render thread instead of the background (for timing comparisons). |
+| `-qablpticksync` | Keeps texture decoding during a script tick on the render thread (for timing comparisons). |
 | `-qagrab` | Keeps cursor catch and edge scrolling on (`-qalog` alone turns them off). |
 | `-qacursorpin <x>,<y>` | Pins the cursor position the in-game UI reads (window pixels, top-left origin); the OS cursor does not move. Needs `-qalog` and `-loadfile`. |
 | `WarMashQaReport(key, value)` | Writes a value into the log; at most 1000 keys per run. |

@@ -80,6 +80,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- `CreateSound` decodes in the background (the handle is valid at once): a `StartSound` before the decode finishes plays a frame or so late… (2026-11-20)
+- `ORIGIN_FRAME_HERO_BAR` sits at the widescreen window's left edge, as in Reforged (2026-11-20)
 - Multi-selection group icons and transport cargo icons follow `ConsoleUI`'s position, so a map that moves it off screen hides them, as in Reforged (2026-11-20)
 - Mouse-wheel zoom-out limit is the larger of the largest camera preset and 5000 (2026-11-19)
 - Command card: a passive ability with no button position (no `Buttonpos`/`Researchbuttonpos` x or y) gets no button (2026-11-19)
@@ -124,6 +126,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Smart, move and follow orders on a unit stop at the follow range (300 units edge to edge, 100 for buildings) instead of the acquisition range (2026-11-20)
 - `BlzUnitDisableAbility` and `BlzUnitHideAbility` work on `Aatk` and `Amov`: a disabled attack stops, no auto-acquire, attack orders refused (rules inferred) (2026-11-20)
 - `BlzSetAbilityRealLevelField(ABILITY_RLF_CASTING_TIME)` on ability-builder abilities is read on every cast (2026-11-20)
 - Shadow Strike no longer errors on hit and its slow always ends (2026-11-20)

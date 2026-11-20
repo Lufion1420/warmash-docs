@@ -27,6 +27,8 @@ Interface parts that continue [UI frames](ui-frames.html).
 | Frames parented to the world frame | works | Draw below the stock HUD. |
 | `ORIGIN_FRAME_UNIT_PANEL_BUFF_BAR` and its label | bugfix | Real frames. |
 | `ORIGIN_FRAME_HERO_BAR`, `HERO_BUTTON`, `HERO_HP_BAR`, `HERO_MANA_BAR`, `HERO_BUTTON_INDICATOR` | unverified | Real clickable hero icons; not hidden by `BlzHideOriginFrames`. |
+| Stock hero bar position | deliberate | Sits at the widescreen window's left edge, as in Reforged. |
+| Hero buttons after a script moved one | deliberate | Buttons the script never moved are not drawn and take no clicks, even after `BlzFrameSetVisible(true)`; `BlzFrameIsVisible` still reads true. As in Reforged; cause unverified. |
 | `ORIGIN_FRAME_PORTRAIT` | deliberate | Drawn exactly in the frame rect; Reforged's offset quirk is not copied. |
 | Multi-selection group icons and transport cargo icons when `ConsoleUI` moves | bugfix | Follow its position, so a map that moves it off screen hides them, as in Reforged. |
 | `BlzFrameSetVisible(ConsoleUI, false)` and build-queue icons | bugfix | Hiding `ConsoleUI` also hides the group, cargo and build-queue icons, and they follow a moved `ConsoleUI`. |
@@ -42,7 +44,7 @@ Interface parts that continue [UI frames](ui-frames.html).
 
 Details:
 - Portrait: frame alpha and scale are not applied; a size-0 frame shows no portrait.
-- Hero buttons: a dead hero's icon is darkened; F1 to F3 select heroes; stock layout unverified.
+- Hero buttons: a dead hero's icon is darkened; F1 to F7 still select heroes whose button is hidden this way.
 
 ### Tooltips
 

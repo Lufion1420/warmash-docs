@@ -27,6 +27,8 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | Click on a unit the active spell cannot target | deliberate | Shows the target error and casts nothing; targeting stays active. |
 | Attack target turns invulnerable or invisible | unverified | The attacker drops the target and ends the attack order. |
 | Attack target lost mid-chase or mid-backswing | deliberate | The attack ends at once; a swing before its damage point deals nothing. |
+| Smart, move and follow orders on a unit | bugfix | The follower stops about 300 units from the target's edge (100 for buildings), not at its acquisition range; it walks again only well beyond that. |
+| `GetUnitMoveFollowBehavior` with a null target | bugfix | Returns null instead of raising an error. |
 
 ## Damage and attack events
 
