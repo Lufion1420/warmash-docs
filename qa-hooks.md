@@ -37,6 +37,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `-qablpticksync` | Keeps texture decoding during a script tick on the render thread (for timing comparisons). |
 | `-qareadsync` | Keeps archive reads on the render thread (for timing comparisons). |
 | `-qaunitsoundsync` | Loads unit response sounds on the render thread (for timing comparisons). |
+| `-qapendingpixmap` | Uses the old pending UI texture upload (zeroed Pixmap, then a second upload) for comparison. |
 | `-qagrab` | Keeps cursor catch and edge scrolling on (`-qalog` alone turns them off). |
 | `-qacursorpin <x>,<y>` | Pins the cursor position the in-game UI reads (window pixels, top-left origin); the OS cursor does not move. Needs `-qalog` and `-loadfile`. |
 | `WarMashQaReport(key, value)` | Writes a value into the log; at most 1000 keys per run. |
@@ -55,6 +56,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `state.camera.projectionFarZ`, `state.worldPixelRows` | Actual far plane; dark share of 7 world rows (black-cut check). |
 | `state.worstFrame`, `state.frameGapMaxMs` | The slowest frame and its top 10 natives. |
 | `state.worstFrame.unitCreate`, `unitResponses` | Unit creation cost per part; unit response sound counters (plays, late or silent plays, dropped files). |
+| `state.worstFrame.frameTexture`, `gcCount`, `gcMs`, `gcByCollector` | `BlzFrameSetTexture` cost per part in the slowest frame; JVM collections since map load. |
 | `hud` | World frame, hero buttons, tooltip, buff bar, multiboard, chat, FPS text. |
 | `state.healthBars` | Floating bars and text tags. |
 | `damageEvents` (exit) | Counts and last values of damage events. |
