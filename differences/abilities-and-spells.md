@@ -62,6 +62,7 @@ Details:
 
 | Native | Status | What differs |
 |---|---|---|
+| Recasting a map-built channel ability while it channels | unverified | The old channel ends first, so its end actions run before the new cast; an Aerial Shackles recast frees the first target. |
 | Channel (`ANcl`) | works | Per-level fields `Ncl1` to `Ncl6`, mana, cooldown and all five spell events. |
 | Channel with follow-through time 0 | unverified | Treated as an instant cast (0.001 s). |
 | Channel cast after a walk into range | bugfix | The cast runs normally and FINISH fires at its end; before, it ended at once with ENDCAST only. Failing for lack of mana no longer leaves the unit stuck. |

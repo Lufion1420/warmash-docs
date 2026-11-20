@@ -123,6 +123,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Recasting a map-built channel ability while it channels ends the old channel first (its end actions run before the new cast), so an Aerial Shackles recast… (2026-11-20)
 - `UnitRemoveAbility`, `GetUnitAbilityLevel`, `BlzGetUnitAbility` on `Aatk` (getters also `Amov`) behave as in Reforged: removal returns true and removes the… (2026-11-20)
 - `GetAbilityLevel(nil)` returns 0 instead of an error (2026-11-20)
 - `BlzEndUnitAbilityCooldown` on a Spell Book child ends the book's cooldown only when that child started it (2026-11-20)
