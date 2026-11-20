@@ -28,7 +28,10 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 | `SetUnitFlyHeight` below 0 | unverified | Ground unit types are clamped at 0. |
 | Snared units (`UNIT_TYPE_SNARED`) | bugfix | Do not walk and read move speed 0, as measured. |
 | `GetUnitMoveSpeed`, `BlzGetUnitRealField(UNIT_RF_SPEED)` with a speed buff | bugfix | Unrounded value, as measured; movement itself still uses whole numbers. |
-| `SetUnitMoveSpeed` | bugfix | Clamped to 150..400 and read back unrounded, as measured; a map's own minimum or maximum, including 0, is used as the bound (0 for both gives speed 0). |
+| `SetUnitMoveSpeed`, move speed limits | deliberate | A map's `MaxUnitSpeed` or the unit's own maximum clamps only values set by script; Reforged also caps at 522, WarMash has no cap. |
+| Move speed floor | deliberate | The final speed is at least 1 or the minimum from the map or unit, buffs included (Slow alone on 270 reads 150); speed-0 types stay 0. |
+| Polymorph move speed | works | Uses the sheep type's minimum speed (100). |
+| `BlzSetUnitRealField(UNIT_RF_SPEED)` | gap | Writes return false and change nothing. |
 | `GetUnitDefaultMoveSpeed` | unverified | The unit type's speed from object data; 0 for a null unit. |
 | Slow or speed upgrade while a speed buff is active | bugfix | Change the base speed without baking in the buff; WC3's combination rule is unverified. |
 | `IsTerrainPathable` | partial | Works for walk, fly, build and float pathing; other types return false. |

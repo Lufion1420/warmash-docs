@@ -22,9 +22,11 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzGetUnitMaxHP`, `BlzGetUnitMaxMana`, `BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`, `BlzGetUnitSkin` | works | Raising max HP or mana also raises the current value; lowering clamps it. |
 | Getters after `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana` while buffed | bugfix | Return exactly the value set, also while buffs are active. |
 | `BlzSetUnitMaxHP` with 0 | bugfix | Kills the unit, as measured; `SetWidgetLife` does not revive it. A negative value also kills (unverified). |
-| `BlzSetUnitMaxHP` with 0 on a unit with Reincarnation or Ankh | unverified | The replacement is skipped and the unit stays dead; during a Reincarnation delay the unit dies for real when it ends, without killer. |
-| `RemoveUnit` on a unit in a Reincarnation delay | unverified | The unit stays removed: no revive, no death event, tech-tree count released. |
-| `RemoveUnit`, then `ReviveHero`, `ReviveHeroLoc` or `ResurrectUnit` in the same tick | unverified | Returns false and revives nothing. |
+| `BlzSetUnitMaxHP` with 0 on a unit with Reincarnation | deliberate | Reforged triggers the Reincarnation, as measured; WarMash skips it and the unit stays dead. Ankh behaves the same in both. |
+| Reincarnation delay ending with max life 0 | deliberate | Reforged leaves a zombie alive at life 0 without events, as measured; WarMash turns it into a real death. |
+| Reincarnation false death | works | Fires no death event, bounty or XP, as measured. |
+| `RemoveUnit` on a unit in a Reincarnation delay | deliberate | The unit stays removed with no revive or death event; Reforged keeps its typed unit count, WarMash releases it. |
+| `RemoveUnit` on a dead hero, then `ReviveHero` in the same tick | deliberate | Reforged revives it, as measured; WarMash returns false and revives nothing. |
 | `RemoveUnit` on a hero that died normally | unverified | Releases its tech-tree count once (`GetPlayerTechCount`, hero training limit); before, the dead removed hero counted forever. |
 | `RemoveUnit` on a unit that is already removed or whose corpse has decayed | unverified | Does nothing more: the tech-tree count is released once, and no second removal is logged. |
 | `RemoveUnit` on a hero queued at an altar | unverified | The queue entry is cancelled and gold, lumber and food are refunded to the altar owner. |
@@ -34,6 +36,7 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `BlzSetUnitIntegerField` | partial | Only the classification field works; it reads back as written, and other fields return false. |
 | `UNIT_IF_UNIT_CLASSIFICATION` writes | bugfix | Bit 128 is only Ancient and never blocks targeting; `IsUnitType(ANCIENT)` and ancient target lists read it, as measured. |
 | `UNIT_IF_UNIT_CLASSIFICATION` write replaces the field | bugfix | Writing 128 or 0 clears `IsUnitType(MECHANICAL)`, and 0 clears the type's own Ancient, as measured. |
+| `UnitAddType`, `UnitRemoveType` after a classification write | bugfix | Set and clear the mechanical, undead and ancient bits (128 plus mechanical reads 136), as measured. |
 | `BlzGetUnitBooleanField` | partial | 12 fields, read from the unit type, not the unit; `BlzSetUnitBooleanField` is missing. |
 | `SetUnitState` life and mana | bugfix | Clamped to the maximum; lowering max life does not lower current life. |
 | `BlzGetUnitCollisionSize`, `GetDestructableTypeId`, `GetDestructableOccluderHeight` | works | Implemented. |

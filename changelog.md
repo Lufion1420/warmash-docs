@@ -79,6 +79,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 - Command card: a passive ability with no button position (no `Buttonpos`/`Researchbuttonpos` x or y) gets no button (2026-11-19)
 - Mouse wheel zooms along the distance only and keeps the camera angle, field of view and far plane (2026-11-19)
 - Spell Book honors Shared Spell Cooldown: casting a listed ability puts the book on the same cooldown (2026-11-19)
+- Move speed limits: `MaxUnitSpeed` or a unit's own maximum clamps only `SetUnitMoveSpeed` values, with no 522 cap (Reforged caps at 522) (2026-11-20)
 - `RemoveUnit` on a hero that died normally releases its tech-tree count once (`GetPlayerTechCount`, hero training limit) (2026-11-17)
 - `BlzPauseUnitEx(u, false)` no longer re-issues a Channel cast that the pause cut after its EFFECT (Reforged does, so one order can cast several times) (2026-11-17)
 - `CAMERA_FIELD_FARZ`: the camera far plane is raised to what the view needs, so zooming out no longer cuts the far ground to black… (2026-11-17)
@@ -117,6 +118,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `StartUnitAbilityCooldown` and `BlzStartUnitAbilityCooldown` on a Spell Book child no longer start an idle book, as measured in Reforged (2026-11-20)
 - `BlzSetUnitSkin` and `BlzCreateUnitWithSkin` reset the model scale to the skin type's scale, like Reforged… (2026-11-20)
 - `IssueTargetOrder` and `IssueTargetOrderById` return false for a nil target or a removed unit, destructable or item (units were an error) (2026-11-20)
 - Destructable and item natives… (2026-11-20)
@@ -235,6 +237,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### WC3 compatibility
 
+- Documented differences from Reforged 3.0.1 (measured), 2026-11-20: `BlzSetUnitMaxHP(u, 0)` on a unit with Reincarnation skips the Reincarnation
 - Measured in Reforged 3.0.1.24371 on 2026-11-16 (run r3d) and matching: the attack dice upgrade raises the number of dice, not the base damage… (2026-11-16)
 - 2026-11-16, deliberate differences from Reforged 3.0.1.24371 (measured there): `BlzUnitHideAbility` is an on/off switch, Reforged counts hides…
 - Data version, 2026-11-16 (documented, no code change): maps that are not flagged melee read the 1.29 `Custom_V1` balance files, so the Tavern sells 5 heroes…
