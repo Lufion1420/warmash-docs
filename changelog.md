@@ -11,6 +11,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Castless ability-builder item abilities (potions) fire the five spell events in the use tick with the item ability id, then one charge is spent and… (2026-11-20)
+- Engine spells with a Casting Time (Entangle Gold Mine) fire CAST after it and EFFECT one cast point later (2026-11-20)
 - Spell events (`EVENT_UNIT_SPELL_CHANNEL`/`CAST`/`EFFECT`/`FINISH`/`ENDCAST` and player events) fire for the engine spells and the JSON ability-builder spells… (2026-11-20)
 - `ShowDestructable`, `QueueDestructableAnimation`, `SetDestructableAnimationSpeed`, `SetDestructableMaxLife`, `GetDestructableName` and… (2026-11-20)
 - Combat state (WarMash-only): `WMS_EVENT_UNIT_COMBAT_ENTER`/`LEAVE` and `WMS_EVENT_PLAYER_UNIT_COMBAT_ENTER`/`LEAVE` events, plus `WmsIsUnitInCombat`… (2026-11-20)
@@ -121,6 +123,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- A castless item ability that cannot pay its mana at the cast point ends with ENDCAST only: no charge spent, no `EVENT_UNIT_USE_ITEM` (2026-11-20)
 - Spell events of JSON ability-builder spells follow WC3: CHANNEL and CAST at cast start, EFFECT with mana and cooldown at the cast point, FINISH then ENDCAST at… (2026-11-20)
 - A JSON spell cast restarted after a stun pays mana once (2026-11-20)
 - Inferred, not measured: transformation-style spells pay at cast start (2026-11-20)
