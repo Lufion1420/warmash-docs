@@ -13,9 +13,12 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 
 | Native | Status | What differs |
 |---|---|---|
-| `IssueTargetOrder`, `IssueTargetOrderById` attack or move on a unit in fog or under the black mask | gap | Warcraft III returns true and walks there, as measured; WarMash returns false. Smart, Storm Bolt and wand-return orders return false in both. |
-| `IssueTargetOrder`, `UnitUseItemTarget`, `IssueNeutralTargetOrder(ById)` other orders on a target in fog | unverified | Refused (false); WC3 behavior is not confirmed. |
-
+| `IssueTargetOrder`, `IssueTargetOrderById` attack or move on a unit in fog or under the black mask | bugfix | Returns true and walks there, as measured in Reforged. |
+| `IssueTargetOrder` smart on an unseen enemy | bugfix | Returns false, as measured; also false for a fogged ally without shared vision and an undetected invisible enemy (inferred). |
+| `IssueTargetOrder` attack on an undetected invisible unit | deliberate | Returns false; Reforged returns true but the unit never hits. |
+| Unit-target spells and `UnitUseItemTarget` on unseen targets | works | Return false, as measured in Reforged. |
+| `GroupTargetOrder`, `GroupTargetOrderById` | partial | Follow the single-unit rules (inferred); nil target returns false, empty group returns true (unmeasured). |
+| Script target order queued on a stunned or casting unit | bugfix | Keeps the script rule when it starts (was dropped). |
 | `IssueTargetOrder`, `IssueTargetOrderById` | bugfix | Return false for a nil target or a removed unit, destructable or item; corpses and killed trees stay valid targets. |
 | `IssuePointOrder` | unverified | Same as `IssuePointOrderById`; a nil order string returns false. |
 | `IssueImmediateOrder`, `IssueImmediateOrderById` with "stop" | bugfix | Returns true. |
