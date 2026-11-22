@@ -26,7 +26,7 @@ The Frame API works for script frames, and the stock parts that custom-UI maps m
 | `BlzGetOriginFrame`, `BlzTriggerRegisterFrameEvent` with an out-of-range index | unverified | Return nil with one log line. |
 | `BlzFrameClick` on a disabled button | bugfix | Fires no click event. |
 | `BlzFrameSetFocus`, `BlzFrameCageMouse`, `BlzFrameSetTextSizeLimit`, `BlzTextAreaFrameSetAutoScroll` | stored-only | Value stored, one log line, no effect. |
-| `BlzEnableUIAutoPosition` | stub | Stores the value only. Warcraft III with it on re-applies the default hero-button position (TOPLEFT) on every layout pass, as measured. |
+| `BlzEnableUIAutoPosition` | works (hero buttons) | ON re-applies the hero buttons' stock TOPLEFT; Reforged also ignores HP-bar and HERO_BAR moves, WarMash honours them; other frames stored only. |
 | Frame events: checkbox, edit box, slider, popup menu, mouse enter, leave, up and wheel | works | Fire; disabled frames fire none. |
 | Frame events MOUSE_DOWN, MOUSE_DOUBLECLICK, SPRITE_ANIM_UPDATE | deliberate | Never fire, as observed in WC3. |
 | Frame events DIALOG_ACCEPT, DIALOG_CANCEL | gap | Never fire: no dialog frame type. |

@@ -132,6 +132,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `BlzEnableUIAutoPosition` ON re-applies the 7 hero buttons' stock TOPLEFT (script TOPLEFT ignored, other points stretch from it, as measured) (2026-11-22)
 - `IssueTargetOrder(ById)` attack or move on a fogged or masked unit returns true and walks (as measured in Reforged) (2026-11-22)
 - `GroupTargetOrder(ById)` follows the single-unit fog rules (nil target returns false, empty group true, unmeasured) (2026-11-22)
 - Morph abilities (Bear Form, Crow Form, Burrow, Stone Form, Metamorphosis and similar) fire CHANNEL, CAST, EFFECT in the order tick with the old type, mana and… (2026-11-22)
