@@ -40,6 +40,7 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | Smart on your own building | bugfix | The unit walks to contact and the order ends (reads 0), no follow, as measured; an allied building is the same (inferred). |
 | Smart on a neutral Passive building (shop, gold mine, waygate) | unverified | The unit keeps following and the order stays smart; Warcraft III is not measured. |
 | Follower after an auto-acquired attack | bugfix | Returns to following the target; the order reads smart throughout. |
+| Follower snared while in follow range | bugfix | Resumes following when the snare ends (inferred); a follow begun while rooted does not resume after unrooting. |
 | `GetUnitMoveFollowBehavior` with a null target | bugfix | Returns null instead of raising an error. |
 
 ## Damage and attack events
