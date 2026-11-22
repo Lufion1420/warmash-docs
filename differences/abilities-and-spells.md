@@ -73,7 +73,7 @@ Details:
 | `BlzPauseUnitEx` during a Channel cast | bugfix | Ends the cast; at the unpause a cast cut before its EFFECT is re-issued, as measured. |
 | `PauseUnit` during a cast | bugfix | Cuts the cast like `BlzPauseUnitEx`, as measured; Channel `ANcl` ignores the pause. A null unit is ignored. |
 | `PauseUnit` on a unit the engine also pauses (loaded in a transport) | unverified | Stays an engine pause: the cast freezes instead of being cut, and a cut ended by an engine unpause is not re-issued. |
-| Cast point 0: `PauseUnit`, `BlzPauseUnitEx` or an order from a `SPELL_CAST` or `SPELL_EFFECT` trigger action | gap | Cannot cut the cast, because actions run after the unit update; pause from the trigger condition instead. |
+| Cast point 0: `PauseUnit`, `BlzPauseUnitEx` or an order from a `SPELL_CAST` or `SPELL_EFFECT` trigger action | gap | Cannot cut the cast; in Reforged it cuts (from EFFECT: no effect, mana spent, no re-cast), as measured. Pausing from the trigger condition cuts. |
 | `BlzPauseUnitEx` unpause after the EFFECT of a Channel cast | deliberate | Reforged re-issues the order, so one order can cast several times; WarMash does not, and the unit takes its next order or goes idle. |
 | `BlzPauseUnitEx` in the CAST or EFFECT of an instant Channel | bugfix | EFFECT, FINISH and ENDCAST fire in one tick and the order is not re-issued, as measured. |
 | Paused instant Channel: target lost before EFFECT | unverified | A dead, hidden or untargetable target ends the cast with ENDCAST, no EFFECT, no mana. |
@@ -84,7 +84,7 @@ Details:
 | Channel: stun before EFFECT | unverified | The cast ends; WC3 reportedly casts again after the stun. |
 | Channel: order given before EFFECT | unverified | Interrupts the cast; not queued. |
 | Channel: `Ncl5` (disable other abilities) | unverified | Greys only spell and item abilities. |
-| Channel: target art, `RemoveUnit` | gap | No target art; removing the caster fires ENDCAST. |
+| Channel: target art | gap | The target art is not spawned. |
 | `GetTriggerPlayer` in spell events | gap | Returns nil. |
 | `GetSpellTargetX`, `GetSpellTargetY`, `GetSpellTargetLoc` | unverified | The target point, else the target's position, else 0. |
 | Spell events of the engine spells (Storm Bolt, Polymorph, Charm and similar) and the JSON ability-builder spells | works | CHANNEL and CAST at cast start, EFFECT at the cast point after mana and cooldown, FINISH and ENDCAST after the backswing; a cut gives ENDCAST only. |
@@ -99,7 +99,8 @@ Details:
 | Ability-builder (JSON) spells with begin-casting actions (other than the morphs below) | unverified | Mana and cooldown are paid at cast start, and the hand-off fires CHANNEL, CAST, EFFECT, FINISH, ENDCAST in one tick. |
 | Spell events of morph abilities (Bear Form, Crow Form, Burrow, Stone Form, Metamorphosis and similar) | bugfix | CHANNEL, CAST, EFFECT fire in the order tick with the old type, mana and cooldown paid at EFFECT; FINISH, ENDCAST follow after the morph time with the new type, as measured. |
 | Morph abilities: stop, second cast, death, stun | partial | Stop does not cancel and reverting pays mana again, as measured; death mid-morph gives ENDCAST only and stun defers FINISH and ENDCAST (both unverified). |
-| Morph abilities: stop or order issued from the EFFECT handler | gap | Ignored, and the morph completes; `RemoveUnit` mid-morph may skip ENDCAST. |
+| Morph abilities: stop or order issued from the EFFECT handler | gap | Ignored and the morph completes; in Reforged it cancels the morph with ENDCAST, no FINISH, mana and cooldown spent, as measured. |
+| `RemoveUnit` with an open cast (Channel, engine spells, JSON spells, morphs) | bugfix | ENDCAST fires once inside the call, PLAYER event before UNIT, no FINISH, no EFFECT if before it; a removed morph does not complete, as measured. |
 | Ability-builder (JSON) spells: stun before EFFECT | bugfix | The cast restarts after the stun and pays mana once. |
 | Ability-builder (JSON) spells: stunned caster dies, is removed, gets a new order or loses the ability | bugfix | The parked cast is dropped: end-channel actions run once and nothing resumes after `ReviveHero`. |
 | `BlzPauseUnitEx` from a spell handler on ability-builder spells | unverified | Cuts the cast with ENDCAST inside the pause call; the unpause re-issues the order if EFFECT had not fired. |

@@ -37,6 +37,8 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | Timed buffs on a unit revived by a death-replacement ability | bugfix | Slow, Bloodlust, stun and other timed buffs are cleared at death, as measured; timed life stays. |
 | Summoned unit with Reincarnation | gap | It loses its timed life on reincarnating and never expires; Warcraft III behavior not confirmed. |
 | `RemoveUnit` on a unit in a Reincarnation delay | deliberate | The unit stays removed with no revive or death event; Reforged keeps its typed unit count, WarMash releases it. |
+| Unit read after `RemoveUnit` | gap | It still reads its old type and position; Reforged reads type 0 and position 0,0, as measured. |
+| `RemoveUnit` called from a spell `EFFECT` condition | unverified | A Java-base spell's effect still runs; Reforged not measured. |
 | `RemoveUnit` on a dead hero, then `ReviveHero` in the same tick | deliberate | Reforged revives it, as measured; WarMash returns false and revives nothing. |
 | `RemoveUnit` on a hero that died normally | unverified | Releases its tech-tree count once (`GetPlayerTechCount`, hero training limit); before, the dead removed hero counted forever. |
 | `RemoveUnit` on a unit that is already removed or whose corpse has decayed | unverified | Does nothing more: the tech-tree count is released once, and no second removal is logged. |

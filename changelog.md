@@ -132,6 +132,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `RemoveUnit` with an open cast (Channel, engine spells, JSON spells, morphs) fires ENDCAST once inside the call, player event before unit event, no FINISH (2026-11-22)
 - A follower snared while already in follow range resumes following when the snare ends (resume rule inferred; a follow begun while rooted still does not resume) (2026-11-22)
 - `BlzEnableUIAutoPosition` ON re-applies the 7 hero buttons' stock TOPLEFT (script TOPLEFT ignored, other points stretch from it, as measured) (2026-11-22)
 - `IssueTargetOrder(ById)` attack or move on a fogged or masked unit returns true and walks (as measured in Reforged) (2026-11-22)
