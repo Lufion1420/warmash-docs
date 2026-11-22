@@ -33,7 +33,10 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | Following a moving unit | deliberate | The follower walks at the target's speed when close, so it neither flickers between walking and standing nor runs ahead. |
 | Following a target that turns or circles close | deliberate | A follower inside about 40 units stands unless the target walks away; on a U-turn it restarts after about 0.5 s. |
 | Follower blocked by a crowd | deliberate | It stands and retries after 1 s, then every 2 s. |
-| `GetUnitCurrentOrder` while following a friendly unit after smart | gap | Warcraft III reports smart (851971), as measured; WarMash reports move (851986). |
+| `GetUnitCurrentOrder` while following a friendly unit after smart | works | Reports smart (851971) throughout, as measured; a move order on a unit reads 851986. |
+| Smart on your own building | bugfix | The unit walks to contact and the order ends (reads 0), no follow, as measured; an allied building is the same (inferred). |
+| Smart on a neutral Passive building (shop, gold mine, waygate) | unverified | The unit keeps following and the order stays smart; Warcraft III is not measured. |
+| Follower after an auto-acquired attack | bugfix | Returns to following the target; the order reads smart throughout. |
 | `GetUnitMoveFollowBehavior` with a null target | bugfix | Returns null instead of raising an error. |
 
 ## Damage and attack events

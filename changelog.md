@@ -132,6 +132,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Smart on your own building walks to contact and the order ends (`GetUnitCurrentOrder` reads 0), no follow, as measured in Reforged (2026-11-22)
+- After an auto-acquired attack while following (smart on a friendly unit) the follower returns to following instead of walking to an old point (2026-11-22)
 - `PauseUnit` cuts a cast like `BlzPauseUnitEx` (ENDCAST, order 851973, re-issue at unpause before EFFECT), as measured in Reforged (2026-11-22)
 - A unit revived by a death-replacement ability (ability-builder setReviving) no longer keeps timed buffs (Slow, Bloodlust, stun), as in Reforged (2026-11-22)
 - Max life and mana per Reforged measurements: Periapt-type life bonuses (`AIlf`/`AIl2`) keep the life ratio, Avatar end only clamps life, `BlzSetUnitMaxMana`… (2026-11-22)
