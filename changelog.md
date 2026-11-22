@@ -11,7 +11,6 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
-- Spell events (CHANNEL, CAST, EFFECT, FINISH, ENDCAST), `EVENT_UNIT_USE_ITEM`, `EVENT_UNIT_DROP_ITEM` and `EVENT_UNIT_PAWN_ITEM` now fire the owner's… (2026-11-22)
 - `BlzSetUnitRealField`/`BlzGetUnitRealField` `UNIT_RF_CAST_POINT` and `UNIT_RF_CAST_BACK_SWING` are settable per unit and used by casts… (2026-11-22)
 - Quest dialog (F9 or the Quests button): main and optional lists with a detail pane (2026-11-20)
 - Unit response sounds decode on a background worker (2026-11-20)
@@ -283,6 +282,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### WC3 compatibility
 
+- Spell events (CHANNEL, CAST, EFFECT, FINISH, ENDCAST), `EVENT_UNIT_USE_ITEM`, `EVENT_UNIT_DROP_ITEM` and `EVENT_UNIT_PAWN_ITEM` now fire the owner's… (2026-11-22)
 - `BlzSetUnitSkin` resets the script vertex colour: now measured in Reforged 3.0.1 (2026-11-20)
 - Known difference: a summoned unit with Reincarnation loses its timed life on reincarnating and never expires (2026-11-22)
 - Known difference: a dead unit keeps life 0 after a max-life raise (2026-11-20)
