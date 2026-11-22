@@ -36,7 +36,8 @@ Timers fire at their real period, also below the 0.05 s tick.
 | Native | Status | What differs |
 |---|---|---|
 | Repeating timer under 0.05 s | bugfix | Fires at its real period, up to 50 times per tick. |
-| Unit events registered on a unit and on a player | gap | Warcraft III fires the player event first whatever the registration order, as measured; WarMash fires the unit event first. |
+| Spell, use-item, drop-item and pawn-item events registered on a unit and on a player | bugfix | The player event fires first whatever the registration order, as in Reforged (measured). |
+| Other unit events registered on a unit and on a player (death, damage, attacked, hero level, pickup, orders, change owner, selection, construct, train and research finish, sell) | unverified | Reforged order not measured; WarMash fires the unit event first. |
 | Timeouts just under a whole tick (0.65 s) | bugfix | Fire on the exact tick, not one early. |
 | `TimerStart` on a running timer | bugfix | Restarts it. |
 | `PauseTimer`, `TimerGetRemaining` | bugfix | The remaining time stays frozen; a second pause does nothing. |

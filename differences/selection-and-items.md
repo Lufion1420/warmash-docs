@@ -50,14 +50,14 @@ Shop purchases by script or UI work; the stock rules are unverified. Sell and pa
 | `EVENT_PLAYER_UNIT_SELL`, `EVENT_PLAYER_UNIT_SELL_ITEM`, `EVENT_UNIT_SELL`, `EVENT_UNIT_SELL_ITEM` | bugfix | Fire synchronously during the purchase, on the shop and its owner; order against the pickup event is unmeasured. |
 | `EVENT_PLAYER_UNIT_PAWN_ITEM`, `EVENT_UNIT_PAWN_ITEM`, `GetSellingUnit`, `GetBuyingUnit`, `GetSoldItem` | works | Fire before the drop event, inline within pawn range; seller is the hero, buyer the shop; a nested pawn of the same item is ignored. |
 | Pawn payment | deliberate | Gold arrives in the same tick; Reforged pays about 0.2 s after the events on a walk-then-pawn. |
-| `EVENT_UNIT_USE_ITEM`, `EVENT_PLAYER_UNIT_USE_ITEM` | bugfix | Fire on use (unit, then player), before the used-up drop; cast item spells fire once per landed effect. |
+| `EVENT_UNIT_USE_ITEM`, `EVENT_PLAYER_UNIT_USE_ITEM` | bugfix | Fire on use (player event, then unit event), before the used-up drop; cast item spells fire once per landed effect. |
 | Potion used by order `heal` | bugfix | Spends one charge and fires one USE. |
 | `GetItemCharges` right after `UnitUseItem` | unverified | Shows the old count in the same thread; it updates later in the same tick. |
 | `GetSpellAbilityId` in `EVENT_UNIT_USE_ITEM` | unverified | Returns 0. |
 | Item spell cast by order string (`IssueTargetOrder(hero, "charm", u)`) | unverified | Now spends a charge at the landed effect; a cast without an effect keeps the charge. |
 | `EVENT_UNIT_USE_ITEM` for powerups | unverified | Fires after the pickup events. |
 | `UnitUseItemTarget` with a target far out of range | unverified | Returns false instead of walking in; WC3 behavior not confirmed. |
-| `EVENT_UNIT_DROP_ITEM`, `EVENT_PLAYER_UNIT_DROP_ITEM` | unverified | Fire once per drop, before the item leaves; `UnitHasItem` is still true inside. Unit list runs before player list; Reforged order unmeasured. |
+| `EVENT_UNIT_DROP_ITEM`, `EVENT_PLAYER_UNIT_DROP_ITEM` | unverified | Fire once per drop, before the item leaves; `UnitHasItem` is still true inside. Player event fires before the unit event, as in Reforged. |
 | Drop events: what counts as a drop | bugfix | Ground drop, give, pawn or sell, drop natives, `RemoveItem`, used-up charges (charges 0) and death drops fire; slot swaps stay silent. |
 | `RemoveItem` on an already removed item | bugfix | Does nothing. |
 | `GetItemTypeId` after `RemoveItem` | bugfix | Returns 0 after the drop event, as in Reforged; an item a handler moved elsewhere is taken out again silently. |
