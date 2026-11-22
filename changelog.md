@@ -131,6 +131,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- A unit revived by a death-replacement ability (ability-builder setReviving) no longer keeps timed buffs (Slow, Bloodlust, stun), as in Reforged (2026-11-22)
 - Max life and mana per Reforged measurements: Periapt-type life bonuses (`AIlf`/`AIl2`) keep the life ratio, Avatar end only clamps life, `BlzSetUnitMaxMana`… (2026-11-22)
 - `SetUnitState(u, UNIT_STATE_MAX_MANA, x)` is ignored, as in Reforged (like `UNIT_STATE_MAX_LIFE`) (2026-11-22)
 - Max life per Reforged 3.0.1 (measured): `SetUnitState(UNIT_STATE_MAX_LIFE, x)` is ignored (2026-11-20)
@@ -280,6 +281,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 ### WC3 compatibility
 
 - `BlzSetUnitSkin` resets the script vertex colour: now measured in Reforged 3.0.1 (2026-11-20)
+- Known difference: a summoned unit with Reincarnation loses its timed life on reincarnating and never expires (2026-11-22)
 - Known difference: a dead unit keeps life 0 after a max-life raise (2026-11-20)
 - `PLAYER_COLOR_BLACK` (`ConvertPlayerColor(24)`) is a valid colour for `SetPlayerColor` and `GetPlayerColor` (2026-11-20)
 - Quests button: enabling a quest enables it on JASS maps (never disabled again) (2026-11-20)
