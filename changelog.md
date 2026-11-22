@@ -132,6 +132,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Morph abilities (Bear Form, Crow Form, Burrow, Stone Form, Metamorphosis and similar) fire CHANNEL, CAST, EFFECT in the order tick with the old type, mana and… (2026-11-22)
 - Smart on your own building walks to contact and the order ends (`GetUnitCurrentOrder` reads 0), no follow, as measured in Reforged (2026-11-22)
 - After an auto-acquired attack while following (smart on a friendly unit) the follower returns to following instead of walking to an old point (2026-11-22)
 - `PauseUnit` cuts a cast like `BlzPauseUnitEx` (ENDCAST, order 851973, re-issue at unpause before EFFECT), as measured in Reforged (2026-11-22)

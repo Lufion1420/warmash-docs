@@ -96,7 +96,10 @@ Details:
 | Item heal and mana potions | unverified | Fire all five spell events with the potion's ability id; charge spend and `EVENT_UNIT_USE_ITEM` follow after the script pass. |
 | Ability-builder (JSON) spells: CHANNEL order | bugfix | CHANNEL and CAST fire at cast start, before EFFECT; before, CAST came first and CHANNEL only after EFFECT. |
 | Ability-builder (JSON) spells: FINISH and ENDCAST | bugfix | Both fire at the end of the backswing or channel; before, ENDCAST fired before FINISH on every end. |
-| Ability-builder (JSON) spells with begin-casting actions (transformations) | unverified | Mana and cooldown are paid at cast start, and the morph hand-off fires CHANNEL, CAST, EFFECT, FINISH, ENDCAST in one tick. |
+| Ability-builder (JSON) spells with begin-casting actions (other than the morphs below) | unverified | Mana and cooldown are paid at cast start, and the hand-off fires CHANNEL, CAST, EFFECT, FINISH, ENDCAST in one tick. |
+| Spell events of morph abilities (Bear Form, Crow Form, Burrow, Stone Form, Metamorphosis and similar) | bugfix | CHANNEL, CAST, EFFECT fire in the order tick with the old type, mana and cooldown paid at EFFECT; FINISH, ENDCAST follow after the morph time with the new type, as measured. |
+| Morph abilities: stop, second cast, death, stun | partial | Stop does not cancel and reverting pays mana again, as measured; death mid-morph gives ENDCAST only and stun defers FINISH and ENDCAST (both unverified). |
+| Morph abilities: stop or order issued from the EFFECT handler | gap | Ignored, and the morph completes; `RemoveUnit` mid-morph may skip ENDCAST. |
 | Ability-builder (JSON) spells: stun before EFFECT | bugfix | The cast restarts after the stun and pays mana once. |
 | Ability-builder (JSON) spells: stunned caster dies, is removed, gets a new order or loses the ability | bugfix | The parked cast is dropped: end-channel actions run once and nothing resumes after `ReviveHero`. |
 | `BlzPauseUnitEx` from a spell handler on ability-builder spells | unverified | Cuts the cast with ENDCAST inside the pause call; the unpause re-issues the order if EFFECT had not fired. |
