@@ -72,7 +72,8 @@ end)
 | Handler makes the target invulnerable or kills it | unverified | Invulnerable: the hit deals nothing; `KillUnit` in DAMAGING still fires DAMAGED. |
 | Damage set to 0 or less, seen by lifesteal and thorns | unverified | Counts as 0 damage. |
 | Hit by a unit without thorns | bugfix | Exactly one DAMAGING and one DAMAGED per hit. |
-| PLAYER vs UNIT trigger order for death, damaged, damaging, hero level, issued orders and item pickup | gap | The unit event fires first; Reforged fires the player event first, as measured. Fix pending. |
+| PLAYER vs UNIT trigger order for death, damaged, damaging, hero level, issued orders and item pickup | bugfix | The player event fires before the unit event whatever the registration order, as measured; sell and attacked still fire the unit first (unmeasured). |
+| `IssueImmediateOrder(u, "stop")` and `ISSUED_ORDER` | gap | Fires no `EVENT_UNIT_ISSUED_ORDER`; Reforged fires one (order id 851972); holdposition does fire. |
 | `EVENT_UNIT_ATTACKED`, `EVENT_PLAYER_UNIT_ATTACKED` | works | Fires once per swing, before the damage point. |
 | When trigger actions run | deliberate | Damage triggers run actions inside the event; other events queue code actions until the tick ends. |
 | `GetHandleId(attacktype)` | bugfix | Returns the `common.j` index, 0 to 6. |
