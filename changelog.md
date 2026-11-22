@@ -129,6 +129,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Max life and mana per Reforged measurements: Periapt-type life bonuses (`AIlf`/`AIl2`) keep the life ratio, Avatar end only clamps life, `BlzSetUnitMaxMana`… (2026-11-22)
+- `SetUnitState(u, UNIT_STATE_MAX_MANA, x)` is ignored, as in Reforged (like `UNIT_STATE_MAX_LIFE`) (2026-11-22)
 - Max life per Reforged 3.0.1 (measured): `SetUnitState(UNIT_STATE_MAX_LIFE, x)` is ignored (2026-11-20)
 - `UnitAddItemById` and `UnitAddItemToSlotById` on a dead unit return nil and create no item (`UnitAddItem` returns false), as measured (2026-11-20)
 - Max life or mana rescaled from an old maximum of 0 (hero attributes, life/mana items, mana upgrades) keeps the current value instead of becoming NaN (2026-11-20)

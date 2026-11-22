@@ -19,12 +19,14 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `BlzGetUnitRealField` | partial | 17 fields (see Details); other fields return 0 with one log line. |
 | `BlzGetUnitRealField(UNIT_RF_SELECTION_SCALE)` | bugfix | Returns the type's selection scale (footman 1.0, knight 1.4), as measured; was 0. |
 | Hero armor from agility | unverified | Damage reduction uses the fractional armor; the display still rounds. |
-| `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzGetUnitMaxHP`, `BlzGetUnitMaxMana`, `BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`, `BlzGetUnitSkin` | works | Raising max mana also raises current mana; raising max HP of a living unit leaves life unchanged, as measured; lowering clamps. |
+| `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzGetUnitMaxHP`, `BlzGetUnitMaxMana`, `BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`, `BlzGetUnitSkin` | works | Raising max mana or max HP of a living unit leaves the current value unchanged, as measured; lowering clamps. |
 | Getters after `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana` while buffed | bugfix | Return exactly the value set, also while buffs are active. |
 | Raising max HP of a dead unit (`BlzSetUnitMaxHP`, `SetUnitState` max life, hero stats, life items, HP upgrades) | bugfix | The unit stays dead and no second death event fires, as measured; only revive paths bring it back. |
 | Life of a dead unit after a max-life raise | deliberate | Reforged reads a nonzero corpse life (still dead), as measured; WarMash reads 0. |
-| `SetUnitState(u, UNIT_STATE_MAX_LIFE, x)` | bugfix | Ignored, as measured in Reforged; use `BlzSetUnitMaxHP`. `UNIT_STATE_MAX_MANA` is unchanged and not measured. |
-| Max life changes from `SetHeroStr`, strength gain, `AIlf`/`AIl2`, HP upgrades, Avatar | bugfix | Life moves by the change instead of keeping the ratio, as measured for strength and `AIlf`/`AIl2`; upgrades and Avatar inferred. |
+| `SetUnitState(u, UNIT_STATE_MAX_LIFE, x)` | bugfix | Ignored, as measured in Reforged; use `BlzSetUnitMaxHP`. `UNIT_STATE_MAX_MANA` is ignored too. |
+| Max life changes from `SetHeroStr`, strength gain, `AIlf`/`AIl2`, HP upgrades, Avatar | bugfix | Strength changes move life by the change; `AIlf`/`AIl2` (Periapt) keep the life ratio; Avatar end only clamps life to the new max, as measured; upgrades inferred. |
+| `UNIT_STATE_MAX_MANA` via `SetUnitState` | deliberate | Ignored, as in Reforged. |
+| Mana change from `SetHeroInt` or intelligence gain | bugfix | Mana moves by the max-mana change, never below 0, as measured. |
 | Max life drops from item drop, Avatar end, strength loss | unverified | Life drops by the change, at least 1 for a living unit; not measured. |
 | Life bonuses while max-HP buffs or a `BlzSetUnitMaxHP` value are active | bugfix | No longer counted twice. |
 | Max life or mana change from an old maximum of 0 | bugfix | Keeps the current value clamped to 0 and the new maximum instead of becoming NaN. |
