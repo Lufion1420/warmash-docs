@@ -28,7 +28,10 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | Click on a unit the active spell cannot target | deliberate | Shows the target error and casts nothing; targeting stays active. |
 | Attack target turns invulnerable or invisible | unverified | The attacker drops the target and ends the attack order. |
 | Attack target lost mid-chase or mid-backswing | deliberate | The attack ends at once; a swing before its damage point deals nothing. |
-| Smart, move and follow orders on a unit | bugfix | The follower stops about 300 units from the target's edge (100 for buildings), not at its acquisition range; it walks again only well beyond that. |
+| Smart, move and follow orders on a unit: stop distance | deliberate | The follower stops 75 units from the target's edge (100 for buildings), not Warcraft III's 300; a map's own `FollowRange` wins. |
+| Smart, move and follow orders on a unit: settling | deliberate | The follower walks in to about 40 units, restarts only well beyond the range, and stands at least 0.3 s once settled. |
+| Following a moving unit | deliberate | The follower walks at the target's speed when close, so it neither flickers between walking and standing nor runs ahead. |
+| Follower blocked by a crowd | deliberate | It stands and retries after 1 s, then every 2 s. |
 | `GetUnitCurrentOrder` while following a friendly unit after smart | gap | Warcraft III reports smart (851971), as measured; WarMash reports move (851986). |
 | `GetUnitMoveFollowBehavior` with a null target | bugfix | Returns null instead of raising an error. |
 
