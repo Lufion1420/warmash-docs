@@ -83,6 +83,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- A follower inside about 40 units now stands while its target turns or circles near it, instead of flickering between walk and stand
 - Follow orders (smart right-click on a unit, move or patrol onto a unit, Jass2 follow) stop 75 units from the target's edge by default instead of Warcraft III's…
 - `CreateSound` decodes in the background (the handle is valid at once): a `StartSound` before the decode finishes plays a frame or so late… (2026-11-20)
 - `ORIGIN_FRAME_HERO_BAR` sits at the widescreen window's left edge, as in Reforged (2026-11-20)

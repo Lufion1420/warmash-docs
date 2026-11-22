@@ -31,6 +31,7 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | Smart, move and follow orders on a unit: stop distance | deliberate | The follower stops 75 units from the target's edge (100 for buildings), not Warcraft III's 300; a map's own `FollowRange` wins. |
 | Smart, move and follow orders on a unit: settling | deliberate | The follower walks in to about 40 units, restarts only well beyond the range, and stands at least 0.3 s once settled. |
 | Following a moving unit | deliberate | The follower walks at the target's speed when close, so it neither flickers between walking and standing nor runs ahead. |
+| Following a target that turns or circles close | deliberate | A follower inside about 40 units stands unless the target walks away; on a U-turn it restarts after about 0.5 s. |
 | Follower blocked by a crowd | deliberate | It stands and retries after 1 s, then every 2 s. |
 | `GetUnitCurrentOrder` while following a friendly unit after smart | gap | Warcraft III reports smart (851971), as measured; WarMash reports move (851986). |
 | `GetUnitMoveFollowBehavior` with a null target | bugfix | Returns null instead of raising an error. |
