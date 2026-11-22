@@ -42,7 +42,9 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `RemoveUnit` on a unit that is already removed or whose corpse has decayed | unverified | Does nothing more: the tech-tree count is released once, and no second removal is logged. |
 | `RemoveUnit` on a hero queued at an altar | unverified | The queue entry is cancelled and gold, lumber and food are refunded to the altar owner. |
 | `BlzSetUnitMaxMana` with 0 or less | unverified | Max mana is clamped to at least 0. |
-| `BlzSetUnitRealField` | partial | Sight radius, HP and mana regeneration, acquisition range and turn rate work; other fields return false. |
+| `BlzSetUnitRealField` | partial | Sight radius, HP and mana regeneration, acquisition range, turn rate, cast point and cast backswing work; other fields return false. |
+| `BlzSetUnitRealField(UNIT_RF_CAST_POINT)`, `UNIT_RF_CAST_BACK_SWING` | works | Set per unit and used by casts; negative values become 0; kept across a morph (not confirmed in Reforged). |
+| `GetUnitCastPoint`, `GetUnitCastBackswingPoint` | bugfix | Return the per-unit value, not only the unit type's. |
 | `BlzGetUnitIntegerField` | partial | Only primary attribute and the four tint fields; other fields return 0. |
 | `BlzSetUnitIntegerField` | partial | Only the classification field works; it reads back as written, and other fields return false. |
 | `UNIT_IF_UNIT_CLASSIFICATION` writes | bugfix | Bit 128 is only Ancient and never blocks targeting; `IsUnitType(ANCIENT)` and ancient target lists read it, as measured. |

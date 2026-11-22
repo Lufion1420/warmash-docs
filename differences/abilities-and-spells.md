@@ -71,7 +71,9 @@ Details:
 | Channel: `SPELL_FINISH` / `SPELL_ENDCAST` timing | bugfix | Fire in the tick the follow-through ends, after that tick's timers, as measured. |
 | Ability-builder (JSON) channels: end events | deliberate | Same order as Channel by analogy: FINISH then ENDCAST at the channel end; a cut channel fires ENDCAST only. |
 | `BlzPauseUnitEx` during a Channel cast | bugfix | Ends the cast; at the unpause a cast cut before its EFFECT is re-issued, as measured. |
-| `PauseUnit` during a cast | gap | Warcraft III cuts the cast like the Ex pause, as measured (Channel `ANcl` unaffected); WarMash freezes it. |
+| `PauseUnit` during a cast | bugfix | Cuts the cast like `BlzPauseUnitEx`, as measured; Channel `ANcl` ignores the pause. A null unit is ignored. |
+| `PauseUnit` on a unit the engine also pauses (loaded in a transport) | unverified | Stays an engine pause: the cast freezes instead of being cut, and a cut ended by an engine unpause is not re-issued. |
+| Cast point 0: `PauseUnit`, `BlzPauseUnitEx` or an order from a `SPELL_CAST` or `SPELL_EFFECT` trigger action | gap | Cannot cut the cast, because actions run after the unit update; pause from the trigger condition instead. |
 | `BlzPauseUnitEx` unpause after the EFFECT of a Channel cast | deliberate | Reforged re-issues the order, so one order can cast several times; WarMash does not, and the unit takes its next order or goes idle. |
 | `BlzPauseUnitEx` in the CAST or EFFECT of an instant Channel | bugfix | EFFECT, FINISH and ENDCAST fire in one tick and the order is not re-issued, as measured. |
 | Paused instant Channel: target lost before EFFECT | unverified | A dead, hidden or untargetable target ends the cast with ENDCAST, no EFFECT, no mana. |
@@ -102,8 +104,8 @@ Details:
 | Engine spells with a Casting Time (Entangle Gold Mine) | works | CHANNEL at start, CAST after the Casting Time, EFFECT one cast point later; a cut in between gives CHANNEL then ENDCAST. |
 | Casting Time of ability-builder (JSON) spells | works | CHANNEL, then CAST after the Casting Time, EFFECT one cast point later; a stop, stun or pause-ex cut gives ENDCAST only and spends nothing. |
 | Ability-builder spells that reuse the Casting Time for something else (transformations, Shadow Strike, Replenish, Flame Strike), toggles, item abilities, Casting Time under 0.05 s | deliberate | CAST still fires with CHANNEL; no pre-cast wait. |
-| Pause during the casting time, cast point or backswing of an engine or JSON spell | unverified | The wait resumes after the unpause; before, CAST, EFFECT and FINISH fired at once. |
-| Pause during a Channel (`ANcl`) cast point | gap | The wait still counts game ticks. |
+| Engine pause (transport, Mass Teleport) during the casting time, cast point or backswing | unverified | The wait is frozen and resumes after the unpause. |
+| Pause during a Channel (`ANcl`) cast | works | The follow-through ends on schedule, then the order reads 851973 until the unpause (the overrun is unverified). |
 | Castless item abilities (ability-builder, e.g. a potion on Brilliance Aura) | works | All five spell events fire in the use tick with the item ability id; then one charge is spent and `EVENT_UNIT_USE_ITEM` fires. |
 | Castless item ability that cannot pay its mana at the cast point | bugfix | Ends with ENDCAST only: no charge spent, no `EVENT_UNIT_USE_ITEM`. |
 | `BlzSetUnitBooleanField` | gap | Not implemented; it is the last missing native that the reference map's spell code calls. |

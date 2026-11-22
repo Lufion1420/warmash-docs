@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `BlzSetUnitRealField`/`BlzGetUnitRealField` `UNIT_RF_CAST_POINT` and `UNIT_RF_CAST_BACK_SWING` are settable per unit and used by casts… (2026-11-22)
 - Quest dialog (F9 or the Quests button): main and optional lists with a detail pane (2026-11-20)
 - Unit response sounds decode on a background worker (2026-11-20)
 - Pending UI textures upload once, directly from the worker buffer (a failed texture stays transparent) (2026-11-20)
@@ -131,6 +132,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `PauseUnit` cuts a cast like `BlzPauseUnitEx` (ENDCAST, order 851973, re-issue at unpause before EFFECT), as measured in Reforged (2026-11-22)
 - A unit revived by a death-replacement ability (ability-builder setReviving) no longer keeps timed buffs (Slow, Bloodlust, stun), as in Reforged (2026-11-22)
 - Max life and mana per Reforged measurements: Periapt-type life bonuses (`AIlf`/`AIl2`) keep the life ratio, Avatar end only clamps life, `BlzSetUnitMaxMana`… (2026-11-22)
 - `SetUnitState(u, UNIT_STATE_MAX_MANA, x)` is ignored, as in Reforged (like `UNIT_STATE_MAX_LIFE`) (2026-11-22)
