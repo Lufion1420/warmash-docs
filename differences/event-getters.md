@@ -27,6 +27,7 @@ A missing getter fails at the call with an "had no native implementation" log li
 | Hero revive: `EVENT_PLAYER_HERO_REVIVABLE` | partial | Fires with `GetTriggerUnit`, `GetTriggerPlayer` (owner) and `GetTriggerWidget` (hero). |
 | Hero revive: `EVENT_PLAYER_UNIT_HERO_REVIVE_START`, `_CANCEL`, `_FINISH` and `EVENT_UNIT_HERO_REVIVE_*` | works | `ReviveHero`/`ReviveHeroLoc`: START then FINISH (START skipped if the hero is already in an altar queue; a failed revive fires nothing; no CANCEL). Altar: START at queue, CANCEL on cancel (timing inferred), FINISH at completion. Player event first. |
 | Summon: `EVENT_PLAYER_UNIT_SUMMON`, `EVENT_UNIT_SUMMON` | partial | Only for Figurine, Phoenix, Grizzly, Hawk, Quilbeast, Feral Spirit, Force of Nature, Factory, Pocket Factory; player event (summoned unit's owner) first. |
+| Construction start and cancel: `EVENT_PLAYER_UNIT_CONSTRUCT_START`, `_CANCEL`, `EVENT_UNIT_CONSTRUCT_CANCEL` | unverified | START fires on placement (human, orc, undead, night elf builds, non-instant Entangled Gold Mine); CANCEL only on the cancel order, not on death or upgrade cancel. Player event first. `EVENT_UNIT_CONSTRUCT_START` does not exist in `common.j`. |
 | Construction and training: `*_CONSTRUCT_FINISH`, `*_TRAIN_FINISH`, `*_RESEARCH_FINISH` | works | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearched`, `GetResearchingUnit`. |
 | Selection: `*_SELECTED`, `*_DESELECTED` | works | `GetTriggerUnit` and `GetTriggerPlayer` set. |
 | Ownership: `*_CHANGE_OWNER` | works | `GetChangingUnit`, `GetChangingUnitPrevOwner`. |
@@ -45,7 +46,6 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `EVENT_PLAYER_UNIT_DETECTED`, `EVENT_UNIT_DETECTED`, `*_HIDDEN` | gap | Never fire; `GetDetectedUnit` and `GetEventDetectingPlayer` are missing. |
 | `EVENT_PLAYER_UNIT_RESCUED`, `EVENT_UNIT_RESCUED` | gap | Never fire; `GetRescuer` exists but returns nil. |
 | `EVENT_UNIT_ACQUIRED_TARGET`, `EVENT_UNIT_TARGET_IN_RANGE`, `TriggerRegisterUnitInRange`, `TriggerRegisterFilterUnitEvent` | gap | Never fire; the two register natives are missing and `GetEventTargetUnit` is missing. |
-| `*_CONSTRUCT_START`, `*_CONSTRUCT_CANCEL` | gap | Never fire; `GetConstructingStructure` and `GetCancelledStructure` are missing. |
 | `*_UPGRADE_START`, `_CANCEL`, `_FINISH` | gap | Never fire. |
 | `*_TRAIN_START`, `*_TRAIN_CANCEL`, `*_RESEARCH_START`, `*_RESEARCH_CANCEL` | gap | Never fire. |
 | `EVENT_PLAYER_UNIT_LOADED`, `EVENT_UNIT_LOADED` | gap | Never fire; `GetLoadedUnit` and `GetTransportUnit` are missing. |
@@ -63,8 +63,8 @@ A missing getter fails at the call with an "had no native implementation" log li
 | Getter | Status | What differs |
 |---|---|---|
 | `GetTriggerUnit` | works | Set in every firing event above; for sale events it is the shop, for pawn events the pawning unit. |
-| `GetTriggerPlayer` in spell, order, item, hero level, construction and training events | gap | Returns nil; only chat, leave, key, mouse, damage, death, attack, selection, ownership, research and sale events set it. |
-| `GetTriggerWidget` in spell, order, item, hero and construction events | gap | Returns nil in spell events; works for death, damage, order and selection events. |
+| `GetTriggerPlayer` in spell, order, item and training events, and construction finish | gap | Returns nil; only chat, leave, key, mouse, damage, death, attack, selection, ownership, research and sale events set it. |
+| `GetTriggerWidget` in spell, order, item and hero events, and construction finish | gap | Returns nil in spell events; works for death, damage, order and selection events. |
 | `GetKillingUnit`, `GetDyingUnit` | works | Valid in death events only; the killer is nil for script kills such as a max life of 0. |
 | `GetAttacker` | works | Valid in attack events only; nil in damage events (use `GetEventDamageSource`). |
 | `GetEventDamage`, `GetEventDamageSource`, `BlzGetEventDamageTarget`, `BlzGetEventIsAttack` | works | Valid in damage events; outside one they return 0, nil or false. |
@@ -82,6 +82,7 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `GetRevivingUnit`, `GetRevivableUnit` | partial | In revive START and FINISH, `GetRevivingUnit` is the hero and `GetRevivableUnit` is nil (measured). Trigger unit/widget = hero, trigger player = owner. |
 | `GetSummonedUnit`, `GetSummoningUnit` | unverified | Summon events: the new unit and the caster. Which unit the unit-form event belongs to is assumed (the summoning unit). Trigger unit/widget = summoned unit. |
 | `SelectHeroSkill` on abilities without a registered ability type | gap | Learns nothing and fires no event (for example Holy Light `AHhb`, `AHds`, `AHre`). |
+| `GetConstructingStructure`, `GetCancelledStructure` | unverified | START and CANCEL only: the structure. Trigger unit and widget = the structure, trigger player = its owner. A handler that removes or kills the structure is refunded once; Entangle START/CANCEL, unit-level CANCEL after a player handler removed the structure, and an order given to the builder in START (overridden by the build) are unconfirmed. |
 | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearchingUnit`, `GetResearched` | works | Finish events only. |
 | `GetRescuer` | stub | Always nil. |
 | `GetEnteringUnit`, `GetLeavingUnit`, `GetTriggeringRegion` | works | Region events. |
@@ -96,7 +97,7 @@ Same in WarMash unless noted.
 | Attack events | works | Use `GetAttacker` in ATTACKED, `GetEventDamageSource` in DAMAGED; the other is nil. |
 | Death events | works | Use `GetKillingUnit` and `GetDyingUnit`; `GetKillingUnit` is only valid in death events. |
 | Hero level and skill | works | `GetLevelingUnit` for levels; `GetLearnedSkill` and `GetLearningUnit` for skills. |
-| Construction | gap | Start uses `GetConstructingStructure`, cancel `GetCancelledStructure`, finish `GetConstructedStructure`; only finish works here. |
+| Construction | unverified | Start uses `GetConstructingStructure`, cancel `GetCancelledStructure`, finish `GetConstructedStructure`; all three are set here. |
 | Sale and pawn items | works | In a sale the shop is `GetSellingUnit`; in a pawn the hero is `GetSellingUnit` and the shop `GetBuyingUnit`. |
 | Damage on spells | works | Spell damage reports `ATTACK_TYPE_NORMAL`; DAMAGING needs patch 1.31 or later in the real game. |
 | Order events | works | Immediate, point and target orders are three separate events with their own getters. |

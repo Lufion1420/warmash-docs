@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Construction events `EVENT_PLAYER_UNIT_CONSTRUCT_START`, `EVENT_PLAYER_UNIT_CONSTRUCT_CANCEL` and `EVENT_UNIT_CONSTRUCT_CANCEL` fire, player event first, with… (2026-11-23)
 - `TriggerRegisterPlayerStateEvent`, `TriggerRegisterPlayerAllianceChange` and `GetEventPlayerState` are implemented (2026-11-23)
 - Hero revive events `EVENT_PLAYER_UNIT_HERO_REVIVE_START`/`_CANCEL`/`_FINISH` and `EVENT_UNIT_HERO_REVIVE_*` fire, player event first
 - `EVENT_PLAYER_UNIT_SUMMON` and `EVENT_UNIT_SUMMON` fire with new natives `GetSummonedUnit`, `GetSummoningUnit`, only for Figurine, Phoenix, Grizzly, Hawk…
