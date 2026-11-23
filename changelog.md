@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `EVENT_PLAYER_UNIT_HERO_SKILL` and `EVENT_UNIT_HERO_SKILL` fire on every hero skill learn…
 - Rect natives `WmsCreateRectCentered`, `WmsSetRectCentered`, `WmsGetRectWidth`, `WmsGetRectHeight`, `WmsIsPointInRect`, `WmsIsUnitInRect`… (2026-11-23)
 - Facing natives `WmsIsUnitFacingUnit`, `WmsIsUnitFacingUnitInRange`, `WmsIsUnitFacingPoint`, `WmsGetUnitFacingDelta` (cone test, signed angle to a point) (2026-11-23)
 - Resource natives `WmsAddPlayerGold`, `WmsAddPlayerLumber` (negative spends, clamped at 0, returns the change applied) and `WmsCanPlayerAfford` (2026-11-23)
@@ -137,6 +138,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `TriggerRegisterGameStateEvent` read the limit value from the wrong argument
 - A move, patrol, follow or hold-position order queued during a morph runs after the morph instead of the unit stopping
 - An order from a morph's spell EFFECT handler… (2026-11-23)
 - Player unit events (`EVENT_PLAYER_UNIT_DEATH`, `DAMAGING`, `DAMAGED`, `HERO_LEVEL`, `ISSUED_ORDER`, `ISSUED_POINT_ORDER`, `ISSUED_TARGET_ORDER`, `PICKUP_ITEM`)… (2026-11-22)

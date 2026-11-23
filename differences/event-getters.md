@@ -23,6 +23,7 @@ A missing getter fails at the call with an "had no native implementation" log li
 | Items: `*_PICKUP_ITEM`, `_DROP_ITEM`, `_USE_ITEM`, `_PAWN_ITEM`, `_SELL_ITEM` | works | Fire with the item getters of that event; see "Traps" for which getter belongs to which event. |
 | Shops: `EVENT_UNIT_SELL`, `EVENT_PLAYER_UNIT_SELL` | works | Fire during the purchase for the shop and the shop owner's player. |
 | Hero: `EVENT_PLAYER_HERO_LEVEL`, `EVENT_UNIT_HERO_LEVEL` | works | `GetLevelingUnit` and `GetTriggerUnit` return the hero. |
+| Hero skill: `EVENT_PLAYER_UNIT_HERO_SKILL`, `EVENT_UNIT_HERO_SKILL` | works | Fire on every skill learn (`SelectHeroSkill`, learn button), not on `UnitAddAbility` or `SetUnitAbilityLevel`. Player event first (inferred). |
 | Hero revive: `EVENT_PLAYER_HERO_REVIVABLE` | partial | Fires with `GetTriggerUnit`; `GetRevivableUnit` is missing. |
 | Construction and training: `*_CONSTRUCT_FINISH`, `*_TRAIN_FINISH`, `*_RESEARCH_FINISH` | works | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearched`, `GetResearchingUnit`. |
 | Selection: `*_SELECTED`, `*_DESELECTED` | works | `GetTriggerUnit` and `GetTriggerPlayer` set. |
@@ -36,7 +37,6 @@ A missing getter fails at the call with an "had no native implementation" log li
 
 | Event | Status | What differs |
 |---|---|---|
-| `EVENT_PLAYER_HERO_SKILL`, `EVENT_UNIT_HERO_SKILL` | gap | Never fire; `GetLearnedSkill`, `GetLearnedSkillLevel` and `GetLearningUnit` are missing. |
 | `EVENT_PLAYER_HERO_REVIVE_START`, `_CANCEL`, `_FINISH` and the unit forms | gap | Never fire; `GetRevivingUnit` is missing. |
 | `EVENT_UNIT_HERO_REVIVABLE` | gap | Never fires; only the player form does. |
 | `EVENT_PLAYER_UNIT_SUMMON`, `EVENT_UNIT_SUMMON` | gap | Never fire; `GetSummonedUnit` and `GetSummoningUnit` are missing. |
@@ -53,7 +53,7 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `EVENT_PLAYER_DEFEAT`, `EVENT_PLAYER_VICTORY`, `EVENT_GAME_VICTORY`, `EVENT_GAME_END_LEVEL`, `EVENT_GAME_LOADED`, `EVENT_GAME_SAVE` | gap | Never fire. |
 | `EVENT_PLAYER_ARROW_*`, `EVENT_PLAYER_SYNC_DATA` | gap | Never fire; `BlzGetTriggerSyncData`, `BlzGetTriggerSyncPrefix` and `BlzTriggerRegisterPlayerSyncEvent` are missing. |
 | `TriggerRegisterUnitStateEvent` | stub | Does nothing useful: returns a null event, and only when the continue-on-error setting is on; `GetEventUnitState` is missing. |
-| `TriggerRegisterGameStateEvent` | partial | Only time of day is handled; other states raise an error, and the limit value is read from the wrong argument. |
+| `TriggerRegisterGameStateEvent` | partial | Only time of day is handled; other states raise an error. The limit is now read from the right argument (bugfix). |
 | `TriggerRegisterTrackableHitEvent`, `TriggerRegisterTrackableTrackEvent`, `GetTriggeringTrackable`, `GetEventGameState`, `GetWinningPlayer` | gap | Raise "not yet implemented" when called. |
 
 ## Getters by event
@@ -75,6 +75,9 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `GetManipulatingUnit`, `GetManipulatedItem` | works | Pickup, drop and use-item events; nil in sale and pawn events, as measured. |
 | `GetSellingUnit`, `GetBuyingUnit`, `GetSoldUnit`, `GetSoldItem` | works | Sale and pawn events as measured; see the item trap below. |
 | `GetLevelingUnit` | works | Hero level events. |
+| `GetLearningUnit`, `GetLearnedSkill`, `GetLearnedSkillLevel` | works | Hero skill events: hero, ability id, new level. `GetTriggerUnit` and `GetTriggerWidget` are the hero, `GetTriggerPlayer` the owner. |
+| `GetTriggerPlayer`, `GetTriggerWidget` in `EVENT_PLAYER_HERO_LEVEL` | gap | Unset (nil) in hero level handlers; use `GetLevelingUnit`. |
+| `SelectHeroSkill` on abilities without a registered ability type | gap | Learns nothing and fires no event (for example Holy Light `AHhb`, `AHds`, `AHre`). |
 | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearchingUnit`, `GetResearched` | works | Finish events only. |
 | `GetRescuer` | stub | Always nil. |
 | `GetEnteringUnit`, `GetLeavingUnit`, `GetTriggeringRegion` | works | Region events. |
@@ -88,7 +91,7 @@ Same in WarMash unless noted.
 |---|---|---|
 | Attack events | works | Use `GetAttacker` in ATTACKED, `GetEventDamageSource` in DAMAGED; the other is nil. |
 | Death events | works | Use `GetKillingUnit` and `GetDyingUnit`; `GetKillingUnit` is only valid in death events. |
-| Hero level and skill | gap | `GetLevelingUnit` for levels; `GetLearnedSkill` and `GetLearningUnit` for skills, but WarMash fires no skill event. |
+| Hero level and skill | works | `GetLevelingUnit` for levels; `GetLearnedSkill` and `GetLearningUnit` for skills. |
 | Construction | gap | Start uses `GetConstructingStructure`, cancel `GetCancelledStructure`, finish `GetConstructedStructure`; only finish works here. |
 | Sale and pawn items | works | In a sale the shop is `GetSellingUnit`; in a pawn the hero is `GetSellingUnit` and the shop `GetBuyingUnit`. |
 | Damage on spells | works | Spell damage reports `ATTACK_TYPE_NORMAL`; DAMAGING needs patch 1.31 or later in the real game. |
