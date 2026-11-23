@@ -29,6 +29,9 @@ A missing getter fails at the call with an "had no native implementation" log li
 | Summon: `EVENT_PLAYER_UNIT_SUMMON`, `EVENT_UNIT_SUMMON` | partial | Only for Figurine, Phoenix, Grizzly, Hawk, Quilbeast, Feral Spirit, Force of Nature, Factory, Pocket Factory; player event (summoned unit's owner) first. |
 | Construction start and cancel: `EVENT_PLAYER_UNIT_CONSTRUCT_START`, `_CANCEL`, `EVENT_UNIT_CONSTRUCT_CANCEL` | unverified | START fires on placement (human, orc, undead, night elf builds, non-instant Entangled Gold Mine); CANCEL only on the cancel order, not on death or upgrade cancel. Player event first. `EVENT_UNIT_CONSTRUCT_START` does not exist in `common.j`. |
 | Construction and training: `*_CONSTRUCT_FINISH`, `*_TRAIN_FINISH`, `*_RESEARCH_FINISH` | works | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearched`, `GetResearchingUnit`. |
+| Train and research start and cancel: `*_TRAIN_START`, `_TRAIN_CANCEL`, `*_RESEARCH_START`, `_RESEARCH_CANCEL` | unverified | START fires when the item is queued, CANCEL on an explicit cancel. Player event first. Building death or a script tech-level change that ends a research fire no CANCEL. Moments not confirmed in Reforged. |
+| Upgrade: `*_UPGRADE_START`, `_CANCEL`, `_FINISH` | unverified | START on accepted order, CANCEL on explicit cancel, FINISH when the building becomes the new type. Player event first. Death of the upgrading building fires no CANCEL. |
+| Decay: `EVENT_PLAYER_UNIT_DECAY`, `EVENT_UNIT_DECAY` | unverified | Fires when the corpse leaves the game. Heroes (dissipate) and corpses removed earlier with `RemoveUnit` fire nothing. Player event first. |
 | Selection: `*_SELECTED`, `*_DESELECTED` | works | `GetTriggerUnit` and `GetTriggerPlayer` set. |
 | Ownership: `*_CHANGE_OWNER` | works | `GetChangingUnit`, `GetChangingUnitPrevOwner`. |
 | Regions: `TriggerRegisterEnterRegion`, `TriggerRegisterLeaveRegion` | works | `GetEnteringUnit` or `GetLeavingUnit`, `GetTriggeringRegion`, `GetTriggerUnit`. |
@@ -42,12 +45,9 @@ A missing getter fails at the call with an "had no native implementation" log li
 |---|---|---|
 | `EVENT_UNIT_HERO_REVIVABLE` | gap | Never fires; only the player form does. |
 | Summons from JSON ability-builder abilities and script `CreateUnit`; Water Elemental summon | gap | Fire no summon event (the Water Elemental summon is not registered). |
-| `EVENT_PLAYER_UNIT_DECAY`, `EVENT_UNIT_DECAY` | gap | Never fire; `GetDecayingUnit` is missing. |
 | `EVENT_PLAYER_UNIT_DETECTED`, `EVENT_UNIT_DETECTED`, `*_HIDDEN` | gap | Never fire; `GetDetectedUnit` and `GetEventDetectingPlayer` are missing. |
 | `EVENT_PLAYER_UNIT_RESCUED`, `EVENT_UNIT_RESCUED` | gap | Never fire; `GetRescuer` exists but returns nil. |
 | `EVENT_UNIT_ACQUIRED_TARGET`, `EVENT_UNIT_TARGET_IN_RANGE`, `TriggerRegisterUnitInRange`, `TriggerRegisterFilterUnitEvent` | gap | Never fire; the two register natives are missing and `GetEventTargetUnit` is missing. |
-| `*_UPGRADE_START`, `_CANCEL`, `_FINISH` | gap | Never fire. |
-| `*_TRAIN_START`, `*_TRAIN_CANCEL`, `*_RESEARCH_START`, `*_RESEARCH_CANCEL` | gap | Never fire. |
 | `EVENT_PLAYER_UNIT_LOADED`, `EVENT_UNIT_LOADED` | gap | Never fire; `GetLoadedUnit` and `GetTransportUnit` are missing. |
 | `EVENT_UNIT_STACK_ITEM`, `*_EQUIP_ITEM`, `*_UNEQUIP_ITEM` | gap | Never fire; `BlzGetStackingItem*`, `BlzGetEquippedItem`, `BlzGetUnequippedItem`, `BlzGetAbsorbingItem` are missing. |
 | `TriggerRegisterPlayerStateEvent`, `GetEventPlayerState` | unverified | Fires when the limit comparison turns from false to true; already true at registration does not fire, and it re-arms when false again. |
@@ -63,7 +63,7 @@ A missing getter fails at the call with an "had no native implementation" log li
 | Getter | Status | What differs |
 |---|---|---|
 | `GetTriggerUnit` | works | Set in every firing event above; for sale events it is the shop, for pawn events the pawning unit. |
-| `GetTriggerPlayer` in spell, order, item and training events, and construction finish | gap | Returns nil; only chat, leave, key, mouse, damage, death, attack, selection, ownership, research and sale events set it. |
+| `GetTriggerPlayer` in spell, order, item and train start/cancel events, and construction finish | gap | Returns nil; only chat, leave, key, mouse, damage, death, attack, selection, ownership, research and sale events set it. |
 | `GetTriggerWidget` in spell, order, item and hero events, and construction finish | gap | Returns nil in spell events; works for death, damage, order and selection events. |
 | `GetKillingUnit`, `GetDyingUnit` | works | Valid in death events only; the killer is nil for script kills such as a max life of 0. |
 | `GetAttacker` | works | Valid in attack events only; nil in damage events (use `GetEventDamageSource`). |
@@ -84,6 +84,8 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `SelectHeroSkill` on abilities without a registered ability type | gap | Learns nothing and fires no event (for example Holy Light `AHhb`, `AHds`, `AHre`). |
 | `GetConstructingStructure`, `GetCancelledStructure` | unverified | START and CANCEL only: the structure. Trigger unit and widget = the structure, trigger player = its owner. A handler that removes or kills the structure is refunded once; Entangle START/CANCEL, unit-level CANCEL after a player handler removed the structure, and an order given to the builder in START (overridden by the build) are unconfirmed. |
 | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearchingUnit`, `GetResearched` | works | Finish events only. |
+| `GetDecayingUnit` | unverified | Decay events only: the decaying unit. |
+| `GetTrainedUnitType`, `GetResearchingUnit`, `GetResearched` in START and CANCEL | unverified | Set as in finish events; `GetTrainedUnit` is nil there because the unit does not exist yet. `GetTriggerPlayer` is now set in TRAIN_FINISH (bugfix). |
 | `GetRescuer` | stub | Always nil. |
 | `GetEnteringUnit`, `GetLeavingUnit`, `GetTriggeringRegion` | works | Region events. |
 | `GetEventPlayerChatString`, `GetEventPlayerChatStringMatched` | works | Return an empty string outside a chat event. |

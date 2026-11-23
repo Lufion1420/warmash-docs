@@ -11,6 +11,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Unit events `*_TRAIN_START`/`_CANCEL`, `*_RESEARCH_START`/`_CANCEL`, `*_UPGRADE_START`/`_CANCEL`/`_FINISH` and `EVENT_PLAYER_UNIT_DECAY`/`EVENT_UNIT_DECAY`… (2026-11-23)
+- `GetTriggerPlayer` is set in `*_TRAIN_FINISH` handlers (2026-11-23)
 - Construction events `EVENT_PLAYER_UNIT_CONSTRUCT_START`, `EVENT_PLAYER_UNIT_CONSTRUCT_CANCEL` and `EVENT_UNIT_CONSTRUCT_CANCEL` fire, player event first, with… (2026-11-23)
 - `TriggerRegisterPlayerStateEvent`, `TriggerRegisterPlayerAllianceChange` and `GetEventPlayerState` are implemented (2026-11-23)
 - Hero revive events `EVENT_PLAYER_UNIT_HERO_REVIVE_START`/`_CANCEL`/`_FINISH` and `EVENT_UNIT_HERO_REVIVE_*` fire, player event first
