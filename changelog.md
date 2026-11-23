@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Spell CHANNEL/CAST/EFFECT actions of engine and JSON spells run inside the event, after the order's `ISSUED_ORDER` handlers: a pause, stop, new order or target… (2026-11-23)
 - A stop order (script `IssueImmediateOrder` "stop"/851972, Stop button, S) fires `EVENT_PLAYER_UNIT_ISSUED_ORDER` then `EVENT_UNIT_ISSUED_ORDER` once per unit (2026-11-23)
 - `BlzSetUnitRealField`/`BlzGetUnitRealField` `UNIT_RF_CAST_POINT` and `UNIT_RF_CAST_BACK_SWING` are settable per unit and used by casts… (2026-11-22)
 - Quest dialog (F9 or the Quests button): main and optional lists with a detail pane (2026-11-20)

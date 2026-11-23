@@ -107,6 +107,9 @@ Details:
 | Ability-builder (JSON) spells: stunned caster dies, is removed, gets a new order or loses the ability | bugfix | The parked cast is dropped: end-channel actions run once and nothing resumes after `ReviveHero`. |
 | `BlzPauseUnitEx` from a spell handler on ability-builder spells | unverified | Cuts the cast with ENDCAST inside the pause call; the unpause re-issues the order if EFFECT had not fired. |
 | `BlzPauseUnitEx` during a Java spell-base cast (Storm Bolt and similar) | bugfix | Before EFFECT: ENDCAST in the pause call, the unpause re-issues the order, mana once; after EFFECT: ENDCAST only, as measured. |
+| Spell CHANNEL, CAST, EFFECT actions of engine and JSON spells | bugfix | They run inside the event after the order's `ISSUED_ORDER` handlers; a pause, stop, new order or target kill from those handlers cuts the cast before any event or payment, as measured. |
+| Engine and JSON spells: EFFECT action that pauses, stops or removes the caster | bugfix | The effect is skipped; mana and cooldown stay spent, no FINISH, no re-cast, as measured. |
+| Engine and JSON spells: CAST or EFFECT action that kills or removes the target | unverified | The cast ends. An item spell cut at EFFECT still spends its charge. |
 | Engine spells with a Casting Time (Entangle Gold Mine) | works | CHANNEL at start, CAST after the Casting Time, EFFECT one cast point later; a cut in between gives CHANNEL then ENDCAST. |
 | Casting Time of ability-builder (JSON) spells | works | CHANNEL, then CAST after the Casting Time, EFFECT one cast point later; a stop, stun or pause-ex cut gives ENDCAST only and spends nothing. |
 | Ability-builder spells that reuse the Casting Time for something else (transformations, Shadow Strike, Replenish, Flame Strike), toggles, item abilities, Casting Time under 0.05 s | deliberate | CAST still fires with CHANNEL; no pre-cast wait. |
