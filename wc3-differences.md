@@ -22,4 +22,5 @@ Compared with Reforged 3.0.1 for Lua maps and 1.29 for JASS maps. "Measured" mea
 - [UI frames](differences/ui-frames.html): Frame layout and events, text, fonts, textures, sprite frames.
 - [HUD and command card](differences/ui-hud.html): Stock HUD and origin frames, tooltips, health bars, command card, chat, multiboards, interface filters.
 - [Camera, effects and sound](differences/camera-effects-and-sound.html): Camera, special effects, models, textures, sound.
+- [Events and event getters](differences/event-getters.html): Which events fire, which event getters return a value, and which event to use with which getter.
 - [Runtimes, map loading and native coverage](differences/runtimes-and-coverage.html): Lua and JASS runtime, map loading and data, native coverage.
