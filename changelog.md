@@ -11,6 +11,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Facing natives `WmsIsUnitFacingUnit`, `WmsIsUnitFacingUnitInRange`, `WmsIsUnitFacingPoint`, `WmsGetUnitFacingDelta` (cone test, signed angle to a point) (2026-11-23)
+- Resource natives `WmsAddPlayerGold`, `WmsAddPlayerLumber` (negative spends, clamped at 0, returns the change applied) and `WmsCanPlayerAfford` (2026-11-23)
 - Spell CHANNEL/CAST/EFFECT actions of engine and JSON spells run inside the event, after the order's `ISSUED_ORDER` handlers: a pause, stop, new order or target… (2026-11-23)
 - A stop order (script `IssueImmediateOrder` "stop"/851972, Stop button, S) fires `EVENT_PLAYER_UNIT_ISSUED_ORDER` then `EVENT_UNIT_ISSUED_ORDER` once per unit (2026-11-23)
 - `BlzSetUnitRealField`/`BlzGetUnitRealField` `UNIT_RF_CAST_POINT` and `UNIT_RF_CAST_BACK_SWING` are settable per unit and used by casts… (2026-11-22)
@@ -134,6 +136,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- A move, patrol, follow or hold-position order queued during a morph runs after the morph instead of the unit stopping
 - An order from a morph's spell EFFECT handler… (2026-11-23)
 - Player unit events (`EVENT_PLAYER_UNIT_DEATH`, `DAMAGING`, `DAMAGED`, `HERO_LEVEL`, `ISSUED_ORDER`, `ISSUED_POINT_ORDER`, `ISSUED_TARGET_ORDER`, `PICKUP_ITEM`)… (2026-11-22)
 - `RemoveUnit` with an open cast (Channel, engine spells, JSON spells, morphs) fires ENDCAST once inside the call, player event before unit event, no FINISH (2026-11-22)

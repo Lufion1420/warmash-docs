@@ -34,6 +34,26 @@ end
 | `WmsGetCombatSourceUnit` | `() -> unit` | Event response in combat events: the other unit; null outside one. | 2026-11-20 | experimental |
 | `WMS_EVENT_UNIT_COMBAT_ENTER` / `_LEAVE` | unit event | Fires for the unit itself; register with `TriggerRegisterUnitEvent`. | 2026-11-20 | experimental |
 | `WMS_EVENT_PLAYER_UNIT_COMBAT_ENTER` / `_LEAVE` | player unit event | Fires for any unit of the player; register with `TriggerRegisterPlayerUnitEvent`. | 2026-11-20 | experimental |
+| `WmsIsUnitFacingUnit` | `(unit, target, coneDegrees) -> boolean` | True when the target is inside the unit's facing cone (full angle). | 2026-11-23 | experimental |
+| `WmsIsUnitFacingUnitInRange` | `(unit, target, coneDegrees, range) -> boolean` | Facing cone plus centre-to-centre range (no collision size, unlike `IsUnitInRange`). | 2026-11-23 | experimental |
+| `WmsIsUnitFacingPoint` | `(unit, x, y, coneDegrees) -> boolean` | Same cone test against a point. | 2026-11-23 | experimental |
+| `WmsGetUnitFacingDelta` | `(unit, x, y) -> real` | Signed degrees in (-180, 180] from the unit's facing to the point; positive is left (counter-clockwise). | 2026-11-23 | experimental |
+| `WmsAddPlayerGold` / `WmsAddPlayerLumber` | `(player, integer) -> integer` | Adds (negative spends), clamps the result to 0..2147483647, returns the change applied; HUD updates, no floating text. | 2026-11-23 | experimental |
+| `WmsCanPlayerAfford` | `(player, gold, lumber) -> boolean` | True if the player holds both amounts; spends nothing; a cost of 0 or less is always covered. | 2026-11-23 | experimental |
+
+Details for facing:
+- Cone: true when `|delta| <= cone/2` (inclusive); `cone >= 360` is always true, a negative cone false. Angles: 0 = east, 90 = north.
+- A point on the unit's own position, and `unit == target`, counts as facing (delta 0), so a group-enum cone filter includes the caster; exclude it in the script. A negative range is never met.
+- Null or dead unit: false, delta 0.
+
+Details for resources:
+- Goes through the same player gold and lumber setter as `SetPlayerState`. Null player: 0 / false.
+- WarMash has no resource cap and `SetPlayerState` is unclamped; only these natives clamp.
+
+```lua
+if WmsCanPlayerAfford(Player(0), 100, 0) then WmsAddPlayerGold(Player(0), -100) end
+print(WmsIsUnitFacingPoint(u, 0, 0, 90))
+```
 
 Details for `WmsSetUnitUntargetable`:
 - Refused orders show the error "unable to target this unit"; a right-click by another unit becomes follow. Dummy casters and autocast are blocked too.
