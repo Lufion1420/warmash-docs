@@ -50,7 +50,8 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `*_TRAIN_START`, `*_TRAIN_CANCEL`, `*_RESEARCH_START`, `*_RESEARCH_CANCEL` | gap | Never fire. |
 | `EVENT_PLAYER_UNIT_LOADED`, `EVENT_UNIT_LOADED` | gap | Never fire; `GetLoadedUnit` and `GetTransportUnit` are missing. |
 | `EVENT_UNIT_STACK_ITEM`, `*_EQUIP_ITEM`, `*_UNEQUIP_ITEM` | gap | Never fire; `BlzGetStackingItem*`, `BlzGetEquippedItem`, `BlzGetUnequippedItem`, `BlzGetAbsorbingItem` are missing. |
-| `TriggerRegisterPlayerStateEvent`, `TriggerRegisterPlayerAllianceChange` | gap | Missing natives; `GetEventPlayerState` is missing. |
+| `TriggerRegisterPlayerStateEvent`, `GetEventPlayerState` | unverified | Fires when the limit comparison turns from false to true; already true at registration does not fire, and it re-arms when false again. |
+| `TriggerRegisterPlayerAllianceChange` | works | Fires only when that alliance type really changes; no getter tells which type or other player. |
 | `EVENT_PLAYER_DEFEAT`, `EVENT_PLAYER_VICTORY`, `EVENT_GAME_VICTORY`, `EVENT_GAME_END_LEVEL`, `EVENT_GAME_LOADED`, `EVENT_GAME_SAVE` | gap | Never fire. |
 | `EVENT_PLAYER_ARROW_*`, `EVENT_PLAYER_SYNC_DATA` | gap | Never fire; `BlzGetTriggerSyncData`, `BlzGetTriggerSyncPrefix` and `BlzTriggerRegisterPlayerSyncEvent` are missing. |
 | `TriggerRegisterUnitStateEvent` | stub | Does nothing useful: returns a null event, and only when the continue-on-error setting is on; `GetEventUnitState` is missing. |
