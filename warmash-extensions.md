@@ -45,6 +45,11 @@ end
 | `WmsGetRectWidth` / `WmsGetRectHeight` | `(rect) -> real` | Size of the rect; null rect gives 0. | 2026-11-23 | experimental |
 | `WmsIsPointInRect` | `(rect, x, y) -> boolean` | Min and max edges count as inside, like `RectContainsCoords` in Blizzard.j. | 2026-11-23 | experimental |
 | `WmsIsUnitInRect` | `(unit, rect) -> boolean` | Tests the unit's centre point; dead units count. Null unit or rect: false. | 2026-11-23 | experimental |
+| `WmsCreateCircleRegion` | `(x, y, radius) -> region` | New region shaped as a circle; works with the normal region events and natives. | 2026-11-23 | experimental |
+| `WmsSetCircleRegion` | `(region, x, y, radius)` | Moves and resizes a circle region; units standing there enter or leave at once. | 2026-11-23 | experimental |
+| `WmsIsCircleRegion` | `(region) -> boolean` | True for a live circle region; false for a rect region or null. | 2026-11-23 | experimental |
+| `WmsGetCircleRegionX` / `Y` / `Radius` | `(region) -> real` | Centre and radius of the circle; 0 for a rect region or null. | 2026-11-23 | experimental |
+| `WmsIsPointInCircleRegion` | `(region, x, y) -> boolean` | Point test, distance to the centre at most the radius; false for a removed, rect or null region. | 2026-11-23 | experimental |
 
 Details for facing:
 - Cone: true when `|delta| <= cone/2` (inclusive); `cone >= 360` is always true, a negative cone false. Angles: 0 = east, 90 = north.
@@ -58,6 +63,23 @@ Details for resources:
 ```lua
 if WmsCanPlayerAfford(Player(0), 100, 0) then WmsAddPlayerGold(Player(0), -100) end
 print(WmsIsUnitFacingPoint(u, 0, 0, 90))
+```
+
+Details for circle regions:
+- A circle region is a normal region handle: `TriggerRegisterEnterRegion`/`LeaveRegion`, `GetTriggeringRegion`, `GetEnteringUnit`, `GetLeavingUnit` and `IsUnitInRegion` work unchanged.
+- A unit is inside when its collision rect touches the circle (the rule rects use); `IsPointInRegion` and `WmsIsPointInCircleRegion` test a point.
+- Units already inside at creation get no enter event. `WmsSetCircleRegion` fires enter and leave at once for standing units (`RegionAddRect`/`RegionClearRect` stay silent, as measured in Reforged).
+- Called inside an enter or leave trigger, the shape changes at once, but unit events and the tree removal of `RemoveRegion` wait until that unit's region check ends.
+- Dead and hidden units (also loaded into a transport) are skipped when the circle moves or resizes. Not confirmed against Warcraft III.
+- A negative or NaN radius becomes 0; values are limited to plus or minus 1e6.
+- `RegionAddRect`, `RegionClearRect` and `AddCell` on a circle region do nothing. A removed circle fires nothing and fails point checks. A null or rect handle gives false, 0 or a no-op.
+
+```lua
+local zone = WmsCreateCircleRegion(0, 0, 400)
+local t = CreateTrigger()
+TriggerRegisterEnterRegion(t, zone, nil)
+TriggerAddAction(t, function() print(GetEnteringUnit()) end)
+WmsSetCircleRegion(zone, 256, 0, 600) -- units now inside enter at once
 ```
 
 Details for `WmsSetUnitUntargetable`:
