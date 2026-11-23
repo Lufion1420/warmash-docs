@@ -22,9 +22,11 @@ A missing getter fails at the call with an "had no native implementation" log li
 | Orders: `*_ISSUED_ORDER`, `_ISSUED_POINT_ORDER`, `_ISSUED_TARGET_ORDER` | works | Order id, point and target getters are set for the matching event only. |
 | Items: `*_PICKUP_ITEM`, `_DROP_ITEM`, `_USE_ITEM`, `_PAWN_ITEM`, `_SELL_ITEM` | works | Fire with the item getters of that event; see "Traps" for which getter belongs to which event. |
 | Shops: `EVENT_UNIT_SELL`, `EVENT_PLAYER_UNIT_SELL` | works | Fire during the purchase for the shop and the shop owner's player. |
-| Hero: `EVENT_PLAYER_HERO_LEVEL`, `EVENT_UNIT_HERO_LEVEL` | works | `GetLevelingUnit` and `GetTriggerUnit` return the hero. |
+| Hero: `EVENT_PLAYER_HERO_LEVEL`, `EVENT_UNIT_HERO_LEVEL` | works | `GetLevelingUnit` and `GetTriggerUnit` return the hero; `GetTriggerPlayer` the owner, `GetTriggerWidget` the hero. |
 | Hero skill: `EVENT_PLAYER_UNIT_HERO_SKILL`, `EVENT_UNIT_HERO_SKILL` | works | Fire on every skill learn (`SelectHeroSkill`, learn button), not on `UnitAddAbility` or `SetUnitAbilityLevel`. Player event first (inferred). |
-| Hero revive: `EVENT_PLAYER_HERO_REVIVABLE` | partial | Fires with `GetTriggerUnit`; `GetRevivableUnit` is missing. |
+| Hero revive: `EVENT_PLAYER_HERO_REVIVABLE` | partial | Fires with `GetTriggerUnit`, `GetTriggerPlayer` (owner) and `GetTriggerWidget` (hero). |
+| Hero revive: `EVENT_PLAYER_UNIT_HERO_REVIVE_START`, `_CANCEL`, `_FINISH` and `EVENT_UNIT_HERO_REVIVE_*` | works | `ReviveHero`/`ReviveHeroLoc`: START then FINISH (START skipped if the hero is already in an altar queue; a failed revive fires nothing; no CANCEL). Altar: START at queue, CANCEL on cancel (timing inferred), FINISH at completion. Player event first. |
+| Summon: `EVENT_PLAYER_UNIT_SUMMON`, `EVENT_UNIT_SUMMON` | partial | Only for Figurine, Phoenix, Grizzly, Hawk, Quilbeast, Feral Spirit, Force of Nature, Factory, Pocket Factory; player event (summoned unit's owner) first. |
 | Construction and training: `*_CONSTRUCT_FINISH`, `*_TRAIN_FINISH`, `*_RESEARCH_FINISH` | works | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearched`, `GetResearchingUnit`. |
 | Selection: `*_SELECTED`, `*_DESELECTED` | works | `GetTriggerUnit` and `GetTriggerPlayer` set. |
 | Ownership: `*_CHANGE_OWNER` | works | `GetChangingUnit`, `GetChangingUnitPrevOwner`. |
@@ -37,9 +39,8 @@ A missing getter fails at the call with an "had no native implementation" log li
 
 | Event | Status | What differs |
 |---|---|---|
-| `EVENT_PLAYER_HERO_REVIVE_START`, `_CANCEL`, `_FINISH` and the unit forms | gap | Never fire; `GetRevivingUnit` is missing. |
 | `EVENT_UNIT_HERO_REVIVABLE` | gap | Never fires; only the player form does. |
-| `EVENT_PLAYER_UNIT_SUMMON`, `EVENT_UNIT_SUMMON` | gap | Never fire; `GetSummonedUnit` and `GetSummoningUnit` are missing. |
+| Summons from JSON ability-builder abilities and script `CreateUnit`; Water Elemental summon | gap | Fire no summon event (the Water Elemental summon is not registered). |
 | `EVENT_PLAYER_UNIT_DECAY`, `EVENT_UNIT_DECAY` | gap | Never fire; `GetDecayingUnit` is missing. |
 | `EVENT_PLAYER_UNIT_DETECTED`, `EVENT_UNIT_DETECTED`, `*_HIDDEN` | gap | Never fire; `GetDetectedUnit` and `GetEventDetectingPlayer` are missing. |
 | `EVENT_PLAYER_UNIT_RESCUED`, `EVENT_UNIT_RESCUED` | gap | Never fire; `GetRescuer` exists but returns nil. |
@@ -76,7 +77,9 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `GetSellingUnit`, `GetBuyingUnit`, `GetSoldUnit`, `GetSoldItem` | works | Sale and pawn events as measured; see the item trap below. |
 | `GetLevelingUnit` | works | Hero level events. |
 | `GetLearningUnit`, `GetLearnedSkill`, `GetLearnedSkillLevel` | works | Hero skill events: hero, ability id, new level. `GetTriggerUnit` and `GetTriggerWidget` are the hero, `GetTriggerPlayer` the owner. |
-| `GetTriggerPlayer`, `GetTriggerWidget` in `EVENT_PLAYER_HERO_LEVEL` | gap | Unset (nil) in hero level handlers; use `GetLevelingUnit`. |
+| `GetTriggerPlayer`, `GetTriggerWidget` in hero level and `EVENT_PLAYER_HERO_REVIVABLE` handlers | bugfix | Were nil; now the owner and the hero. |
+| `GetRevivingUnit`, `GetRevivableUnit` | partial | In revive START and FINISH, `GetRevivingUnit` is the hero and `GetRevivableUnit` is nil (measured). Trigger unit/widget = hero, trigger player = owner. |
+| `GetSummonedUnit`, `GetSummoningUnit` | unverified | Summon events: the new unit and the caster. Which unit the unit-form event belongs to is assumed (the summoning unit). Trigger unit/widget = summoned unit. |
 | `SelectHeroSkill` on abilities without a registered ability type | gap | Learns nothing and fires no event (for example Holy Light `AHhb`, `AHds`, `AHre`). |
 | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearchingUnit`, `GetResearched` | works | Finish events only. |
 | `GetRescuer` | stub | Always nil. |

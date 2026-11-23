@@ -11,6 +11,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Hero revive events `EVENT_PLAYER_UNIT_HERO_REVIVE_START`/`_CANCEL`/`_FINISH` and `EVENT_UNIT_HERO_REVIVE_*` fire, player event first
+- `EVENT_PLAYER_UNIT_SUMMON` and `EVENT_UNIT_SUMMON` fire with new natives `GetSummonedUnit`, `GetSummoningUnit`, only for Figurine, Phoenix, Grizzly, Hawk…
 - `EVENT_PLAYER_UNIT_HERO_SKILL` and `EVENT_UNIT_HERO_SKILL` fire on every hero skill learn…
 - Rect natives `WmsCreateRectCentered`, `WmsSetRectCentered`, `WmsGetRectWidth`, `WmsGetRectHeight`, `WmsIsPointInRect`, `WmsIsUnitInRect`… (2026-11-23)
 - Facing natives `WmsIsUnitFacingUnit`, `WmsIsUnitFacingUnitInRange`, `WmsIsUnitFacingPoint`, `WmsGetUnitFacingDelta` (cone test, signed angle to a point) (2026-11-23)
@@ -138,6 +140,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `GetTriggerPlayer` and `GetTriggerWidget` were nil in `EVENT_PLAYER_HERO_LEVEL`, `EVENT_UNIT_HERO_LEVEL` and `EVENT_PLAYER_HERO_REVIVABLE` handlers
 - `TriggerRegisterGameStateEvent` read the limit value from the wrong argument
 - A move, patrol, follow or hold-position order queued during a morph runs after the morph instead of the unit stopping
 - An order from a morph's spell EFFECT handler… (2026-11-23)
