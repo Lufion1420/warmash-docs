@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Unit geoset visibility (WarMash-only): `WmsSetUnitGeosetVisible`, `WmsIsUnitGeosetVisible`, `WmsGetUnitGeosetCount` hide or show one part of a unit's current… (2026-11-23)
 - Circle regions (WarMash-only): `WmsCreateCircleRegion`, `WmsSetCircleRegion`, `WmsIsCircleRegion`, `WmsGetCircleRegionX`/`Y`/`Radius`… (2026-11-23)
 - Unit events `*_TRAIN_START`/`_CANCEL`, `*_RESEARCH_START`/`_CANCEL`, `*_UPGRADE_START`/`_CANCEL`/`_FINISH` and `EVENT_PLAYER_UNIT_DECAY`/`EVENT_UNIT_DECAY`… (2026-11-23)
 - `GetTriggerPlayer` is set in `*_TRAIN_FINISH` handlers (2026-11-23)

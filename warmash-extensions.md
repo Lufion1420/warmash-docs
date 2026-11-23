@@ -50,6 +50,9 @@ end
 | `WmsIsCircleRegion` | `(region) -> boolean` | True for a live circle region; false for a rect region or null. | 2026-11-23 | experimental |
 | `WmsGetCircleRegionX` / `Y` / `Radius` | `(region) -> real` | Centre and radius of the circle; 0 for a rect region or null. | 2026-11-23 | experimental |
 | `WmsIsPointInCircleRegion` | `(region, x, y) -> boolean` | Point test, distance to the centre at most the radius; false for a removed, rect or null region. | 2026-11-23 | experimental |
+| `WmsSetUnitGeosetVisible` | `(unit, integer geosetIndex, boolean visible)` | Hides or shows one part (geoset) of the unit's current model; drawing only. | 2026-11-23 | experimental |
+| `WmsIsUnitGeosetVisible` | `(unit, integer geosetIndex) -> boolean` | The flag the script set; true by default. Not a test of what is drawn. | 2026-11-23 | experimental |
+| `WmsGetUnitGeosetCount` | `(unit) -> integer` | Number of geosets you can index on the unit's current model. | 2026-11-23 | experimental |
 
 Details for facing:
 - Cone: true when `|delta| <= cone/2` (inclusive); `cone >= 360` is always true, a negative cone false. Angles: 0 = east, 90 = north.
@@ -80,6 +83,19 @@ local t = CreateTrigger()
 TriggerRegisterEnterRegion(t, zone, nil)
 TriggerAddAction(t, function() print(GetEnteringUnit()) end)
 WmsSetCircleRegion(zone, 256, 0, 600) -- units now inside enter at once
+```
+
+Details for geosets:
+- Index is 0-based among the drawn parts (level of detail 0). Lower-detail geosets are skipped, so on HD models it is not always the raw index in the model file.
+- Only drawing changes: collision, attachments, emitters and geoset animations keep running. A part with geoset-animation alpha 0 stays invisible even when the flag is true.
+- The state is kept per model and re-applied after animation and selection changes.
+- A model change (skin, morph, Polymorph) draws the new model whole; switching back hides the old parts again.
+- The selection portrait is unaffected. Local only: not synced in multiplayer.
+- Null or removed unit, or a bad index: no-op, reads false (visible) or 0 (count).
+
+```lua
+WmsSetUnitGeosetVisible(u, 2, false)
+print(WmsIsUnitGeosetVisible(u, 2), WmsGetUnitGeosetCount(u)) --> false  <count>
 ```
 
 Details for `WmsSetUnitUntargetable`:
