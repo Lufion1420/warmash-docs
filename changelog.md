@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Rect natives `WmsCreateRectCentered`, `WmsSetRectCentered`, `WmsGetRectWidth`, `WmsGetRectHeight`, `WmsIsPointInRect`, `WmsIsUnitInRect`… (2026-11-23)
 - Facing natives `WmsIsUnitFacingUnit`, `WmsIsUnitFacingUnitInRange`, `WmsIsUnitFacingPoint`, `WmsGetUnitFacingDelta` (cone test, signed angle to a point) (2026-11-23)
 - Resource natives `WmsAddPlayerGold`, `WmsAddPlayerLumber` (negative spends, clamped at 0, returns the change applied) and `WmsCanPlayerAfford` (2026-11-23)
 - Spell CHANNEL/CAST/EFFECT actions of engine and JSON spells run inside the event, after the order's `ISSUED_ORDER` handlers: a pause, stop, new order or target… (2026-11-23)

@@ -40,6 +40,11 @@ end
 | `WmsGetUnitFacingDelta` | `(unit, x, y) -> real` | Signed degrees in (-180, 180] from the unit's facing to the point; positive is left (counter-clockwise). | 2026-11-23 | experimental |
 | `WmsAddPlayerGold` / `WmsAddPlayerLumber` | `(player, integer) -> integer` | Adds (negative spends), clamps the result to 0..2147483647, returns the change applied; HUD updates, no floating text. | 2026-11-23 | experimental |
 | `WmsCanPlayerAfford` | `(player, gold, lumber) -> boolean` | True if the player holds both amounts; spends nothing; a cost of 0 or less is always covered. | 2026-11-23 | experimental |
+| `WmsCreateRectCentered` | `(cx, cy, width, height) -> rect` | New rect from a centre and size; a negative, zero or NaN size becomes 0. | 2026-11-23 | experimental |
+| `WmsSetRectCentered` | `(rect, cx, cy, width, height)` | Moves and resizes an existing rect the same way; null rect: no-op. | 2026-11-23 | experimental |
+| `WmsGetRectWidth` / `WmsGetRectHeight` | `(rect) -> real` | Size of the rect; null rect gives 0. | 2026-11-23 | experimental |
+| `WmsIsPointInRect` | `(rect, x, y) -> boolean` | Min and max edges count as inside, like `RectContainsCoords` in Blizzard.j. | 2026-11-23 | experimental |
+| `WmsIsUnitInRect` | `(unit, rect) -> boolean` | Tests the unit's centre point; dead units count. Null unit or rect: false. | 2026-11-23 | experimental |
 
 Details for facing:
 - Cone: true when `|delta| <= cone/2` (inclusive); `cone >= 360` is always true, a negative cone false. Angles: 0 = east, 90 = north.
