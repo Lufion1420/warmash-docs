@@ -32,7 +32,7 @@ BlzUnitHideAbility(hero, FourCC("A000"), false)
 | `UnitRemoveAbility`, `GetUnitAbilityLevel`, `BlzGetUnitAbility` on `Aatk` (getters also `Amov`) | bugfix | Removal returns true and the unit has no attack; the level reads 1, then 0 after removal; the handle is not nil. |
 | Removing `Aatk` during an attack | unverified | Ends the attack without a stop order and drops only queued attack orders; WC3 behavior not confirmed. |
 | `UnitAddAbility(u, 'Aatk')` after a removal | deliberate | Restores the attack; a morph also restores a script-removed attack. |
-| `BlzUnitDisableAbility`, `BlzUnitHideAbility` on `Aatk`, `Amov` | bugfix | Disables or hides the engine ability; a disabled attack stops, no auto-acquire, attack orders refused (rules inferred).
+| `BlzUnitDisableAbility`, `BlzUnitHideAbility` on `Aatk`, `Amov` | bugfix | Disables or hides the engine ability; a disabled attack stops, no auto-acquire, attack orders refused (rules inferred). |
 | `BlzEndUnitAbilityCooldown` on a Spell Book child | unverified | Ends the book's cooldown only when that child started it; a script cooldown on the book stays. |
 | `GetAbilityLevel(nil)` | bugfix | Returns 0 instead of raising an error. |
 | Boolean, non-level and array ability field natives (`BlzGet/SetAbilityBooleanField` and similar) | gap | Not implemented. |
@@ -44,8 +44,8 @@ BlzUnitHideAbility(hero, FourCC("A000"), false)
 | Tooltip text from `BlzGetAbilityStringLevelField` | unverified | Returned raw, placeholders unresolved. |
 | `BlzSetAbilityIcon` | works | Sets the normal icon on all levels; the disabled icon is unchanged. |
 | `BlzGetAbilityRealLevelField`, `BlzGetAbilityIntegerLevelField` | works | Every field is known; level is 0-based; a script-set value is returned first. |
-| `BlzSetAbilityRealLevelField(ABILITY_RLF_CASTING_TIME)` on ability-builder spells | bugfix | Read on every cast; no level refresh needed.
-| Shadow Strike slow and hit | bugfix | No error on hit; the slow always ends (buff removal, `UnitRemoveBuffs` or expiry).
+| `BlzSetAbilityRealLevelField(ABILITY_RLF_CASTING_TIME)` on ability-builder spells | bugfix | Read on every cast; no level refresh needed. |
+| Shadow Strike slow and hit | bugfix | No error on hit; the slow always ends (buff removal, `UnitRemoveBuffs` or expiry). |
 | `BlzSetAbilityIntegerLevelField`, `BlzSetAbilityRealLevelField` | partial | Take effect on the next level change (Channel at once); some fields stay stored-only. |
 | `IncUnitAbilityLevel`, `DecUnitAbilityLevel`, `SetUnitAbilityLevel` with script-set fields | unverified | At an unchanged level they re-apply the data only when a script set fields. |
 | `DecUnitAbilityLevel` | works | Lowers by 1, not below 1; returns 0 without the ability. |

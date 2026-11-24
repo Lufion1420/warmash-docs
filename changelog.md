@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `PanCameraToTimedWithZ` and `CameraSetupApplyForceDurationWithZ` now change the camera height linearly over the duration… (2026-11-24)
 - `UnitSetUpgradeProgress` and `UnitSetConstructionProgress` are implemented (percent clamped 0-100; each acts only on its own case) (2026-11-24)
 - Raise Dead summons now fire `EVENT_PLAYER_UNIT_SUMMON` and `EVENT_UNIT_SUMMON` once per unit
 - Camera helpers (WarMash-only): `WmsCameraFrameUnit`, `WmsCameraFollowUnit`, `WmsCameraStopFollow`, `WmsSetCameraLocked`, `WmsIsCameraLocked`, `WmsResetCamera` (2026-11-23)

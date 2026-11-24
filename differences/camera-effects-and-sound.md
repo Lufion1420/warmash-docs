@@ -22,7 +22,7 @@ parent: Differences from Warcraft III
 | `GetCameraField(CAMERA_FIELD_TARGET_DISTANCE)` | deliberate | Returns the wheel-zoomed distance; a script distance replaces the wheel zoom, and a camera reset clears it. |
 | Wheel and script camera fields | deliberate | The wheel keeps script angle, rotation, field of view and far plane; Insert and Delete presets still use their own far plane. |
 | `CAMERA_FIELD_FARZ` | deliberate | The far plane is raised when the view needs more, so zooming out no longer cuts the ground to black; larger values apply, `GetCameraField` returns the set value. |
-| `PanCameraToTimedWithZ`, `CameraSetupApplyForceDuration` (z-offset part) | partial | The pan and setup apply work; the timed height change is stored but never applied. |
+| `PanCameraToTimedWithZ`, `CameraSetupApplyForceDurationWithZ` | works | Height changes linearly over the duration; a camera move, scroll or plain z set cancels it and keeps the height reached. |
 | `SetCameraTargetController` with inherit orientation | bugfix | The camera sits behind the unit and turns with its facing (the angle was converted wrongly). |
 | `CameraSetSourceNoise`, `CameraSetTargetNoise` and their Ex forms | bugfix | A sinusoidal sway (shape inferred). |
 | Camera bounds | unverified | The target is clamped every frame, as in a Reforged run. |
