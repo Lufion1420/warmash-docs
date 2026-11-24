@@ -163,6 +163,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- A unit trained with a point rally now reports order id 851970 (as measured in Reforged) in `GetIssuedOrderId` and `GetUnitCurrentOrder`, not 851971 (2026-11-24)
 - `SetWidgetLife` and `SetUnitState(UNIT_STATE_LIFE)` from a life state-event handler during a revive (Resurrection, `ReviveHero`, altar revive) no longer revive… (2026-11-24)
 - `ReviveHero` and altar revive return false (no `HERO_REVIVE_FINISH`, no rally order) when a handler inside the revive… (2026-11-24)
 - A script `ReviveHero` inside a running revive (altar refund, enter-region or state handler) is the only revive: one START, one FINISH, no double revive art, no…
