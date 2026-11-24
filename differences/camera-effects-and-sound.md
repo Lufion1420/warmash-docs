@@ -82,6 +82,12 @@ Effects attached to a unit ignore position, orientation and alpha. Images are no
 | `CreateSound` decoding | deliberate | The handle is valid at once and the file decodes in the background; a `StartSound` before that finishes plays a frame or so late. |
 | `TriggerWaitForSound`, `GetSoundDuration` on a decoding sound | deliberate | The wait still counts from `StartSound`; the duration call decodes the sound right away. |
 | `CreateSoundFromLabel` | deliberate | The file loads at the sound's first play. |
-| `SetSoundPosition` | partial | Used at the next start; `SetSoundDistances` and `AttachSoundToUnit` are missing. |
+| `SetSoundPosition` | partial | Used at the next start, not applied to a sound already playing. |
+| `SetSoundDistances` | partial | The minimum is the reference distance at the next start; the maximum is stored but not applied; 2D sounds ignore it. |
+| `SetSoundDistanceCutoff` | works | Applied at the next start; with stop-when-out-of-range on, a sound beyond the cutoff is not started. |
+| `AttachSoundToUnit` | partial | Uses the unit's position at attach and at each start, but does not follow it while playing; 2D sounds ignore it. |
+| `StartSoundEx` | deliberate | Same as `StartSound`; the fade-in is ignored. |
+| `SetSoundChannel`, `SetSoundConeAngles`, `SetSoundConeOrientation`, `SetSoundVelocity` | stub | Do nothing. |
+| 3D script sounds with a reference distance | deliberate | They now fade with distance, like unit sounds. |
 | Sounds never killed | bugfix | Released when the map closes. |
 | 3D sound distance | unverified | Measured from the camera target. |

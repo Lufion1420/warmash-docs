@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Sound natives: `SetSoundDistances` (min used as reference distance at the next start, max stored only), `SetSoundDistanceCutoff`… (2026-11-24)
 - Passive ability interval events (WarMash-only): `WMS_EVENT_UNIT_ABILITY_INTERVAL` and `WMS_EVENT_PLAYER_UNIT_ABILITY_INTERVAL` fire every N seconds for the… (2026-11-24)
 - Buff and ability events (WarMash-only): `WMS_EVENT_UNIT_BUFF_RECEIVED`/`_BUFF_LOST`/`_ABILITY_ADDED`/`_ABILITY_REMOVED` and the `WMS_EVENT_PLAYER_UNIT_*`… (2026-11-24)
 - `PanCameraToTimedWithZ` and `CameraSetupApplyForceDurationWithZ` now change the camera height linearly over the duration… (2026-11-24)
