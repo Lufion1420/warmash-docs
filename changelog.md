@@ -160,6 +160,10 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Polymorph: the unit turns at the sheep's rate, and a `SetUnitTurnSpeed` value written during the morph survives its end (2026-11-24)
+- `SetUnitMoveSpeed` during Polymorph clamps to the unit type's own speed limits, not the sheep's (2026-11-24)
+- A script unit type change keeps active slows on the new type's speed and never removes the move ability of a type that can move (2026-11-24)
+- Slow (Thunder Clap) on a Polymorph sheep takes its percent of the sheep's speed (not verified against Warcraft III) (2026-11-24)
 - `RemoveUnit` on a live haunted or entangled gold mine restores the parent mine (before it stayed hidden and paused, and Entangle stayed disabled) (2026-11-24)
 - Training and food: `*_TRAIN_START` fires when production starts with food paid (a food-blocked item waits silently), and a waiting item starts and pays inside… (2026-11-24)
 - Order `raisedead` (852197) on a unit with Raise Dead (`Arai`) is refused by every `Issue*Order*`, `IssueNeutral*Order*` and `Group*Order*` native… (2026-11-24)

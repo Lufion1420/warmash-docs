@@ -32,6 +32,11 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 | Move speed floor | deliberate | The final speed is at least 1 or the minimum from the map or unit, buffs included (Slow alone on 270 reads 150); speed-0 types stay 0. |
 | Polymorph move speed | works | Uses the sheep type's minimum speed (100). |
 | `GetUnitMoveSpeed`, `SetUnitMoveSpeed` on a polymorphed unit | unverified | The read shows the sheep speed; a set during the morph and speed gains made meanwhile show after it ends. |
+| `SetUnitMoveSpeed`, `BlzSetUnitRealField(UNIT_RF_SPEED)` during Polymorph | bugfix | The value is clamped to the unit type's own minimum and maximum speed, not the sheep's. |
+| `SetUnitMoveSpeed` on a slowed unit | bugfix | The slow stays applied to the written value (320 with a 54 reduction reads 266) and is not added again when it ends; WC3 value not measured. |
+| `SetUnitTurnSpeed`, `BlzSetUnitRealField(UNIT_RF_TURN_RATE)` during Polymorph | bugfix | The unit turns at the sheep's rate; a value written during the morph survives its end; Reforged not measured. |
+| Changing a unit's type from script | bugfix | Active slows stay on the new type's speed, and a type that can move never loses its move ability. |
+| Slow (Thunder Clap) on a Polymorph sheep | bugfix | Takes its percent of the sheep's speed; WC3 not measured. |
 | `BlzSetUnitRealField(UNIT_RF_SPEED)` | deliberate | Acts like `SetUnitMoveSpeed` (same limits) and returns true; not confirmed in Reforged. |
 | `UnitRemoveAbility(u, 'Amov')` | bugfix | Returns true: the unit stops walking and drops move orders but still attacks in range; attack-move to a point is refused. |
 | `UnitAddAbility(u, 'Amov')` | deliberate | Re-adds Amov after a script removal; false otherwise. |

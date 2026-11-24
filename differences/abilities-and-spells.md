@@ -153,7 +153,7 @@ Details:
 Details:
 - Ensnare: flyers sink and are targeted as ground units; the net is negative physical and not dispellable (measured). Duration and cooldown come from the map's data. A silenced caster can cast it (unverified).
 - Unholy Frenzy: DataB life per second, no armor; attack type reads chaos and damage type universal (unverified). It can kill, and wakes or provokes the target.
-- Polymorph: heroes and summons refused; harvest, build, repair, load and items off. Known gaps: turn rate and collision unchanged.
+- Polymorph: heroes and summons refused; harvest, build, repair, load and items off. The unit turns at the sheep's rate; collision is unchanged (known gap).
 
 ### Targeting rules
 
