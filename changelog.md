@@ -27,6 +27,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 - `EVENT_PLAYER_UNIT_SUMMON` and `EVENT_UNIT_SUMMON` fire with new natives `GetSummonedUnit`, `GetSummoningUnit`, only for Figurine, Phoenix, Grizzly, Hawk…
 - `EVENT_PLAYER_UNIT_HERO_SKILL` and `EVENT_UNIT_HERO_SKILL` fire on every hero skill learn…
 - Rect natives `WmsCreateRectCentered`, `WmsSetRectCentered`, `WmsGetRectWidth`, `WmsGetRectHeight`, `WmsIsPointInRect`, `WmsIsUnitInRect`… (2026-11-23)
+- Facing angle natives (WarMash-only) `WmsGetUnitFacingDiffToUnit` and `WmsGetUnitFacingDiffToPoint`: signed degrees from the unit's facing to a target or point… (2026-11-24)
 - Facing natives `WmsIsUnitFacingUnit`, `WmsIsUnitFacingUnitInRange`, `WmsIsUnitFacingPoint`, `WmsGetUnitFacingDelta` (cone test, signed angle to a point) (2026-11-23)
 - Resource natives `WmsAddPlayerGold`, `WmsAddPlayerLumber` (negative spends, clamped at 0, returns the change applied) and `WmsCanPlayerAfford` (2026-11-23)
 - Spell CHANNEL/CAST/EFFECT actions of engine and JSON spells run inside the event, after the order's `ISSUED_ORDER` handlers: a pause, stop, new order or target… (2026-11-23)

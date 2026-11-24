@@ -45,6 +45,8 @@ end
 | `WmsIsUnitFacingUnitInRange` | `(unit, target, coneDegrees, range) -> boolean` | Facing cone plus centre-to-centre range (no collision size, unlike `IsUnitInRange`). | 2026-11-23 | experimental |
 | `WmsIsUnitFacingPoint` | `(unit, x, y, coneDegrees) -> boolean` | Same cone test against a point. | 2026-11-23 | experimental |
 | `WmsGetUnitFacingDelta` | `(unit, x, y) -> real` | Signed degrees in (-180, 180] from the unit's facing to the point; positive is left (counter-clockwise). | 2026-11-23 | experimental |
+| `WmsGetUnitFacingDiffToPoint` | `(unit, x, y) -> real` | Same value as `WmsGetUnitFacingDelta`; signed degrees in (-180, 180] from the facing to the point. | 2026-11-24 | experimental |
+| `WmsGetUnitFacingDiffToUnit` | `(unit, target) -> real` | Same angle towards the target unit; positive is left (counter-clockwise). | 2026-11-24 | experimental |
 | `WmsAddPlayerGold` / `WmsAddPlayerLumber` | `(player, integer) -> integer` | Adds (negative spends), clamps the result to 0..2147483647, returns the change applied; HUD updates, no floating text. | 2026-11-23 | experimental |
 | `WmsCanPlayerAfford` | `(player, gold, lumber) -> boolean` | True if the player holds both amounts; spends nothing; a cost of 0 or less is always covered. | 2026-11-23 | experimental |
 | `WmsCreateRectCentered` | `(cx, cy, width, height) -> rect` | New rect from a centre and size; a negative, zero or NaN size becomes 0. | 2026-11-23 | experimental |
@@ -82,7 +84,7 @@ BlzSetAbilityRealLevelField(abil, ConvertAbilityRealLevelField('Wmsi'), 0, 2.0)
 Details for facing:
 - Cone: true when `|delta| <= cone/2` (inclusive); `cone >= 360` is always true, a negative cone false. Angles: 0 = east, 90 = north.
 - A point on the unit's own position, and `unit == target`, counts as facing (delta 0), so a group-enum cone filter includes the caster; exclude it in the script. A negative range is never met.
-- Null or dead unit: false, delta 0.
+- Null or dead unit: false, delta 0. The `DiffTo` natives also give 0 for a null or dead target and for a target on the same position.
 
 Details for resources:
 - Goes through the same player gold and lumber setter as `SetPlayerState`. Null player: 0 / false.
