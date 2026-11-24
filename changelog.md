@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `SetCameraOrientController` is registered as a no-op stub (2026-11-24)
 - Quest log suppression (WarMash-only): `WmsSetQuestLogHidden(player, hidden)` and `WmsIsQuestLogHidden(player)` (2026-11-24)
 - Sound natives: `SetSoundDistances` (min used as reference distance at the next start, max stored only), `SetSoundDistanceCutoff`… (2026-11-24)
 - Passive ability interval events (WarMash-only): `WMS_EVENT_UNIT_ABILITY_INTERVAL` and `WMS_EVENT_PLAYER_UNIT_ABILITY_INTERVAL` fire every N seconds for the… (2026-11-24)
@@ -157,6 +158,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `PanCameraToWithZ` and `PanCameraToTimedWithZ` treat z as an absolute target height floored at the ground (as measured in Reforged), not an added offset (2026-11-24)
 - `TriggerRegisterUnitStateEvent` and `GetEventUnitState` now work (were a stub): edge-triggered like WC3, measured for life (2026-11-24)
 - `SetCameraTargetController` with inherit orientation converted the unit's facing from degrees to radians wrongly (2026-11-24)
 - `WmsCameraFollowUnit` looks up the unit's drawn model every frame, so a follow no longer breaks when the model is replaced (2026-11-24)
