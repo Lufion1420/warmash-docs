@@ -82,6 +82,7 @@ Details:
 | `GetUnitCurrentOrder` after `ReviveHero`, altar revive, Resurrection or Reincarnation | unverified | Reads 0; before, the order of the cast the unit died in. |
 | `ReviveHero` on a hero still in a stun state | unverified | Stunned at once (permanent stun buff or `UNIT_TYPE_STUNNED`); before, unstunned until the next stun change. |
 | `ReviveHero`, `ReviveHeroLoc` | works | Fire no revive events; refused when the food cap would be exceeded. |
+| Altar revive cancel of a paid entry | unverified | The refunded food goes straight to the hero; no waiting train item takes it. |
 | Altar revive gold, lumber and time | bugfix | Capped by the `HeroMaxRevive*` gameplay constants. |
 | `UnitModifySkillPoints` | unverified | Capped at what the hero can still learn; the real native's documented bugs are not copied. |
 | `EVENT_UNIT_HERO_LEVEL`, `EVENT_PLAYER_HERO_LEVEL`, `GetLevelingUnit` | bugfix | One event pair per `SetHeroLevel`, `AddHeroXP` or `SetHeroXP` call with the final level, as in Reforged; unit list then player list; from a kill they run before the death events. |

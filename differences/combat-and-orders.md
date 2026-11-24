@@ -23,6 +23,10 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | Any `Issue*Order*` or `Group*Order*` with order `raisedead` (852197) on a unit with Raise Dead (`Arai`) | bugfix | Returns false, as measured; only autocast works (`raisedeadon` true, then the unit casts itself). Item Raise Dead (`AIrd`) stays manual. |
 | `IssuePointOrder` | unverified | Same as `IssuePointOrderById`; a nil order string returns false. |
 | `IssueImmediateOrder`, `IssueImmediateOrderById` with "stop" | bugfix | Returns true. |
+| `IssueImmediateOrder`, `IssueImmediateOrderById` train order behind a running item while food is full | bugfix | Returns true and charges gold, as measured; a food-short front order still returns false with no gold and no event. |
+| `IssueImmediateOrderById(building, 851976)` cancel | bugfix | Cancels the last queue slot, as measured (was the front). Altar revive cancel still takes the front (unmeasured). |
+| Cancel event versus refund | gap | Reforged fires CANCEL before the refund; WarMash refunds first, gold before food (order unverified). |
+| Cancel handler that kills or cancels the building | bugfix | No double refund and no error. |
 | Orders to a paused unit | gap | A paused unit still accepts orders. |
 | Order issued inside an issued-target-order trigger condition | bugfix | The outer order keeps its target (was replaced or crashed). |
 | `IssueBuildOrder` | works | Resolves the unit name; an unknown name returns false. |

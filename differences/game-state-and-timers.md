@@ -22,6 +22,12 @@ In a single-player start of a non-melee map only the local player's slot is play
 | `GetPlayerStructureCount` | bugfix | Counts living structures only. |
 | `GetPlayerTypedUnitCount` | bugfix | `includeUpgrades` counts upgraded tiers; dead units are excluded. |
 | Cancel of a supply-blocked revive or train | bugfix | Returns no food that was never paid. |
+| Food change (`SetPlayerState` `FOOD_CAP`, `FOOD_USED`, `FOOD_CAP_CEILING`, unit death, new food building) | bugfix | A waiting train item starts and pays inside the call; its START fires player form, then unit form. Measured for `SetPlayerState`; unit-death case unverified. |
+| `GetPlayerTechCount` with a food-blocked train item | bugfix | In-progress count is 0 (was -1). |
+| Training food checks and `FOOD_CAP_CEILING` | gap | Queue food checks ignore the ceiling. |
+| `SetUnitOwner` and food | gap | Moves no food between players; Charm moves it after the owner change (unmeasured). |
+| `RemoveUnit` on a building with a paid front train item | gap | The charged food stays charged. |
+| Food-making unit created while an item waits | unverified | `CreateUnit` places the unit, then the waiting item's START fires, still inside the call. |
 | `EndGame` | gap | Leaves to the menu, no score screen. |
 | `RestartGame`, `ChangeLevel` | deliberate | Leave to the menu. |
 | `DisplayTimedTextFromPlayer`, `GetDefaultDifficulty`, `UnitSuspendDecay` | works | Implemented. |
