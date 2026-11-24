@@ -53,7 +53,7 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `TriggerRegisterPlayerAllianceChange` | works | Fires only when that alliance type really changes; no getter tells which type or other player. |
 | `EVENT_PLAYER_DEFEAT`, `EVENT_PLAYER_VICTORY`, `EVENT_GAME_VICTORY`, `EVENT_GAME_END_LEVEL`, `EVENT_GAME_LOADED`, `EVENT_GAME_SAVE` | gap | Never fire. |
 | `EVENT_PLAYER_ARROW_*`, `EVENT_PLAYER_SYNC_DATA` | gap | Never fire; `BlzGetTriggerSyncData`, `BlzGetTriggerSyncPrefix` and `BlzTriggerRegisterPlayerSyncEvent` are missing. |
-| `TriggerRegisterUnitStateEvent` | stub | Does nothing useful: returns a null event, and only when the continue-on-error setting is on; `GetEventUnitState` is missing. |
+| `TriggerRegisterUnitStateEvent`, `GetEventUnitState` | works (MANA and max states unverified) | Edge-triggered, EQ never fires, registering fires nothing; measured for life. A death hit fires it after the death; regen events are queued. |
 | `TriggerRegisterGameStateEvent` | partial | Only time of day is handled; other states raise an error. The limit is now read from the right argument (bugfix). |
 | `TriggerRegisterTrackableHitEvent`, `TriggerRegisterTrackableTrackEvent`, `GetTriggeringTrackable`, `GetEventGameState`, `GetWinningPlayer` | gap | Raise "not yet implemented" when called. |
 

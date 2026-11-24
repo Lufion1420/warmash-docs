@@ -101,7 +101,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
-- `*_TRAIN_START` and `*_RESEARCH_START` fire when an item becomes the queue front (not on every queue call)
+- `*_TRAIN_START` and `*_RESEARCH_START` fire when an item becomes the queue front (not on every queue call) (2026-11-24)
 - `TriggerRegisterPlayerStateEvent` limit events fire on every change after which the comparison holds, not only on false to true
 - A follower inside about 40 units now stands while its target turns or circles near it, instead of flickering between walk and stand
 - Follow orders (smart right-click on a unit, move or patrol onto a unit, Jass2 follow) stop 75 units from the target's edge by default instead of Warcraft III's…
@@ -151,6 +151,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `TriggerRegisterUnitStateEvent` and `GetEventUnitState` now work (were a stub): edge-triggered like WC3, measured for life (2026-11-24)
 - `SetCameraTargetController` with inherit orientation converted the unit's facing from degrees to radians wrongly (2026-11-24)
 - `WmsCameraFollowUnit` looks up the unit's drawn model every frame, so a follow no longer breaks when the model is replaced (2026-11-24)
 - `EVENT_UNIT_SUMMON`: `GetTriggerUnit`, `GetTriggerWidget` and `GetSummoningUnit` are the caster, as in Reforged (trigger unit was the summoned unit)
