@@ -101,6 +101,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- `*_TRAIN_START` and `*_RESEARCH_START` fire when an item becomes the queue front (not on every queue call)
 - `TriggerRegisterPlayerStateEvent` limit events fire on every change after which the comparison holds, not only on false to true
 - A follower inside about 40 units now stands while its target turns or circles near it, instead of flickering between walk and stand
 - Follow orders (smart right-click on a unit, move or patrol onto a unit, Jass2 follow) stop 75 units from the target's edge by default instead of Warcraft III's…
