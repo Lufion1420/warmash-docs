@@ -34,6 +34,10 @@ end
 | `WmsGetCombatSourceUnit` | `() -> unit` | Event response in combat events: the other unit; null outside one. | 2026-11-20 | experimental |
 | `WMS_EVENT_UNIT_COMBAT_ENTER` / `_LEAVE` | unit event | Fires for the unit itself; register with `TriggerRegisterUnitEvent`. | 2026-11-20 | experimental |
 | `WMS_EVENT_PLAYER_UNIT_COMBAT_ENTER` / `_LEAVE` | player unit event | Fires for any unit of the player; register with `TriggerRegisterPlayerUnitEvent`. | 2026-11-20 | experimental |
+| `WMS_EVENT_UNIT_BUFF_RECEIVED` / `_BUFF_LOST` / `_ABILITY_ADDED` / `_ABILITY_REMOVED` | unit event | Fires for the unit itself when it gains or loses a buff or ability; register with `TriggerRegisterUnitEvent`. | 2026-11-24 | experimental |
+| `WMS_EVENT_PLAYER_UNIT_BUFF_RECEIVED` / `_BUFF_LOST` / `_ABILITY_ADDED` / `_ABILITY_REMOVED` | player unit event | Same four events for any unit of the player; register with `TriggerRegisterPlayerUnitEvent`. | 2026-11-24 | experimental |
+| `WmsGetEventAbilityId` | `() -> integer` | Event response in those events: the rawcode of the buff or ability; 0 outside one. | 2026-11-24 | experimental |
+| `WmsGetEventAbility` | `() -> ability` | Event response: the ability or buff handle, also valid in the REMOVED and LOST events. | 2026-11-24 | experimental |
 | `WmsIsUnitFacingUnit` | `(unit, target, coneDegrees) -> boolean` | True when the target is inside the unit's facing cone (full angle). | 2026-11-23 | experimental |
 | `WmsIsUnitFacingUnitInRange` | `(unit, target, coneDegrees, range) -> boolean` | Facing cone plus centre-to-centre range (no collision size, unlike `IsUnitInRange`). | 2026-11-23 | experimental |
 | `WmsIsUnitFacingPoint` | `(unit, x, y, coneDegrees) -> boolean` | Same cone test against a point. | 2026-11-23 | experimental |
@@ -129,6 +133,13 @@ local u = CreateUnit(Player(0), FourCC("hfoo"), 0, 0, 0)
 WmsSetUnitUntargetable(u, true)
 print(WmsIsUnitUntargetable(u)) --> true
 ```
+
+Details for buff and ability events:
+- Fire when the outermost add or remove ends, in the order the list changed; the unit is the triggering unit. Script-added buffs and abilities count.
+- A timed-buff refresh fires nothing; replacing a buff with the same id fires LOST, then RECEIVED. A change a handler undoes before its event fired cancels both events.
+- Nothing fires for unit creation, built-in abilities (Move, Attack, Hero, Inventory, Rally), a building's in-progress build ability, or units being removed.
+- Death clears buffs: LOST fires after the DEATH trigger conditions and before the DEATH actions. A unit type change fires ABILITY_REMOVED for lost abilities, then ADDED for new ones, buffs kept.
+- Handlers nest up to 32 deep; deeper changes are logged and skipped. Warcraft III has no such events (maps poll `GetUnitAbilityLevel`).
 
 Details for combat state:
 - Enters combat (both units, once per ENTER): hostile damage above 0, an attack swing, a hostile unit-target spell (also without damage), enemy buffs and enemy auras. Each repeat refreshes the timer.

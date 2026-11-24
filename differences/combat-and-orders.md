@@ -96,6 +96,7 @@ The buff filter natives use a mostly inferred classification table: check the bu
 | `UnitApplyTimedLife` | works | A later call replaces the timer without killing the unit. |
 | `UnitApplyTimedLife` with 0, negative or huge durations | bugfix | 0 or negative expires on the next tick; huge values no longer overflow. |
 | `UnitApplyTimedLife` target art | bugfix | No target art is shown. |
+| Buff and ability gain or loss events | deliberate | Warcraft III has none; WarMash adds `WMS_EVENT_UNIT_BUFF_RECEIVED` and three more (see the WarMash extensions page). |
 
 Details:
 - Timed-life buff `BTLF` is classed neither magic nor physical, so filters with both false never count it. Removing it kills the summon.
