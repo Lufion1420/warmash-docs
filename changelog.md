@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `UnitSetUpgradeProgress` and `UnitSetConstructionProgress` are implemented (percent clamped 0-100; each acts only on its own case) (2026-11-24)
 - Raise Dead summons now fire `EVENT_PLAYER_UNIT_SUMMON` and `EVENT_UNIT_SUMMON` once per unit
 - Camera helpers (WarMash-only): `WmsCameraFrameUnit`, `WmsCameraFollowUnit`, `WmsCameraStopFollow`, `WmsSetCameraLocked`, `WmsIsCameraLocked`, `WmsResetCamera` (2026-11-23)
 - Unit geoset visibility (WarMash-only): `WmsSetUnitGeosetVisible`, `WmsIsUnitGeosetVisible`, `WmsGetUnitGeosetCount` hide or show one part of a unit's current… (2026-11-23)
@@ -100,6 +101,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- `TriggerRegisterPlayerStateEvent` limit events fire on every change after which the comparison holds, not only on false to true
 - A follower inside about 40 units now stands while its target turns or circles near it, instead of flickering between walk and stand
 - Follow orders (smart right-click on a unit, move or patrol onto a unit, Jass2 follow) stop 75 units from the target's edge by default instead of Warcraft III's…
 - `CreateSound` decodes in the background (the handle is valid at once): a `StartSound` before the decode finishes plays a frame or so late… (2026-11-20)
@@ -148,6 +150,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `SetCameraTargetController` with inherit orientation converted the unit's facing from degrees to radians wrongly (2026-11-24)
+- `WmsCameraFollowUnit` looks up the unit's drawn model every frame, so a follow no longer breaks when the model is replaced (2026-11-24)
 - `EVENT_UNIT_SUMMON`: `GetTriggerUnit`, `GetTriggerWidget` and `GetSummoningUnit` are the caster, as in Reforged (trigger unit was the summoned unit)
 - `GetTriggerPlayer` and `GetTriggerWidget` were nil in `EVENT_PLAYER_HERO_LEVEL`, `EVENT_UNIT_HERO_LEVEL` and `EVENT_PLAYER_HERO_REVIVABLE` handlers
 - `TriggerRegisterGameStateEvent` read the limit value from the wrong argument

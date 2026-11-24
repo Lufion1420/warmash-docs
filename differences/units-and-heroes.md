@@ -134,3 +134,4 @@ Idle units walk home after a chase they started themselves. Player and script or
 | `IsUnitVisible`, `IsUnitFogged`, `IsUnitMasked`, `IsVisibleToPlayer`, `IsFoggedToPlayer`, `IsMaskedToPlayer`, `IsLocationVisibleToPlayer`, `IsLocationFoggedToPlayer`, `IsLocationMaskedToPlayer` | works | A point outside the map counts as masked. |
 | `IsUnitDetected` | bugfix | True for any unit inside a detector of the player, as measured. |
 | `IsUnitInvisible` | deliberate | True only for an invisible unit the player cannot see; plain fog gives false (1.29 gave true). |
+| `UnitSetUpgradeProgress`, `UnitSetConstructionProgress` | works | Percent is clamped 0-100; each acts only on its own case, and training or researching units are ignored, as measured. |
