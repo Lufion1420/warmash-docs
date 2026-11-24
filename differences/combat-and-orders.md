@@ -20,6 +20,7 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | `GroupTargetOrder`, `GroupTargetOrderById` | partial | Follow the single-unit rules (inferred); nil target returns false, empty group returns true (unmeasured). |
 | Script target order queued on a stunned or casting unit | bugfix | Keeps the script rule when it starts (was dropped). |
 | `IssueTargetOrder`, `IssueTargetOrderById` | bugfix | Return false for a nil target or a removed unit, destructable or item; corpses and killed trees stay valid targets. |
+| Any `Issue*Order*` or `Group*Order*` with order `raisedead` (852197) on a unit with Raise Dead (`Arai`) | bugfix | Returns false, as measured; only autocast works (`raisedeadon` true, then the unit casts itself). Item Raise Dead (`AIrd`) stays manual. |
 | `IssuePointOrder` | unverified | Same as `IssuePointOrderById`; a nil order string returns false. |
 | `IssueImmediateOrder`, `IssueImmediateOrderById` with "stop" | bugfix | Returns true. |
 | Orders to a paused unit | gap | A paused unit still accepts orders. |

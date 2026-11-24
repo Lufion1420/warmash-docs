@@ -34,7 +34,8 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `ISSUED_*_ORDER` events after training | unverified | Dispatched after same-tick train events even when the order came first; the Warcraft III order is not measured. |
 | Train and research start and cancel: `*_TRAIN_START`, `_TRAIN_CANCEL`, `*_RESEARCH_START`, `_RESEARCH_CANCEL` | partial | START fires when an item becomes the queue front, as measured; a queued item starts right after the previous FINISH. CANCEL on an explicit cancel. Building death fires neither CANCEL nor START. |
 | Upgrade: `*_UPGRADE_START`, `_CANCEL`, `_FINISH` | unverified | START on accepted order, CANCEL on explicit cancel, FINISH when the building becomes the new type. Player event first. Death of the upgrading building fires no CANCEL. Cancel refunds 75% (rounded down), none if the building dies mid-upgrade. |
-| Decay: `EVENT_PLAYER_UNIT_DECAY`, `EVENT_UNIT_DECAY` | partial | Fires once when the death animation ends (about 3 s after death, unit still dead), as measured. Never for heroes, buildings or corpse-less units; later corpse removal is silent. |
+| Decay: `EVENT_PLAYER_UNIT_DECAY`, `EVENT_UNIT_DECAY` | bugfix | Fire once at the end of the death animation (about 3 s, unit still dead) only for raisable and decaying corpses (death type 3), as measured. |
+| Decay for other death types and units | works | Decay-only corpses (type 2) fire nothing and go at about 91 s; types 0 and 1 are removed after the animation, as measured. Never for heroes or buildings. |
 | Selection: `*_SELECTED`, `*_DESELECTED` | works | `GetTriggerUnit` and `GetTriggerPlayer` set. |
 | Ownership: `*_CHANGE_OWNER` | works | `GetChangingUnit`, `GetChangingUnitPrevOwner`. |
 | Regions: `TriggerRegisterEnterRegion`, `TriggerRegisterLeaveRegion` | works | `GetEnteringUnit` or `GetLeavingUnit`, `GetTriggeringRegion`, `GetTriggerUnit`. |

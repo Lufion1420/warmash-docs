@@ -127,6 +127,7 @@ Details:
 
 | Native | Status | What differs |
 |---|---|---|
+| Animate Dead (`AUan`, `AIan`, creep Animate Dead) | gap | Not implemented; casting does nothing. The `animatedead` order still works as a Channel base order. |
 | Storm Bolt (`AHtb`), Attribute Bonus (`Aamk`) | works | A missile with speed 0 or no art arrives at once. |
 | Cripple (`Acri`), Drunken Haze (`ANdh`) | works | Implemented; Drunken Haze `Nsi1` is a bit mask (1 melee, 2 ranged, 4 special, 8 spells). |
 | Drunken Haze overlapping | gap | Two from the same caster: the disarm ends when the first expires. |
