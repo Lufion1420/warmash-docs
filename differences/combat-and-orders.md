@@ -25,8 +25,11 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | `IssueImmediateOrder`, `IssueImmediateOrderById` with "stop" | bugfix | Returns true. |
 | `IssueImmediateOrder`, `IssueImmediateOrderById` train order behind a running item while food is full | bugfix | Returns true and charges gold, as measured; a food-short front order still returns false with no gold and no event. |
 | `IssueImmediateOrderById(building, 851976)` cancel | bugfix | Cancels the last queue slot, as measured (was the front). Altar revive cancel still takes the front (unmeasured). |
-| Cancel event versus refund | gap | Reforged fires CANCEL before the refund; WarMash refunds first, gold before food (order unverified). |
+| Cancel event versus refund | bugfix | `TRAIN_CANCEL` fires before the refund, as measured; `RESEARCH_CANCEL` too, and food returns afterwards (unverified). |
 | Cancel handler that kills or cancels the building | bugfix | No double refund and no error. |
+| `IssueImmediateOrder(ById)` 851978 on an upgrading building | bugfix | Cancels the upgrade, as measured; also cancels a construction (unverified). 851976 still works. |
+| `IssueImmediateOrder(ById)` 851978 on a training building | gap | Returns false and cancels nothing; Reforged returns true. |
+| Second upgrade cancel from a refund handler | bugfix | The upgrade is refunded only once. |
 | Orders to a paused unit | gap | A paused unit still accepts orders. |
 | Order issued inside an issued-target-order trigger condition | bugfix | The outer order keeps its target (was replaced or crashed). |
 | `IssueBuildOrder` | works | Resolves the unit name; an unknown name returns false. |
@@ -46,6 +49,7 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | Smart on a neutral Passive building (shop, gold mine, waygate) | unverified | The unit keeps following and the order stays smart; Warcraft III is not measured. |
 | Follower after an auto-acquired attack | bugfix | Returns to following the target; the order reads smart throughout. |
 | Follower snared while in follow range | bugfix | Resumes following when the snare ends (inferred); a follow begun while rooted does not resume after unrooting. |
+| Attack, cast or item give/get begun in range while snared | unverified | Walks after the target once the snare ends; a target leaving range during the snare drops the order. |
 | `GetUnitMoveFollowBehavior` with a null target | bugfix | Returns null instead of raising an error. |
 
 ## Damage and attack events

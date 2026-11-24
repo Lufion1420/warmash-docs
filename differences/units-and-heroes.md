@@ -98,6 +98,7 @@ Details:
 | Altar-queued hero whose Resurrection raise ends in a Reincarnation false death | bugfix | The altar entry is cancelled and refunded. |
 | Altar revive cancel of a paid entry | unverified | The refunded food goes straight to the hero; no waiting train item takes it. |
 | Altar revive gold, lumber and time | bugfix | Capped by the `HeroMaxRevive*` gameplay constants. |
+| Altar revive lumber cost | unverified | Checks and charges the hero type's lumber cost; before, the gold cost was the base. |
 | `UnitModifySkillPoints` | unverified | Capped at what the hero can still learn; the real native's documented bugs are not copied. |
 | `EVENT_UNIT_HERO_LEVEL`, `EVENT_PLAYER_HERO_LEVEL`, `GetLevelingUnit` | bugfix | One event pair per `SetHeroLevel`, `AddHeroXP` or `SetHeroXP` call with the final level, as in Reforged; unit list then player list; from a kill they run before the death events. |
 | Hero level-up art | deliberate | One effect per gain call, not one per level gained. |

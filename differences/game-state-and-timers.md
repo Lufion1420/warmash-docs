@@ -34,7 +34,7 @@ In a single-player start of a non-melee map only the local player's slot is play
 | `GetUnitFoodMade` on a constructed or upgraded building | bugfix | Returns the type's supply (was 0). |
 | Death or `RemoveUnit` of a constructed building | bugfix | Lowers its owner's food cap (was never released). |
 | Change-owner handler that changes the owner again | bugfix | No stale change-owner event fires. |
-| `RemoveUnit` on a building with a paid front train item | gap | The charged food stays charged. |
+| `RemoveUnit` on a building with a queue | bugfix | Refunds gold, lumber and food shortly afterwards without events; training as measured, research and revive unverified. |
 | Food-making unit created while an item waits | unverified | `CreateUnit` places the unit, then the waiting item's START fires, still inside the call. |
 | `EndGame` | gap | Leaves to the menu, no score screen. |
 | `RestartGame`, `ChangeLevel` | deliberate | Leave to the menu. |

@@ -163,6 +163,13 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Queued attack, attack-move, attack-ground and enemy smart orders survive a morph or upgrade into a form that can attack (2026-11-24)
+- An attack, cast or item give/get begun in range while snared now follows the target once the snare ends instead of dropping (unverified) (2026-11-24)
+- `TRAIN_CANCEL` fires before the refund, as measured in Reforged (2026-11-24)
+- `RemoveUnit` on a building refunds its queue shortly afterwards, with no CANCEL, START or DEATH events (research and revive refunds unverified) (2026-11-24)
+- Order 851978 cancels a building upgrade (as measured) or construction (unverified) (2026-11-24)
+- A second upgrade cancel from a refund handler no longer refunds twice (2026-11-24)
+- Altar hero revive checks and charges the hero's lumber cost instead of one based on gold cost (unverified) (2026-11-24)
 - After `RemoveUnit` returns, `GetUnitTypeId`, `GetUnitX`/`Y`, `GetUnitLoc` and `GetWidgetX`/`Y` read 0 (as measured) (2026-11-24)
 - After `RemoveUnit`, `GetWidgetLife`, `GetUnitState` life and max life and `BlzGetUnitMaxHP` read 0 (unverified for living units) (2026-11-24)
 - A removed unit no longer acts in the same tick (no auto-acquire or order queue step) (2026-11-24)
