@@ -163,6 +163,9 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `SetUnitOwner` and Charm move the unit's food used, paid queue-front train food and food made to the new owner (2026-11-24)
+- `GetUnitFoodMade` returns the supply of constructed and upgraded buildings (was 0), and their death or `RemoveUnit` lowers the owner's food cap (2026-11-24)
+- Food checks for training, altar revive order, build, upgrade, unit sale and JSON morph or ability food cost use min(food cap, `FOOD_CAP_CEILING`) (2026-11-24)
 - A unit trained with a point rally now reports order id 851970 (as measured in Reforged) in `GetIssuedOrderId` and `GetUnitCurrentOrder`, not 851971 (2026-11-24)
 - `SetWidgetLife` and `SetUnitState(UNIT_STATE_LIFE)` from a life state-event handler during a revive (Resurrection, `ReviveHero`, altar revive) no longer revive… (2026-11-24)
 - `ReviveHero` and altar revive return false (no `HERO_REVIVE_FINISH`, no rally order) when a handler inside the revive… (2026-11-24)

@@ -24,8 +24,16 @@ In a single-player start of a non-melee map only the local player's slot is play
 | Cancel of a supply-blocked revive or train | bugfix | Returns no food that was never paid. |
 | Food change (`SetPlayerState` `FOOD_CAP`, `FOOD_USED`, `FOOD_CAP_CEILING`, unit death, new food building) | bugfix | A waiting train item starts and pays inside the call; its START fires player form, then unit form. Measured for `SetPlayerState`; unit-death case unverified. |
 | `GetPlayerTechCount` with a food-blocked train item | bugfix | In-progress count is 0 (was -1). |
-| Training food checks and `FOOD_CAP_CEILING` | gap | Queue food checks ignore the ceiling. |
-| `SetUnitOwner` and food | gap | Moves no food between players; Charm moves it after the owner change (unmeasured). |
+| Food checks (train, altar revive order, build, upgrade, unit sale, JSON morph, JSON ability food cost) | unverified | Use min(food cap, `FOOD_CAP_CEILING`). `ReviveHero` checks the ceiling only. |
+| `PLAYER_STATE_FOOD_CAP_CEILING` default | unverified | 100 (was 101); not checked against Warcraft III. |
+| Food refused by the ceiling | gap | Shows the not-enough-food message, not the max-supply one. |
+| HUD resource bar food cap | gap | Shows the raw cap, not min(cap, ceiling). |
+| `SetUnitOwner` and Charm: food | unverified | Food used, paid front-of-queue unit food and food made move to the new owner. Warcraft III not confirmed. |
+| `SetUnitOwner` and altar-revive food, worker build reservations, tech in-progress counts | gap | These do not move to the new owner. |
+| `SetUnitOwner` and upgrades | gap | Swaps no upgrades. |
+| `GetUnitFoodMade` on a constructed or upgraded building | bugfix | Returns the type's supply (was 0). |
+| Death or `RemoveUnit` of a constructed building | bugfix | Lowers its owner's food cap (was never released). |
+| Change-owner handler that changes the owner again | bugfix | No stale change-owner event fires. |
 | `RemoveUnit` on a building with a paid front train item | gap | The charged food stays charged. |
 | Food-making unit created while an item waits | unverified | `CreateUnit` places the unit, then the waiting item's START fires, still inside the call. |
 | `EndGame` | gap | Leaves to the menu, no score screen. |
