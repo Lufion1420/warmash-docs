@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `TerrainDeformCrater`, `TerrainDeformRipple`, `TerrainDeformWave`, `TerrainDeformRandom`, `TerrainDeformStop` and `TerrainDeformStopAll` are registered as… (2026-11-24)
 - `SetCameraOrientController` is registered as a no-op stub (2026-11-24)
 - Quest log suppression (WarMash-only): `WmsSetQuestLogHidden(player, hidden)` and `WmsIsQuestLogHidden(player)` (2026-11-24)
 - Sound natives: `SetSoundDistances` (min used as reference distance at the next start, max stored only), `SetSoundDistanceCutoff`… (2026-11-24)
@@ -158,6 +159,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Training: `*_TRAIN_FINISH` handlers run before the rally order is issued to the trained unit, then the next queue item starts (as measured in Reforged) (2026-11-24)
 - `PanCameraToWithZ` and `PanCameraToTimedWithZ` treat z as an absolute target height floored at the ground (as measured in Reforged), not an added offset (2026-11-24)
 - `TriggerRegisterUnitStateEvent` and `GetEventUnitState` now work (were a stub): edge-triggered like WC3, measured for life (2026-11-24)
 - `SetCameraTargetController` with inherit orientation converted the unit's facing from degrees to radians wrongly (2026-11-24)

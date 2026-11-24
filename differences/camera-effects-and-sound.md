@@ -58,6 +58,7 @@ Effects attached to a unit ignore position, orientation and alpha. Images are no
 | `BlzSetSpecialEffectTimeScale(e, 0)` with `BlzSetSpecialEffectTime` | bugfix | The set frame is held. |
 | `AddSpecialEffect` with an empty model path | bugfix | Returns an invisible handle instead of nil. |
 | `CreateImage` family | stored-only | State is kept; nothing is drawn. |
+| `TerrainDeformCrater`, `TerrainDeformRipple`, `TerrainDeformWave`, `TerrainDeformRandom`, `TerrainDeformStop`, `TerrainDeformStopAll` | stub | Do nothing; the four creators return a null handle, so the terrain never deforms. |
 
 ### Models and textures
 
