@@ -30,6 +30,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 - Hero revive events `EVENT_PLAYER_UNIT_HERO_REVIVE_START`/`_CANCEL`/`_FINISH` and `EVENT_UNIT_HERO_REVIVE_*` fire, player event first
 - `EVENT_PLAYER_UNIT_SUMMON` and `EVENT_UNIT_SUMMON` fire with new natives `GetSummonedUnit`, `GetSummoningUnit`, only for Figurine, Phoenix, Grizzly, Hawk…
 - `EVENT_PLAYER_UNIT_HERO_SKILL` and `EVENT_UNIT_HERO_SKILL` fire on every hero skill learn…
+- Holy Light (`AHhb`) casts via order `holybolt` (852092): heals a living friendly non-mechanical non-self unit below max life for 200/400/600, damages an enemy…
 - Rect natives `WmsCreateRectCentered`, `WmsSetRectCentered`, `WmsGetRectWidth`, `WmsGetRectHeight`, `WmsIsPointInRect`, `WmsIsUnitInRect`… (2026-11-23)
 - Facing angle natives (WarMash-only) `WmsGetUnitFacingDiffToUnit` and `WmsGetUnitFacingDiffToPoint`: signed degrees from the unit's facing to a target or point… (2026-11-24)
 - Facing natives `WmsIsUnitFacingUnit`, `WmsIsUnitFacingUnitInRange`, `WmsIsUnitFacingPoint`, `WmsGetUnitFacingDelta` (cone test, signed angle to a point) (2026-11-23)
@@ -160,6 +161,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Holy Light (`AHhb`) can now be learned via `SelectHeroSkill` and the hero learn button (it stayed at level 0), 2026-11-24 (uncommitted)
 - Polymorph: the unit turns at the sheep's rate, and a `SetUnitTurnSpeed` value written during the morph survives its end (2026-11-24)
 - `SetUnitMoveSpeed` during Polymorph clamps to the unit type's own speed limits, not the sheep's (2026-11-24)
 - Slow (Thunder Clap) is now a percent of the current speed applied when it is read: `SetUnitMoveSpeed(320)` under a 20% slow reads 256 (was 266) (2026-11-24)
