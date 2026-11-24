@@ -109,6 +109,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- A polymorphed unit moves at the sheep speed and `GetUnitMoveSpeed` reads it (2026-11-24)
 - `*_TRAIN_START` and `*_RESEARCH_START` fire when an item becomes the queue front (not on every queue call) (2026-11-24)
 - `TriggerRegisterPlayerStateEvent` limit events fire on every change after which the comparison holds, not only on false to true
 - A follower inside about 40 units now stands while its target turns or circles near it, instead of flickering between walk and stand

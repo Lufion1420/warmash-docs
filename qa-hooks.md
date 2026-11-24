@@ -92,7 +92,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `WarMashQaHotkeyMode(mode)` | Hotkey mode for the run: 0 letters, 1 grid, -1 config. |
 | `WarMashQaPortraitInfo()`, `WarMashQaPortraitClick([right])` | Portrait state and a click on it. |
 | `WarMashQaReadPixels`, `WarMashQaSetStockFrameVisible`, `WarMashQaStockOnScreen` | Pixel readback and stock frame checks. |
-| `WarMashQaArmUnitTarget(orderId)` | Arms a unit-target command of the selected unit. |
+| `WarMashQaArmUnitTarget(orderId)` | Arms a unit-target command of the selected unit; also arms attack and move. |
 | `WarMashQaIconPreload()` | Icon loading state (JSON). |
 
 ## Units, input and camera

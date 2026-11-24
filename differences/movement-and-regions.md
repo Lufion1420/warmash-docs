@@ -31,6 +31,7 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 | `SetUnitMoveSpeed`, move speed limits | deliberate | A map's `MaxUnitSpeed` or the unit's own maximum clamps only values set by script; Reforged also caps at 522, WarMash has no cap. |
 | Move speed floor | deliberate | The final speed is at least 1 or the minimum from the map or unit, buffs included (Slow alone on 270 reads 150); speed-0 types stay 0. |
 | Polymorph move speed | works | Uses the sheep type's minimum speed (100). |
+| `GetUnitMoveSpeed`, `SetUnitMoveSpeed` on a polymorphed unit | unverified | The read shows the sheep speed; a set during the morph and speed gains made meanwhile show after it ends. |
 | `BlzSetUnitRealField(UNIT_RF_SPEED)` | deliberate | Acts like `SetUnitMoveSpeed` (same limits) and returns true; not confirmed in Reforged. |
 | `UnitRemoveAbility(u, 'Amov')` | bugfix | Returns true: the unit stops walking and drops move orders but still attacks in range; attack-move to a point is refused. |
 | `UnitAddAbility(u, 'Amov')` | deliberate | Re-adds Amov after a script removal; false otherwise. |
