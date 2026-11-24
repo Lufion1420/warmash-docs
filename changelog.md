@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Passive ability interval events (WarMash-only): `WMS_EVENT_UNIT_ABILITY_INTERVAL` and `WMS_EVENT_PLAYER_UNIT_ABILITY_INTERVAL` fire every N seconds for the… (2026-11-24)
 - Buff and ability events (WarMash-only): `WMS_EVENT_UNIT_BUFF_RECEIVED`/`_BUFF_LOST`/`_ABILITY_ADDED`/`_ABILITY_REMOVED` and the `WMS_EVENT_PLAYER_UNIT_*`… (2026-11-24)
 - `PanCameraToTimedWithZ` and `CameraSetupApplyForceDurationWithZ` now change the camera height linearly over the duration… (2026-11-24)
 - `UnitSetUpgradeProgress` and `UnitSetConstructionProgress` are implemented (percent clamped 0-100; each acts only on its own case) (2026-11-24)
