@@ -88,6 +88,9 @@ Details:
 | `ReviveHero`, `ReviveHeroLoc` | works | Fire no revive events; refused when the food cap would be exceeded. |
 | `SetWidgetLife`, `SetUnitState(UNIT_STATE_LIFE)` in a life state-event handler during a revive | bugfix | The unit stays dead if the handler killed it inside the revive, as in Warcraft III; before, it was revived. |
 | `ReviveHero` or altar revive when a handler during the revive kills or removes the hero again | bugfix | `ReviveHero` returns false, no finish event, no rally order; the dead hero keeps no food. Reforged not measured. |
+| `ReviveHero` called by a handler inside a running revive (altar refund, enter-region or state handler) | bugfix | It does the only revive: one START, one FINISH, no second revive art, no altar rally order. Not confirmed against Reforged. |
+| A handler kills then revives the hero during a revive (instant respawn) | bugfix | The revive that ran last decides; a `ReviveHero` after a new death fires its own START. Not confirmed against Reforged. |
+| `ReviveHero` from a gold-refund handler near the food ceiling | bugfix | No longer refused; altar-paid food is not counted twice. |
 | Altar-queued hero whose Resurrection raise ends in a Reincarnation false death | bugfix | The altar entry is cancelled and refunded. |
 | Altar revive cancel of a paid entry | unverified | The refunded food goes straight to the hero; no waiting train item takes it. |
 | Altar revive gold, lumber and time | bugfix | Capped by the `HeroMaxRevive*` gameplay constants. |

@@ -165,6 +165,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 - `SetWidgetLife` and `SetUnitState(UNIT_STATE_LIFE)` from a life state-event handler during a revive (Resurrection, `ReviveHero`, altar revive) no longer revive… (2026-11-24)
 - `ReviveHero` and altar revive return false (no `HERO_REVIVE_FINISH`, no rally order) when a handler inside the revive… (2026-11-24)
+- A script `ReviveHero` inside a running revive (altar refund, enter-region or state handler) is the only revive: one START, one FINISH, no double revive art, no…
 - An altar-queued hero whose Resurrection raise ends in a Reincarnation false death has its altar entry cancelled and refunded (2026-11-24)
 - Resurrection (`AHre`) can now be learned via `SelectHeroSkill` and the hero learn button (it stayed at level 0), 2026-11-24 (uncommitted)
 - `ResurrectUnit` and Resurrection give back the food and tech count death released once, by the stored amounts, never onto a unit killed again during the revive…
