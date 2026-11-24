@@ -26,6 +26,9 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 | `BlzSetUnitFacingEx` | deliberate | Instant; cancels a pending turn. |
 | `SetUnitFlyHeight` | bugfix | The rate is honoured; 0 or NaN is instant. |
 | `SetUnitFlyHeight` below 0 | unverified | Ground unit types are clamped at 0. |
+| `GetUnitFlyHeight`, `BlzGetUnitRealField(UNIT_RF_FLY_HEIGHT)` on a netted flyer | bugfix | Read the height from before the net, as measured; the drawn unit still sinks. |
+| `SetUnitFlyHeight` on a netted unit | unverified | Changes the read and the height restored after the net; the drawn unit stays down. |
+| Fly height after `UnitAddType(u, UNIT_TYPE_SNARED)` | unverified | Reads stay at the pre-snare height, which removal restores instead of the type default. |
 | Snared units (`UNIT_TYPE_SNARED`) | bugfix | Do not walk and read move speed 0, as measured. |
 | `GetUnitMoveSpeed`, `BlzGetUnitRealField(UNIT_RF_SPEED)` with a speed buff | bugfix | Unrounded value, as measured; movement itself still uses whole numbers. |
 | `SetUnitMoveSpeed`, move speed limits | deliberate | A map's `MaxUnitSpeed` or the unit's own maximum clamps only values set by script; Reforged also caps at 522, WarMash has no cap. |
@@ -33,16 +36,17 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 | Polymorph move speed | works | Uses the sheep type's minimum speed (100). |
 | `GetUnitMoveSpeed`, `SetUnitMoveSpeed` on a polymorphed unit | unverified | The read shows the sheep speed; a set during the morph and speed gains made meanwhile show after it ends. |
 | `SetUnitMoveSpeed`, `BlzSetUnitRealField(UNIT_RF_SPEED)` during Polymorph | bugfix | The value is clamped to the unit type's own minimum and maximum speed, not the sheep's. |
-| `SetUnitMoveSpeed` on a slowed unit | bugfix | The slow is a percent of the written value (320 with a 20% slow reads 256) and ends cleanly; WC3 value not measured. |
+| `SetUnitMoveSpeed` on a slowed unit | bugfix | A Thunder Clap slow is a percent of the written value (320 with 20% reads 256) and ends cleanly; WC3 value not measured. |
 | `SetUnitTurnSpeed`, `BlzSetUnitRealField(UNIT_RF_TURN_RATE)` during Polymorph | bugfix | The unit turns at the sheep's rate; a value written during the morph survives its end; Reforged not measured. |
 | Changing a unit's type from script | bugfix | Active slows apply their percent to the new type's speed, and a type that can move never loses its move ability. |
-| Slow (Thunder Clap) and Polymorph | bugfix | A slow cast before or during the morph slows the sheep and still applies to the unit afterwards (270 with 20% reads 216); WC3 not measured. |
-| Overlapping Slow (Thunder Clap) from different sources | unverified | Only the strongest slow applies instead of compounding (270 no longer drops to 216, then 173); a flat speed bonus is slowed too. |
+| Collision size growing mid-walk (type change) | bugfix | The walk re-fits its path instead of getting stuck. |
+| Thunder Clap slow and Polymorph | bugfix | A slow cast before or during the morph slows the sheep and still applies to the unit afterwards (270 with 20% reads 216); WC3 not measured. |
+| Overlapping Thunder Clap slows | unverified | Only the strongest applies to move speed instead of compounding; flat speed bonuses are not slowed. |
 | `BlzSetUnitRealField(UNIT_RF_SPEED)` | deliberate | Acts like `SetUnitMoveSpeed` (same limits) and returns true; not confirmed in Reforged. |
 | `UnitRemoveAbility(u, 'Amov')` | bugfix | Returns true: the unit stops walking and drops move orders but still attacks in range; attack-move to a point is refused. |
 | `UnitAddAbility(u, 'Amov')` | deliberate | Re-adds Amov after a script removal; false otherwise. |
 | `GetUnitDefaultMoveSpeed` | unverified | The unit type's speed from object data; 0 for a null unit. |
-| Slow or speed upgrade while a speed buff is active | bugfix | Change the base speed without baking in the buff; WC3's combination rule is unverified. |
+| Thunder Clap slow or speed upgrade while a speed buff is active | bugfix | The buff is never baked into the base speed; WC3's combination rule is unverified. |
 | `IsTerrainPathable` | partial | Works for walk, fly, build and float pathing; other types return false. |
 | `SetTerrainPathable` | unverified | `true` clears the cell's blocking bit, or blight with `PATHING_TYPE_BLIGHTPATHING`. |
 | `SetTerrainPathable` with peon-harvest, amphibious or any pathing | gap | Ignored with one log line. |

@@ -112,6 +112,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- Stat buffs sharing a stacking key now count the strongest bonus plus the strongest penalty (before: the highest value, so the weaker penalty won) (2026-11-25)
+- The Ensnare net now flies and the buff lands on impact (2026-11-25)
 - A polymorphed unit moves at the sheep speed and `GetUnitMoveSpeed` reads it (2026-11-24)
 - `*_TRAIN_START` and `*_RESEARCH_START` fire when an item becomes the queue front (not on every queue call) (2026-11-24)
 - `TriggerRegisterPlayerStateEvent` limit events fire on every change after which the comparison holds, not only on false to true
@@ -163,6 +165,9 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Thunder Clap (`AHtc`) now works (before, it did nothing) (2026-11-25)
+- A netted flyer reads its pre-net fly height (was 0), and removing a script-added snare restores the pre-snare height (2026-11-25)
+- A unit whose collision size grows mid-walk re-fits its path instead of getting stuck (2026-11-25)
 - Queued attack, attack-move, attack-ground and enemy smart orders survive a morph or upgrade into a form that can attack (2026-11-24)
 - An attack, cast or item give/get begun in range while snared now follows the target once the snare ends instead of dropping (unverified) (2026-11-24)
 - `TRAIN_CANCEL` fires before the refund, as measured in Reforged (2026-11-24)
@@ -190,9 +195,9 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 - Holy Light (`AHhb`) can now be learned via `SelectHeroSkill` and the hero learn button (it stayed at level 0), 2026-11-24 (uncommitted)
 - Polymorph: the unit turns at the sheep's rate, and a `SetUnitTurnSpeed` value written during the morph survives its end (2026-11-24)
 - `SetUnitMoveSpeed` during Polymorph clamps to the unit type's own speed limits, not the sheep's (2026-11-24)
-- Slow (Thunder Clap) is now a percent of the current speed applied when it is read: `SetUnitMoveSpeed(320)` under a 20% slow reads 256 (was 266) (2026-11-24)
+- The Thunder Clap slow is now a percent of the current speed applied when it is read: `SetUnitMoveSpeed(320)` under a 20% slow reads 256 (was 266) (2026-11-24)
 - A slow cast before a Polymorph slows the sheep (2026-11-24)
-- Overlapping Thunder Clap slows from different sources apply only the strongest (before they compounded 270 to 216 to 173), and a flat move-speed bonus is… (2026-11-24)
+- Overlapping Thunder Clap slows from different sources apply only the strongest (before they compounded 270 to 216 to 173) (2026-11-24)
 - `RemoveUnit` on a live haunted or entangled gold mine restores the parent mine (before it stayed hidden and paused, and Entangle stayed disabled) (2026-11-24)
 - Training and food: `*_TRAIN_START` fires when production starts with food paid (a food-blocked item waits silently), and a waiting item starts and pays inside… (2026-11-24)
 - Order `raisedead` (852197) on a unit with Raise Dead (`Arai`) is refused by every `Issue*Order*`, `IssueNeutral*Order*` and `Group*Order*` native… (2026-11-24)
@@ -277,7 +282,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 - A paused instant Channel ends with ENDCAST when its target is lost before EFFECT (unverified) (2026-11-17)
 - A script error in one cast's FINISH or ENDCAST action no longer blocks other casts ending in the same tick (2026-11-17)
 - An order given by script inside a condition of an issued-target-order trigger no longer replaces the outer order's target or makes it fail (2026-11-16)
-- Slow (also Thunder Clap) and the move speed upgrades no longer write an active speed buff into the unit's base speed… (2026-11-16)
+- The Thunder Clap slow and the move speed upgrades no longer write an active speed buff into the unit's base speed… (2026-11-16)
 - A disabled command button whose icon has no disabled art is drawn dark (45 percent brightness, WarMash's own value): a silenced hero's buttons… (2026-11-16)
 - Crash fix: `SetWidgetLife`, `SetUnitState(UNIT_STATE_LIFE)` and heals on a killed unit are ignored, its life stays 0 until a real revive… (2026-11-16)
 - Regions: a unit already standing in the area added by `RegionAddRect`, `RegionAddCell` or `RegionAddCellAtLoc` is inside at once (`IsUnitInRegion`) and gets no… (2026-11-16)
@@ -367,6 +372,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### WC3 compatibility
 
+- Unverified in Reforged: Thunder Clap stacking, added enemy targets and damage-before-slow order (2026-11-25)
 - Spell events (CHANNEL, CAST, EFFECT, FINISH, ENDCAST), `EVENT_UNIT_USE_ITEM`, `EVENT_UNIT_DROP_ITEM` and `EVENT_UNIT_PAWN_ITEM` now fire the owner's… (2026-11-22)
 - `BlzSetUnitSkin` resets the script vertex colour: now measured in Reforged 3.0.1 (2026-11-20)
 - Known difference: a summoned unit with Reincarnation loses its timed life on reincarnating and never expires (2026-11-22)

@@ -133,6 +133,12 @@ Details:
 | Animate Dead details | unverified | Corpse choice, hero and building refusal, exploding on death, no food charge and ignored Inherit Upgrades are not confirmed in Reforged. |
 | Animate Dead takeover | deliberate | No `EVENT_UNIT_CHANGE_OWNER` or `EVENT_PLAYER_UNIT_CHANGE_OWNER` fires when the corpse changes owner; only SUMMON events fire. |
 | Storm Bolt (`AHtb`), Attribute Bonus (`Aamk`) | works | A missile with speed 0 or no art arrives at once. |
+| Thunder Clap (`AHtc`) | bugfix | Damages and slows units around the caster. |
+| Thunder Clap slow with speed bonuses | unverified | Takes its share of base speed after bonuses: 270 with 50% clap and 25% Bloodlust reads 202.5. |
+| Thunder Clap attack speed slow | unverified | Adds to Slow (`Aslo`) and Banish; two claps give only the stronger. |
+| Thunder Clap targets | deliberate | Enemies are added if no alliance flag except neutral is listed; friend, allies and player lists are not widened. |
+| Thunder Clap: self-only target list | deliberate | Hits nothing. |
+| Thunder Clap damage and slow order | unverified | Damage comes first, so a `DAMAGED` handler sees the target not yet slowed. |
 | Cripple (`Acri`), Drunken Haze (`ANdh`) | works | Implemented; Drunken Haze `Nsi1` is a bit mask (1 melee, 2 ranged, 4 special, 8 spells). |
 | Drunken Haze overlapping | gap | Two from the same caster: the disarm ends when the first expires. |
 | Cleave (`ANca`) | unverified | Melee only; each unit in the area takes the full factor and no attack event fires. |
@@ -148,6 +154,7 @@ Details:
 | Hardened Skin (`Assk`) | unverified | Attacks lose the ignored damage down to the minimum, before armor; attacks only, with chance and ranged or melee flags. |
 | Aerial Shackles (`Amls`) | bugfix | The channel ends after its duration and fires ENDCAST. |
 | Ensnare (`Aens`) | partial | Target cannot move but may attack and cast; hits magic-immune, refuses ethereal, as measured. |
+| Ensnare net flight | unverified | The net flies; the buff lands on impact, never on a dead or removed target. `SPELL_EFFECT` timing is unchanged. |
 | Bloodlust (`Ablo`) | works | Attack rate, speed and scale bonus with autocast; speed reads 337.5 from 270, as measured. |
 | Unholy Frenzy (`Auhf`) | bugfix | The drain is a non-attack damage event from the caster every second, as measured. |
 | Polymorph (`Aply`) | partial | The sheep cannot attack or cast; type id and current life are kept, as measured. |
@@ -156,6 +163,7 @@ Details:
 
 Details:
 - Ensnare: flyers sink and are targeted as ground units; the net is negative physical and not dispellable (measured). Duration and cooldown come from the map's data. A silenced caster can cast it (unverified).
+- Ensnare net: missile speed 0 nets at once. A netted unit stands still, even before its first step.
 - Unholy Frenzy: DataB life per second, no armor; attack type reads chaos and damage type universal (unverified). It can kill, and wakes or provokes the target.
 - Polymorph: heroes and summons refused; harvest, build, repair, load and items off. The unit turns at the sheep's rate; collision is unchanged (known gap).
 

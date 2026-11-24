@@ -100,6 +100,7 @@ The buff filter natives use a mostly inferred classification table: check the bu
 | `UnitCountBuffsEx`, `UnitHasBuffsEx`, `UnitRemoveBuffs`, `UnitRemoveBuffsEx` | works | Filter by polarity, magic or physical, aura and timed life on an inferred table. |
 | Non-stacking aura buffs from several sources | bugfix | The buff stays listed while another source still applies. |
 | Spell buffs with the same buff id | deliberate | A timed spell buff replaces the older one; auras and passives still stack. |
+| Stat buffs sharing a stacking key | unverified | The strongest bonus plus the strongest penalty count, for every stat. |
 | `UnitRemoveAbility(unit, buffId)` | bugfix | Removes every instance, not only the first. |
 | Slow (`Aslo`) on re-level of a disabled ability | bugfix | No longer errors. |
 | `UnitApplyTimedLife` | works | A later call replaces the timer without killing the unit. |
