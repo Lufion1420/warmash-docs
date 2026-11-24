@@ -68,6 +68,8 @@ end
 | `WmsSetCameraLocked` | `(player, boolean)` | Locks or unlocks the player's own camera input; script camera calls still work. | 2026-11-23 | experimental |
 | `WmsIsCameraLocked` | `(player) -> boolean` | The lock flag kept for that player. | 2026-11-23 | experimental |
 | `WmsResetCamera` | `(player)` | Restores the map's default camera setup and ends a follow or timed pan; the target does not move. | 2026-11-23 | experimental |
+| `WmsSetQuestLogHidden` | `(player, boolean)` | Hides the Quests button for that player; F9 and clicks open nothing and an open dialog closes. | 2026-11-24 | experimental |
+| `WmsIsQuestLogHidden` | `(player) -> boolean` | The flag kept for that player; false for null or never set. | 2026-11-24 | experimental |
 
 Details for ability interval events:
 - Passive abilities only (built-in passives, auras, ability-builder passives). Handlers use `GetTriggerUnit`, `GetTriggerPlayer`, `WmsGetEventAbilityId`, `WmsGetEventAbility`.
@@ -80,6 +82,11 @@ Details for ability interval events:
 ```lua
 BlzSetAbilityRealLevelField(abil, ConvertAbilityRealLevelField('Wmsi'), 0, 2.0)
 ```
+
+Details for the quest log:
+- The flag is stored for every player; only the local player's HUD changes. `FlashQuestDialogButton` and `ForceQuestDialogUpdate` do not open the dialog while hidden. Null player: no-op.
+- Un-hiding shows the button again in its `QuestSetEnabled` state. If the map hid the button with `BlzFrameSetVisible`, un-hiding shows it anyway.
+- `BlzFrameSetVisible(button, true)` while hidden shows the button, but it stays unclickable.
 
 Details for facing:
 - Cone: true when `|delta| <= cone/2` (inclusive); `cone >= 360` is always true, a negative cone false. Angles: 0 = east, 90 = north.

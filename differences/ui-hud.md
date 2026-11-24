@@ -102,6 +102,7 @@ Details:
 | `CreateQuest`, `IsQuestRequired` | bugfix | A new quest is required by default, as documented. |
 | `FlashQuestDialogButton` | partial | Enables the Quests button; the 10 s highlight is not drawn. |
 | `ForceQuestDialogUpdate` | bugfix | Refreshes an open quest dialog. |
+| Quest log suppression | deliberate | `WmsSetQuestLogHidden` hides the Quests button and blocks the dialog; Warcraft III has no equivalent. Defeat-condition natives are still missing. |
 | `QuestSetEnabled`, `DestroyQuest` | partial | On JASS maps enabling a quest enables the Quests button and nothing disables it; Lua maps keep it always enabled. |
 | `CreateDefeatCondition`, `DestroyDefeatCondition`, `DefeatConditionSetDescription` | gap | Not implemented; the dialog shows no defeat conditions. |
 
