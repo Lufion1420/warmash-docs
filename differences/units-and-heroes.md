@@ -80,6 +80,9 @@ Details:
 | `GetHeroProperName` | works | Returns nil for a non-hero. |
 | `BlzSetHeroProperName` | works | The hero-bar tooltip and revive button show the new name only after their next rebuild. |
 | Hero proper name at creation | gap | Stock heroes always get their first proper name, not a random one. |
+| `ResurrectUnit`, Resurrection, Reincarnation end | bugfix | Food and tech count released by death come back once by the stored amounts; a unit killed again during the revive is skipped. |
+| `ResurrectUnit` on a dead hero in an altar revive queue | unverified | The hero leaves the queue and the altar's food and gold are refunded; Reforged behavior not confirmed. |
+| `ResurrectUnit` on a dissipated hero corpse | bugfix | The corpse is unhidden. |
 | `GetUnitCurrentOrder` after `ReviveHero`, altar revive, Resurrection or Reincarnation | unverified | Reads 0; before, the order of the cast the unit died in. |
 | `ReviveHero` on a hero still in a stun state | unverified | Stunned at once (permanent stun buff or `UNIT_TYPE_STUNNED`); before, unstunned until the next stun change. |
 | `ReviveHero`, `ReviveHeroLoc` | works | Fire no revive events; refused when the food cap would be exceeded. |

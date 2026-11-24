@@ -85,9 +85,12 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `GetRevivingUnit`, `GetRevivableUnit` | partial | In revive START and FINISH, `GetRevivingUnit` is the hero and `GetRevivableUnit` is nil (measured). Trigger unit/widget = hero, trigger player = owner. |
 | `GetSummonedUnit`, `GetSummoningUnit`, and trigger unit/widget in `EVENT_UNIT_SUMMON` | bugfix | Unit form: trigger unit and widget are the caster, as measured; trigger player is the summoned unit's owner. The player form returns the summoned unit. |
 | `GetSummonedUnit` in `EVENT_UNIT_SUMMON` | deliberate | Reforged returns an empty handle here, as measured; WarMash returns the real summoned unit. |
-| `SelectHeroSkill` on abilities without a registered ability type | gap | Learns nothing and fires no event (for example `AHre`). |
+| `SelectHeroSkill` on abilities without a registered ability type | gap | Learns nothing and fires no event. |
 | `SelectHeroSkill` and the learn button for Divine Shield `AHds` | bugfix | Now learns it and fires the skill events; before, nothing was learned. |
 | `SelectHeroSkill` and the learn button for Holy Light `AHhb` | bugfix | Now learns it and fires the skill events; before, nothing was learned. |
+| `SelectHeroSkill` and the learn button for Resurrection `AHre` | bugfix | Now learns it and fires the skill events; before, nothing was learned. |
+| Resurrection `AHre` cast | unverified | Raises friendly bone-phase corpses in Area, up to DataA, in map-scan order; a cast with no corpse still spends mana and cooldown. |
+| Resurrection `AHre` corpse and mana rules | unverified | Hero corpses and corpses in the first 5 s flesh phase are not raised; the revived unit keeps its death-time mana. |
 | Divine Shield `AHds` cast (`divineshield` 852090, `undivineshield` 852091) | unverified | Caster invulnerable for HeroDur; early end only if Can Deactivate (DataA) is 1, never in stock data; script invulnerable flag unaffected both ways. |
 | Holy Light `AHhb` cast (order `holybolt`, 852092) | unverified | Heals a living friendly non-mechanical non-self unit below max life, hurts enemy undead for half; self, full-health refusal, damage type and spell shield unconfirmed. |
 | `GetConstructingStructure`, `GetCancelledStructure` | unverified | START and CANCEL only: the structure. Trigger unit and widget = the structure, trigger player = its owner. A handler that removes or kills the structure is refunded once; Entangle START/CANCEL, unit-level CANCEL after a player handler removed the structure, and an order given to the builder in START (overridden by the build) are unconfirmed. |

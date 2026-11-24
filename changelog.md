@@ -31,6 +31,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 - `EVENT_PLAYER_UNIT_SUMMON` and `EVENT_UNIT_SUMMON` fire with new natives `GetSummonedUnit`, `GetSummoningUnit`, only for Figurine, Phoenix, Grizzly, Hawk…
 - `EVENT_PLAYER_UNIT_HERO_SKILL` and `EVENT_UNIT_HERO_SKILL` fire on every hero skill learn…
 - Divine Shield (`AHds`) casts via order `divineshield` (852090): the caster is invulnerable for HeroDur (15/25/35 s stock), mana Cost, cooldown Cool
+- Resurrection (`AHre`) casts: raises friendly bone-phase corpses within Area, up to DataA, in map-scan order
 - Holy Light (`AHhb`) casts via order `holybolt` (852092): heals a living friendly non-mechanical non-self unit below max life for 200/400/600, damages an enemy…
 - Rect natives `WmsCreateRectCentered`, `WmsSetRectCentered`, `WmsGetRectWidth`, `WmsGetRectHeight`, `WmsIsPointInRect`, `WmsIsUnitInRect`… (2026-11-23)
 - Facing angle natives (WarMash-only) `WmsGetUnitFacingDiffToUnit` and `WmsGetUnitFacingDiffToPoint`: signed degrees from the unit's facing to a target or point… (2026-11-24)
@@ -162,6 +163,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Resurrection (`AHre`) can now be learned via `SelectHeroSkill` and the hero learn button (it stayed at level 0), 2026-11-24 (uncommitted)
+- `ResurrectUnit` and Resurrection give back the food and tech count death released once, by the stored amounts, never onto a unit killed again during the revive…
 - Divine Shield (`AHds`) can now be learned via `SelectHeroSkill` and the hero learn button (it stayed at level 0), 2026-11-24 (uncommitted)
 - An ability-builder INVULNERABLE state-mod buff ending no longer clears `SetUnitInvulnerable(true)`, and `SetUnitInvulnerable(false)` no longer ends an active…
 - Holy Light (`AHhb`) can now be learned via `SelectHeroSkill` and the hero learn button (it stayed at level 0), 2026-11-24 (uncommitted)
