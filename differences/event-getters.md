@@ -26,7 +26,7 @@ A missing getter fails at the call with an "had no native implementation" log li
 | Hero skill: `EVENT_PLAYER_UNIT_HERO_SKILL`, `EVENT_UNIT_HERO_SKILL` | works | Fire on every skill learn (`SelectHeroSkill`, learn button), not on `UnitAddAbility` or `SetUnitAbilityLevel`. Player event first (inferred). |
 | Hero revive: `EVENT_PLAYER_HERO_REVIVABLE` | partial | Fires with `GetTriggerUnit`, `GetTriggerPlayer` (owner) and `GetTriggerWidget` (hero). |
 | Hero revive: `EVENT_PLAYER_UNIT_HERO_REVIVE_START`, `_CANCEL`, `_FINISH` and `EVENT_UNIT_HERO_REVIVE_*` | works | `ReviveHero`/`ReviveHeroLoc`: START then FINISH (START skipped if the hero is already in an altar queue; a failed revive fires nothing; no CANCEL). Altar: START at queue, CANCEL on cancel (timing inferred), FINISH at completion. Player event first. |
-| Summon: `EVENT_PLAYER_UNIT_SUMMON`, `EVENT_UNIT_SUMMON` | partial | Only for Figurine, Phoenix, Grizzly, Hawk, Quilbeast, Feral Spirit, Force of Nature, Factory, Pocket Factory; player event (summoned unit's owner) first. |
+| Summon: `EVENT_PLAYER_UNIT_SUMMON`, `EVENT_UNIT_SUMMON` | partial | Fire for the engine summon abilities (Figurine, Phoenix, Grizzly, Hawk, Quilbeast, Feral Spirit, Force of Nature, Factory, Pocket Factory, Water Elemental, Raise Dead) and JSON summons that opt in; player event first. Script `CreateUnit` fires nothing, as in Reforged. |
 | Construction start and cancel: `EVENT_PLAYER_UNIT_CONSTRUCT_START`, `_CANCEL`, `EVENT_UNIT_CONSTRUCT_CANCEL` | unverified | START fires on placement (human, orc, undead, night elf builds, non-instant Entangled Gold Mine); CANCEL only on the cancel order, not on death or upgrade cancel. Player event first. `EVENT_UNIT_CONSTRUCT_START` does not exist in `common.j`. |
 | Construction and training: `*_CONSTRUCT_FINISH`, `*_TRAIN_FINISH`, `*_RESEARCH_FINISH` | works | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearched`, `GetResearchingUnit`. |
 | Train and research start and cancel: `*_TRAIN_START`, `_TRAIN_CANCEL`, `*_RESEARCH_START`, `_RESEARCH_CANCEL` | unverified | START fires when the item is queued, CANCEL on an explicit cancel. Player event first. Building death or a script tech-level change that ends a research fire no CANCEL. Moments not confirmed in Reforged. |
@@ -44,7 +44,6 @@ A missing getter fails at the call with an "had no native implementation" log li
 | Event | Status | What differs |
 |---|---|---|
 | `EVENT_UNIT_HERO_REVIVABLE` | gap | Never fires; only the player form does. |
-| Summons from JSON ability-builder abilities and script `CreateUnit`; Water Elemental summon | gap | Fire no summon event (the Water Elemental summon is not registered). |
 | `EVENT_PLAYER_UNIT_DETECTED`, `EVENT_UNIT_DETECTED`, `*_HIDDEN` | gap | Never fire; `GetDetectedUnit` and `GetEventDetectingPlayer` are missing. |
 | `EVENT_PLAYER_UNIT_RESCUED`, `EVENT_UNIT_RESCUED` | gap | Never fire; `GetRescuer` exists but returns nil. |
 | `EVENT_UNIT_ACQUIRED_TARGET`, `EVENT_UNIT_TARGET_IN_RANGE`, `TriggerRegisterUnitInRange`, `TriggerRegisterFilterUnitEvent` | gap | Never fire; the two register natives are missing and `GetEventTargetUnit` is missing. |
@@ -80,7 +79,8 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `GetLearningUnit`, `GetLearnedSkill`, `GetLearnedSkillLevel` | works | Hero skill events: hero, ability id, new level. `GetTriggerUnit` and `GetTriggerWidget` are the hero, `GetTriggerPlayer` the owner. |
 | `GetTriggerPlayer`, `GetTriggerWidget` in hero level and `EVENT_PLAYER_HERO_REVIVABLE` handlers | bugfix | Were nil; now the owner and the hero. |
 | `GetRevivingUnit`, `GetRevivableUnit` | partial | In revive START and FINISH, `GetRevivingUnit` is the hero and `GetRevivableUnit` is nil (measured). Trigger unit/widget = hero, trigger player = owner. |
-| `GetSummonedUnit`, `GetSummoningUnit` | unverified | Summon events: the new unit and the caster. Which unit the unit-form event belongs to is assumed (the summoning unit). Trigger unit/widget = summoned unit. |
+| `GetSummonedUnit`, `GetSummoningUnit`, and trigger unit/widget in `EVENT_UNIT_SUMMON` | bugfix | Unit form: trigger unit and widget are the caster, as measured; trigger player is the summoned unit's owner. The player form returns the summoned unit. |
+| `GetSummonedUnit` in `EVENT_UNIT_SUMMON` | deliberate | Reforged returns an empty handle here, as measured; WarMash returns the real summoned unit. |
 | `SelectHeroSkill` on abilities without a registered ability type | gap | Learns nothing and fires no event (for example Holy Light `AHhb`, `AHds`, `AHre`). |
 | `GetConstructingStructure`, `GetCancelledStructure` | unverified | START and CANCEL only: the structure. Trigger unit and widget = the structure, trigger player = its owner. A handler that removes or kills the structure is refunded once; Entangle START/CANCEL, unit-level CANCEL after a player handler removed the structure, and an order given to the builder in START (overridden by the build) are unconfirmed. |
 | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearchingUnit`, `GetResearched` | works | Finish events only. |

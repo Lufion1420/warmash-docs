@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Raise Dead summons now fire `EVENT_PLAYER_UNIT_SUMMON` and `EVENT_UNIT_SUMMON` once per unit
 - Camera helpers (WarMash-only): `WmsCameraFrameUnit`, `WmsCameraFollowUnit`, `WmsCameraStopFollow`, `WmsSetCameraLocked`, `WmsIsCameraLocked`, `WmsResetCamera` (2026-11-23)
 - Unit geoset visibility (WarMash-only): `WmsSetUnitGeosetVisible`, `WmsIsUnitGeosetVisible`, `WmsGetUnitGeosetCount` hide or show one part of a unit's current… (2026-11-23)
 - Circle regions (WarMash-only): `WmsCreateCircleRegion`, `WmsSetCircleRegion`, `WmsIsCircleRegion`, `WmsGetCircleRegionX`/`Y`/`Radius`… (2026-11-23)
@@ -147,6 +148,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `EVENT_UNIT_SUMMON`: `GetTriggerUnit`, `GetTriggerWidget` and `GetSummoningUnit` are the caster, as in Reforged (trigger unit was the summoned unit)
 - `GetTriggerPlayer` and `GetTriggerWidget` were nil in `EVENT_PLAYER_HERO_LEVEL`, `EVENT_UNIT_HERO_LEVEL` and `EVENT_PLAYER_HERO_REVIVABLE` handlers
 - `TriggerRegisterGameStateEvent` read the limit value from the wrong argument
 - A move, patrol, follow or hold-position order queued during a morph runs after the morph instead of the unit stopping
