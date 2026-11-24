@@ -37,7 +37,11 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | Timed buffs on a unit revived by a death-replacement ability | bugfix | Slow, Bloodlust, stun and other timed buffs are cleared at death, as measured; timed life stays. |
 | Summoned unit with Reincarnation | gap | It loses its timed life on reincarnating and never expires; Warcraft III behavior not confirmed. |
 | `RemoveUnit` on a unit in a Reincarnation delay | deliberate | The unit stays removed with no revive or death event; Reforged keeps its typed unit count, WarMash releases it. |
-| Unit read after `RemoveUnit` | gap | It still reads its old type and position; Reforged reads type 0 and position 0,0, as measured. |
+| `GetUnitTypeId`, `GetUnitX`, `GetUnitY`, `GetUnitLoc`, `GetWidgetX`, `GetWidgetY` after `RemoveUnit` | bugfix | Read 0 after the call, as measured; events fired by the removal (`SPELL_ENDCAST`) still read real values. |
+| `GetWidgetLife`, `GetUnitState` life and max life, `BlzGetUnitMaxHP` after `RemoveUnit` | unverified | Read 0; Reforged was measured only on a hero in a Reincarnation false death. |
+| `UnitAlive`, `IsUnitType` dead, owner, name, mana, facing, range natives, `GetUnitCurrentOrder` after `RemoveUnit` | gap | A unit removed mid-action still reads its old state; `UnitAlive` stays true. |
+| A unit's own actions after `RemoveUnit` | unverified | A removed unit no longer acts in that tick: no auto-acquire or order queue step. |
+| `GetWidgetX`, `GetWidgetY` with nil | deliberate | Return 0 instead of raising a script error. |
 | `RemoveUnit` called from a spell `EFFECT` condition | unverified | A Java-base spell's effect still runs; Reforged not measured. |
 | `RemoveUnit` on a dead hero, then `ReviveHero` in the same tick | deliberate | Reforged revives it, as measured; WarMash returns false and revives nothing. |
 | `RemoveUnit` on a hero that died normally | unverified | Releases its tech-tree count once (`GetPlayerTechCount`, hero training limit); before, the dead removed hero counted forever. |
@@ -132,6 +136,7 @@ Idle units walk home after a chase they started themselves. Player and script or
 | Auto-acquire target choice | unverified | Highest `prio` first, then the nearest. |
 | `GetUnitCurrentOrder` during auto-acquired attacks | unverified | Reads 0 (Hive, unmeasured), not attack. |
 | `GetUnitCurrentOrder` after a stop, or after the running ability is removed or disabled mid-cast | bugfix | Reads 0 (Hive, unmeasured); was the old order. `SPELL_ENDCAST` handlers still read the cast's order. |
+| `GetUnitCurrentOrder` after Ensnare, Polymorph, Charm or `Amov` removal stops the unit | unverified | Reads 0; was 851972. `ISSUED_ORDER` events are unchanged. |
 | `GetUnitCurrentOrder` for a move blocked by pathing or units | unverified | Keeps reading move while the unit still tries, reads 0 once it gives up (16 to 58 s); an arrived move reads 0. |
 | Chase target turns invulnerable, hidden or Locust | deliberate | The guard walks home at once. |
 | Re-acquire after a chase | works | Respects auto-attack-disabling buffs; a script order inside an autocast clears the leash. |

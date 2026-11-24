@@ -163,6 +163,11 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- After `RemoveUnit` returns, `GetUnitTypeId`, `GetUnitX`/`Y`, `GetUnitLoc` and `GetWidgetX`/`Y` read 0 (as measured) (2026-11-24)
+- After `RemoveUnit`, `GetWidgetLife`, `GetUnitState` life and max life and `BlzGetUnitMaxHP` read 0 (unverified for living units) (2026-11-24)
+- A removed unit no longer acts in the same tick (no auto-acquire or order queue step) (2026-11-24)
+- `GetUnitCurrentOrder` reads 0 after Ensnare, Polymorph, Charm or `Amov` removal stops a unit (was 851972; unverified in Warcraft III) (2026-11-24)
+- `GetWidgetX` and `GetWidgetY` return 0 for nil instead of raising an error (2026-11-24)
 - `SetUnitOwner` and Charm move the unit's food used, paid queue-front train food and food made to the new owner (2026-11-24)
 - `GetUnitFoodMade` returns the supply of constructed and upgraded buildings (was 0), and their death or `RemoveUnit` lowers the owner's food cap (2026-11-24)
 - Food checks for training, altar revive order, build, upgrade, unit sale and JSON morph or ability food cost use min(food cap, `FOOD_CAP_CEILING`) (2026-11-24)
