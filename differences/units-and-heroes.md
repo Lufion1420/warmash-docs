@@ -86,6 +86,9 @@ Details:
 | `GetUnitCurrentOrder` after `ReviveHero`, altar revive, Resurrection or Reincarnation | unverified | Reads 0; before, the order of the cast the unit died in. |
 | `ReviveHero` on a hero still in a stun state | unverified | Stunned at once (permanent stun buff or `UNIT_TYPE_STUNNED`); before, unstunned until the next stun change. |
 | `ReviveHero`, `ReviveHeroLoc` | works | Fire no revive events; refused when the food cap would be exceeded. |
+| `SetWidgetLife`, `SetUnitState(UNIT_STATE_LIFE)` in a life state-event handler during a revive | bugfix | The unit stays dead if the handler killed it inside the revive, as in Warcraft III; before, it was revived. |
+| `ReviveHero` or altar revive when a handler during the revive kills or removes the hero again | bugfix | `ReviveHero` returns false, no finish event, no rally order; the dead hero keeps no food. Reforged not measured. |
+| Altar-queued hero whose Resurrection raise ends in a Reincarnation false death | bugfix | The altar entry is cancelled and refunded. |
 | Altar revive cancel of a paid entry | unverified | The refunded food goes straight to the hero; no waiting train item takes it. |
 | Altar revive gold, lumber and time | bugfix | Capped by the `HeroMaxRevive*` gameplay constants. |
 | `UnitModifySkillPoints` | unverified | Capped at what the hero can still learn; the real native's documented bugs are not copied. |
