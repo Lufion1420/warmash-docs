@@ -182,7 +182,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 - Training and food: `*_TRAIN_START` fires when production starts with food paid (a food-blocked item waits silently), and a waiting item starts and pays inside… (2026-11-24)
 - Order `raisedead` (852197) on a unit with Raise Dead (`Arai`) is refused by every `Issue*Order*`, `IssueNeutral*Order*` and `Group*Order*` native… (2026-11-24)
 - `EVENT_PLAYER_UNIT_DECAY` and `EVENT_UNIT_DECAY` fire only for raisable and decaying corpses (death type 3), as in Reforged (2026-11-24)
-- Known gap: Animate Dead (`AUan`, `AIan`, creep Animate Dead) has no implementation yet (2026-11-24)
+- Animate Dead (`AUan`, `AIan`, creep Animate Dead) works: it revives the 6 nearest raisable corpses at full life for the caster's owner as timed summons…
 - Training: `*_TRAIN_FINISH` handlers run before the rally order is issued to the trained unit, then the next queue item starts (as measured in Reforged) (2026-11-24)
 - `PanCameraToWithZ` and `PanCameraToTimedWithZ` treat z as an absolute target height floored at the ground (as measured in Reforged), not an added offset (2026-11-24)
 - `TriggerRegisterUnitStateEvent` and `GetEventUnitState` now work (were a stub): edge-triggered like WC3, measured for life (2026-11-24)

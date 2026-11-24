@@ -127,7 +127,9 @@ Details:
 
 | Native | Status | What differs |
 |---|---|---|
-| Animate Dead (`AUan`, `AIan`, creep Animate Dead) | gap | Not implemented; casting does nothing. The `animatedead` order still works as a Channel base order. |
+| Animate Dead (`AUan`, `AIan`, `ACad`) | works | Raises the 6 nearest raisable corpses as timed summons of the caster's owner; refused without mana or cooldown cost when none is in range. |
+| Animate Dead details | unverified | Corpse choice, hero and building refusal, exploding on death, no food charge and ignored Inherit Upgrades are not confirmed in Reforged. |
+| Animate Dead takeover | deliberate | No `EVENT_UNIT_CHANGE_OWNER` or `EVENT_PLAYER_UNIT_CHANGE_OWNER` fires when the corpse changes owner; only SUMMON events fire. |
 | Storm Bolt (`AHtb`), Attribute Bonus (`Aamk`) | works | A missile with speed 0 or no art arrives at once. |
 | Cripple (`Acri`), Drunken Haze (`ANdh`) | works | Implemented; Drunken Haze `Nsi1` is a bit mask (1 melee, 2 ranged, 4 special, 8 spells). |
 | Drunken Haze overlapping | gap | Two from the same caster: the disarm ends when the first expires. |
