@@ -42,6 +42,7 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `RemoveUnit` on a dead hero, then `ReviveHero` in the same tick | deliberate | Reforged revives it, as measured; WarMash returns false and revives nothing. |
 | `RemoveUnit` on a hero that died normally | unverified | Releases its tech-tree count once (`GetPlayerTechCount`, hero training limit); before, the dead removed hero counted forever. |
 | `RemoveUnit` on a unit that is already removed or whose corpse has decayed | unverified | Does nothing more: the tech-tree count is released once, and no second removal is logged. |
+| `RemoveUnit` on a live haunted or entangled gold mine | bugfix | The parent mine is restored at the next unit-add step, so `IsUnitHidden(parent)` is still true inside the same trigger; Reforged not measured. |
 | `RemoveUnit` on a hero queued at an altar | unverified | The queue entry is cancelled and gold, lumber and food are refunded to the altar owner. |
 | `BlzSetUnitMaxMana` with 0 or less | unverified | Max mana is clamped to at least 0. |
 | `BlzSetUnitRealField` | partial | Sight radius, HP and mana regeneration, acquisition range, turn rate, cast point and cast backswing work; other fields return false. |

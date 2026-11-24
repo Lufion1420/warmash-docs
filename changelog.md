@@ -159,6 +159,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `RemoveUnit` on a live haunted or entangled gold mine restores the parent mine (before it stayed hidden and paused, and Entangle stayed disabled) (2026-11-24)
 - Training and food: `*_TRAIN_START` fires when production starts with food paid (a food-blocked item waits silently), and a waiting item starts and pays inside… (2026-11-24)
 - Order `raisedead` (852197) on a unit with Raise Dead (`Arai`) is refused by every `Issue*Order*`, `IssueNeutral*Order*` and `Group*Order*` native… (2026-11-24)
 - `EVENT_PLAYER_UNIT_DECAY` and `EVENT_UNIT_DECAY` fire only for raisable and decaying corpses (death type 3), as in Reforged (2026-11-24)
