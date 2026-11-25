@@ -18,6 +18,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 - Model effect sidecar: view-angle falloff (a `falloff` texture plus the `falloff` field and track, 0 to 1) now fades alpha by how directly a surface faces the… (2026-11-25)
 - Model effect sidecar: `vertexColor` is now drawn, multiplying colour and alpha per vertex (alpha also counts in the alpha test) (2026-11-25)
 - Model effect sidecar: a second texture (`color1`) is now drawn in the same pass, with four `combine` modes, `weight0`/`weight1` and its own UV offset/scale (2026-11-25)
+- Model effect sidecar: `ribbons` entries now work, with `uvScroll` (texture scrolling) and `ageColor` (colour and alpha over segment age) (2026-11-25)
 - `TerrainDeformCrater`, `TerrainDeformRipple`, `TerrainDeformWave`, `TerrainDeformRandom`, `TerrainDeformStop` and `TerrainDeformStopAll` are registered as… (2026-11-24)
 - `SetCameraOrientController` is registered as a no-op stub (2026-11-24)
 - Quest log suppression (WarMash-only): `WmsSetQuestLogHidden(player, hidden)` and `WmsIsQuestLogHidden(player)` (2026-11-24)

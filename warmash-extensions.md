@@ -255,7 +255,7 @@ Fields that work today, per entry in `surfaces`:
 | `tracks.uv0Offset` | Moves the texture: `uv * scale + offset`. |
 | `tracks.uv0Scale` | Scales U and V separately from UV (0, 0); zero and negative values work. |
 
-Parsed but ignored for now: `normal` textures, `softDistance`, `ribbons` and their tracks, and the `glare` and `distortion` tracks. A surface with `pass` `distortion` is skipped entirely.
+Parsed but ignored for now: `normal` textures, `softDistance`, ribbon tracks, and the `glare` and `distortion` tracks. A surface with `pass` `distortion` is skipped entirely.
 
 Details:
 - Tracks are `{"interp": "linear" or "step", "keys": [[ms, value...], ...]}`; `ms` is MDX time, ascending. Default `linear`.
@@ -299,6 +299,25 @@ A is the `color0` (or MDX) sample, B the `color1` sample, r1 is `weight0`, r2 is
 - Use straight (not premultiplied) alpha, and a unique base name.
 - On additive layers using `combine` or `alphaRef`, also override `color0` with a straight-alpha texture.
 - Without OpenGL 3 sampler objects, or if the shaders fail to compile: one log line, no `color1`.
+
+### Ribbons (`ribbons`)
+
+Each entry in the root `ribbons` list changes one ribbon emitter. Since 2026-11-25.
+
+| Key | Effect |
+|---|---|
+| `ribbon` | Required: index in the MDX ribbon emitter list. |
+| `uvScroll` | `[u, v]` in texture units per second; positive `u` moves the texture toward the head. |
+| `ageColor` | Stops `[age, r, g, b, a]` multiplying the ribbon's MDX colour and alpha per segment. |
+
+- `uvScroll` needs rows = columns = 1 and the layer texture's wrap flag on each scrolled axis.
+- The scroll runs on each model instance's animation clock: it continues on a held last frame and stops at time scale 0.
+- `age` runs from 0 (newest) to 1 (oldest); list stops in ascending order. Values blend linearly.
+- Outside the stops the first or last value holds; equal ages make a step, and the later stop wins.
+- Colour and alpha components are clamped to 0..1.
+- A bad or duplicate `ribbon` index drops the entry; bad, empty or unsorted stops drop only `ageColor`.
+- An unusable `uvScroll` or a dropped entry or field logs one line.
+- Ribbons ignore `surfaces`. A ribbon without an entry draws as before.
 
 ```json
 { "version": 1, "surfaces": [ {

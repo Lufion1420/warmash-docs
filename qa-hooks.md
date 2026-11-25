@@ -137,5 +137,5 @@ Runs with `-qamem`, `-qadsverify` or `-qablpverify` are slow: never use them for
 | `-qablpverify` | Checks every BLP decode against the old decoder. |
 | `-qadsverify` | Checks every folder file lookup against the disk. |
 | `-qauitexturekeys` | Lists UI texture cache keys in the exit record. |
-| `WarMashQaBatchCompare(tag[, points[, files[, "cache"]]])` | Compares a frame drawn with emitter merging or GL caching on and off. |
+| `WarMashQaBatchCompare(tag[, points[, files[, mode]]])` | Compares a frame with emitter merging on and off; `mode` `"cache"` or `"ribbonscroll"` switches that instead. |
 | `-Dwarmash.qa.portraitInPass=true` | JVM switch for portrait drawing checks. |
