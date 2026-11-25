@@ -124,6 +124,8 @@ Runs with `-qamem`, `-qadsverify` or `-qablpverify` are slow: never use them for
 | `WarMashQaEffectInfo(effect)` | Script and render state of an effect (JSON). |
 | `WarMashQaEffectScan(text)`, `WarMashQaEffectWatch(text, frames)` | Logs live effects whose model path contains the text. |
 | `WarMashQaModelInfo(path)`, `WarMashQaEffectCandidates()` | Model contents and preload candidates (JSON). |
+| `WarMashQaWmfxInfo(pathSuffix)` | Load counts of a `.wmfx.json` sidecar (JSON); `{}` if none was read. |
+| `WarMashQaResult(key)` | A stored QA result, such as a pixel-read value, as text; nil if not set. |
 | `-qaperf`, `WarMashQaPerfBegin`, `WarMashQaPerfEnd`, `WarMashQaPerfFrames`, `WarMashQaPerfSnapshot` | Frame profiler and measuring windows. |
 | `-qanovsync` | Turns vsync and the 60 fps cap off. |
 | `-qanoloadcost` | Turns load-cost tracking off. |

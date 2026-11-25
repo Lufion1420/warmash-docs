@@ -181,6 +181,49 @@ TriggerAddAction(t, function() print(GetTriggerUnit(), WmsGetCombatSourceUnit())
 
 `Stability` is `experimental` (may change without notice) or `stable`.
 
+## Model effect sidecar (`.wmfx.json`)
+
+An optional JSON file that changes how WarMash draws parts of a model. Warcraft III does not support it and shows the plain MDX model (not checked in game). Since 2026-11-25, experimental.
+
+| Topic | Rule |
+|---|---|
+| File name | `Name.wmfx.json` beside `Name.mdx`; import both into the same folder. |
+| Models | MDX version 800 only. |
+| Required | Root `version` = 1; per surface `geoset`, `layer` (inside its material) and `vertexCount` (must match). |
+| Texture names | Give each sidecar texture a base name no other map image has, such as suffix `_sa`. |
+| Errors | The model still loads; the bad file, surface or field is skipped and logged with `[wmfx]`. |
+| World Editor, HiveWE | Whether they keep the imported file is not confirmed. |
+
+Fields that work today, per entry in `surfaces`:
+
+| Field | Effect (a missing field keeps the MDX value) |
+|---|---|
+| `hideOtherLayers` | Draws no other layer of this geoset's material, on this geoset only. |
+| `twoSided`, `depthTest`, `depthWrite`, `unshaded`, `unfogged` | Booleans that override the layer flags. |
+| `textures` with `role` `color0` | Replaces the layer texture; takes `path`, `uvSet` (default 0), `wrapU`, `wrapV`. |
+| `tracks.opacity` | Replaces the layer alpha; 0 to 1. |
+| `tracks.color` | RGB multiplier, 0 or more; values above 1 brighten. |
+| `tracks.uv0Offset` | Moves the texture: `uv * scale + offset`. |
+| `tracks.uv0Scale` | Scales from UV (0, 0); U and V must be equal, non-zero and one sign in every key. |
+
+Parsed but ignored for now: `falloff`, `alphaRef`, `vertexColor`, `color1`, `falloff` and `normal` textures, `combine`, `weight0`, `weight1`, `softDistance`, `ribbons`, their tracks, and `glare`, `distortion`. A surface with `pass` `distortion` is skipped entirely.
+
+Details:
+- Tracks are `{"interp": "linear" or "step", "keys": [[ms, value...], ...]}`; `ms` is MDX time, ascending. Default `linear`.
+- Only keys inside the playing sequence count; the first and last of them are held. Without any, the MDX value applies.
+- While a `uv0Offset` or `uv0Scale` track applies, the layer's MDX texture animation is off. An invalid `uv0Scale` track is ignored.
+- `color0` also overrides texture flipbooks, replaceable textures (team colour) and texture swaps on that layer.
+- Paths must end in `.blp`, `.tga` or `.dds`. Among map files of one base name, `.blp` wins over `.tga`, then `.dds`.
+- A missing or broken `color0` file leaves the MDX texture; a broken `.blp` may draw empty instead. Extra loader log lines can appear.
+
+```json
+{ "version": 1, "surfaces": [ {
+  "geoset": 0, "layer": 0, "vertexCount": 4, "depthWrite": false,
+  "textures": [ { "role": "color0", "path": "war3mapImported\\ring_sa.tga" } ],
+  "tracks": { "opacity": { "keys": [[0, 1], [1000, 0]] } }
+} ] }
+```
+
 ## Planned
 
 No further native is designed yet.

@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Model effect sidecar `Name.wmfx.json` (WarMash-only) beside an MDX v800 model: hides other layers, overrides draw flags and the colour texture, and animates… (2026-11-25)
 - `TerrainDeformCrater`, `TerrainDeformRipple`, `TerrainDeformWave`, `TerrainDeformRandom`, `TerrainDeformStop` and `TerrainDeformStopAll` are registered as… (2026-11-24)
 - `SetCameraOrientController` is registered as a no-op stub (2026-11-24)
 - Quest log suppression (WarMash-only): `WmsSetQuestLogHidden(player, hidden)` and `WmsIsQuestLogHidden(player)` (2026-11-24)
