@@ -16,6 +16,7 @@ parent: Differences from Warcraft III
 | `CAMERA_FIELD_ROLL` and the local pitch, yaw and roll fields | stored-only | The view does not change. |
 | `GetCameraField` | unverified | Radians for angles. |
 | `GetCameraEyePositionX/Y/Z/Loc`, `GetCameraTargetPositionX/Y/Z/Loc` | unverified | Implemented. |
+| Camera target height over terrain, `GetCameraTargetPositionZ` | bugfix | Follows smoothed terrain including cliffs, ignoring water and deformations; the exact smoothing is unverified. |
 | `SetCameraPosition` | bugfix | Cancels a running pan. |
 | `CAMERA_FIELD_ZOFFSET` | deliberate | Replaces the preset height until the camera is reset. |
 | Mouse wheel zoom | deliberate | Changes only the distance (WC3 steps presets and changes the angle); zoom-out limit is the larger of the largest preset and 5000, and a script distance widens it. |
@@ -23,11 +24,12 @@ parent: Differences from Warcraft III
 | Wheel and script camera fields | deliberate | The wheel keeps script angle, rotation, field of view and far plane; Insert and Delete presets still use their own far plane. |
 | `CAMERA_FIELD_FARZ` | deliberate | The far plane is raised when the view needs more, so zooming out no longer cuts the ground to black; larger values apply, `GetCameraField` returns the set value. |
 | `CameraSetupApplyForceDurationWithZ` | works | Height changes linearly over the duration; a camera move, scroll or plain z set cancels it and keeps the height reached. |
-| `PanCameraToWithZ`, `PanCameraToTimedWithZ` | bugfix | Z is an absolute target height floored at the ground, advancing only while xy moves; the floor is the raw height map (WC3 smooths it). Was additive. |
+| `PanCameraToWithZ`, `PanCameraToTimedWithZ` | bugfix | Z is an absolute target height floored at the ground, advancing only while xy moves; the floor is the smoothed camera ground. Was additive. |
 | `PanCameraToWithZ` height after the pan | unverified | Persists until `ResetToGameCamera`, `CAMERA_FIELD_ZOFFSET` or a `CameraSetupApply*WithZ`; WC3 not confirmed. |
 | `ResetToGameCamera(d)` | bugfix | Z offset and target height return to default linearly over d; a timed pan stops; the additive z offset is cleared too. |
 | `PanCameraTo`, timed `CameraSetupApply` pan | bugfix | Pan at 3000 units/s (measured for `PanCameraTo` only; the `CameraSetupApply` speed is unverified). |
 | `SetCameraTargetController` with inherit orientation | bugfix | The camera sits behind the unit and turns with its facing (the angle was converted wrongly). |
+| Camera height around `WmsCameraFollowUnit` | deliberate | Exact ground while following, then eases over 0.5 s; instant camera jumps snap. |
 | `CameraSetSourceNoise`, `CameraSetTargetNoise` and their Ex forms | bugfix | A sinusoidal sway (shape inferred). |
 | Camera bounds | unverified | The target is clamped every frame, as in a Reforged run. |
 | `BlzCameraSetupApplyForceDurationSmooth`, `BlzCameraSetupGet/SetCameraType`, `BlzCameraSetupGet/SetLabel`, `BlzGet/SetCameraAllowsHotkeyTargetLock`, `CameraSetDepthOfFieldScale`, `CameraSetFocalDistance`, `CameraSetSmoothingFactor`, `Get/SetCameraFieldControlledByInput`, `SetCameraQuickPosition`, `SetCameraRotateMode`, `SetCinematicCamera`, `StopCamera` | gap | Not implemented (16 natives). |

@@ -112,6 +112,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- Order 851976 on a hero altar cancels the last queue slot instead of the front (unmeasured for altars) (2026-11-25)
+- After `WmsCameraFollowUnit` ends, the camera height eases over 0.5 s to the smoothed ground (2026-11-25)
 - Stat buffs sharing a stacking key now count the strongest bonus plus the strongest penalty (before: the highest value, so the weaker penalty won) (2026-11-25)
 - The Ensnare net now flies and the buff lands on impact (2026-11-25)
 - A polymorphed unit moves at the sheep speed and `GetUnitMoveSpeed` reads it (2026-11-24)
@@ -165,6 +167,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- The camera height follows smoothed terrain including cliffs and ignores water and deformations, as in Warcraft III (2026-11-25)
 - Thunder Clap (`AHtc`) now works (before, it did nothing) (2026-11-25)
 - A netted flyer reads its pre-net fly height (was 0), and removing a script-added snare restores the pre-snare height (2026-11-25)
 - A unit whose collision size grows mid-walk re-fits its path instead of getting stuck (2026-11-25)

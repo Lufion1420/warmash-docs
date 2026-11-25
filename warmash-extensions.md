@@ -136,6 +136,7 @@ Details for camera helpers:
 - Angle offset is in degrees: 0 puts the eye in front of the unit looking at its face, 180 behind it. Height is the eye height above the target; distance is the 3D eye-to-target distance.
 - Null or non-finite arguments do nothing. Only the local player's camera is moved; for another player the call does nothing.
 - Follow reads the drawn unit and snaps on its first frame (no easing); it keeps following when the unit's drawn model is replaced. It ends on unit removal or decay, `WmsCameraStopFollow`, `WmsResetCamera` or `SetCameraTargetController(unit)`.
+- Height uses the exact ground while following, then eases over 0.5 s to the smoothed ground; instant camera jumps snap.
 - While following, player input cannot change the framing, and script position or pan calls are overridden each frame.
 - The lock blocks edge scroll, arrow keys, Insert and Delete, the wheel, minimap click and drag, middle-mouse drag, the hero-centre hotkey and holding the portrait. Script camera calls still work. The flag is kept per player.
 

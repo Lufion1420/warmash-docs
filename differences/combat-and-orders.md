@@ -24,7 +24,8 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | `IssuePointOrder` | unverified | Same as `IssuePointOrderById`; a nil order string returns false. |
 | `IssueImmediateOrder`, `IssueImmediateOrderById` with "stop" | bugfix | Returns true. |
 | `IssueImmediateOrder`, `IssueImmediateOrderById` train order behind a running item while food is full | bugfix | Returns true and charges gold, as measured; a food-short front order still returns false with no gold and no event. |
-| `IssueImmediateOrderById(building, 851976)` cancel | bugfix | Cancels the last queue slot, as measured (was the front). Altar revive cancel still takes the front (unmeasured). |
+| `IssueImmediateOrderById(building, 851976)` cancel | bugfix | Cancels the last queue slot, as measured (was the front). |
+| `IssueImmediateOrderById(altar, 851976)` cancel | deliberate | Cancels the last revive queue slot (was the front); not measured for altars. |
 | Cancel event versus refund | bugfix | `TRAIN_CANCEL` fires before the refund, as measured; `RESEARCH_CANCEL` too, and food returns afterwards (unverified). |
 | Cancel handler that kills or cancels the building | bugfix | No double refund and no error. |
 | `IssueImmediateOrder(ById)` 851978 on an upgrading building | bugfix | Cancels the upgrade, as measured; also cancels a construction (unverified). 851976 still works. |
