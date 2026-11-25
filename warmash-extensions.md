@@ -70,6 +70,8 @@ end
 | `WmsResetCamera` | `(player)` | Restores the map's default camera setup and ends a follow or timed pan; the target does not move. | 2026-11-23 | experimental |
 | `WmsSetQuestLogHidden` | `(player, boolean)` | Hides the Quests button for that player; F9 and clicks open nothing and an open dialog closes. | 2026-11-24 | experimental |
 | `WmsIsQuestLogHidden` | `(player) -> boolean` | The flag kept for that player; false for null or never set. | 2026-11-24 | experimental |
+| `WmsSetDestructableTypeOpensPathing` | `(integer destructableId, boolean flag)` | Lets a walkable destructable type open blocked terrain under its bridges; per game, default off. | 2026-11-25 | experimental |
+| `WmsIsDestructableTypeOpensPathing` | `(integer destructableId) -> boolean` | The type's opt-in flag; false for unknown or non-walkable types. | 2026-11-25 | experimental |
 
 Details for ability interval events:
 - Passive abilities only (built-in passives, auras, ability-builder passives). Handlers use `GetTriggerUnit`, `GetTriggerPlayer`, `WmsGetEventAbilityId`, `WmsGetEventAbility`.
@@ -87,6 +89,21 @@ Details for the quest log:
 - The flag is stored for every player; only the local player's HUD changes. `FlashQuestDialogButton` and `ForceQuestDialogUpdate` do not open the dialog while hidden. Null player: no-op.
 - Un-hiding shows the button again in its `QuestSetEnabled` state. If the map hid the button with `BlzFrameSetVisible`, un-hiding shows it anyway.
 - `BlzFrameSetVisible(button, true)` while hidden shows the button, but it stays unclickable.
+
+Details for terrain opening:
+- Applies at once to existing destructables of the type (pre-placed or script-created) and to later ones. `false` closes the cells again.
+- Cells under non-black pixels of the alive pathing texture become walkable, swimmable, buildable and flyable. Rails and other overlays then block on top.
+- Open only while alive and shown: kill, hide and remove close; revive and show reopen. Overlapping bridges keep a cell open while any covers it.
+- Never opens cells outside the playable area or boundary cells. Units on closing cells stay alive and in place; a later move order walks them off.
+- Non-walkable type: no effect, one warning per type. Unknown id: no effect, a warning on every call.
+- Tree-bridge types with swapped textures never become walkable over water.
+- For one tick after `RemoveDestructable`, the removed bridge's destroyed-state blocking still applies.
+
+```lua
+local bridgeId = FourCC('B000') -- your walkable destructable type
+WmsSetDestructableTypeOpensPathing(bridgeId, true)
+print(WmsIsDestructableTypeOpensPathing(bridgeId)) --> true
+```
 
 Details for facing:
 - Cone: true when `|delta| <= cone/2` (inclusive); `cone >= 360` is always true, a negative cone false. Angles: 0 = east, 90 = north.

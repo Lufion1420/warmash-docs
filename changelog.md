@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Walkable bridges can open blocked terrain (WarMash-only): `WmsSetDestructableTypeOpensPathing(destructableId, flag)` and `WmsIsDestructableTypeOpensPathing` (2026-11-25)
 - Model effect sidecar `Name.wmfx.json` (WarMash-only) beside an MDX v800 model: hides other layers, overrides draw flags and the colour texture, and animates… (2026-11-25)
 - Model effect sidecar: `alphaRef` (field and track, 0 to 1) now discards pixels by colour texture alpha, before any fading, replacing the model's fixed cutoffs (2026-11-25)
 - Model effect sidecar: view-angle falloff (a `falloff` texture plus the `falloff` field and track, 0 to 1) now fades alpha by how directly a surface faces the… (2026-11-25)
