@@ -202,26 +202,32 @@ Fields that work today, per entry in `surfaces`:
 | `hideOtherLayers` | Draws no other layer of this geoset's material, on this geoset only. |
 | `twoSided`, `depthTest`, `depthWrite`, `unshaded`, `unfogged` | Booleans that override the layer flags. |
 | `textures` with `role` `color0` | Replaces the layer texture; takes `path`, `uvSet` (default 0), `wrapU`, `wrapV`. |
-| `alphaRef`, `tracks.alphaRef` | Discards pixels with color texture alpha at or below it; 0 to 1; the track wins. |
+| `alphaRef`, `tracks.alphaRef` | Discards pixels whose tested alpha is at or below it; 0 to 1; the track wins. |
 | `textures` with `role` `falloff` | View-angle ramp (`path` only); its green channel multiplies alpha, RGB is untouched. |
 | `falloff`, `tracks.falloff` | Picks the ramp row; 0 (default, top) to 1; the track wins. |
+| `vertexColor` | Per-vertex RGBA, integers 0 to 255 (255 = 1.0), multiplying colour and alpha. |
+| `positionCrc32` | Optional check that `vertexColor` matches the geoset's vertex positions. |
 | `tracks.opacity` | Replaces the layer alpha; 0 to 1. |
 | `tracks.color` | RGB multiplier, 0 or more; values above 1 brighten. |
 | `tracks.uv0Offset` | Moves the texture: `uv * scale + offset`. |
 | `tracks.uv0Scale` | Scales U and V separately from UV (0, 0); zero and negative values work. |
 
-Parsed but ignored for now: `vertexColor`, `color1` and `normal` textures, `combine`, `weight0`, `weight1`, `softDistance`, `ribbons`, their tracks, and `glare`, `distortion`. A surface with `pass` `distortion` is skipped entirely.
+Parsed but ignored for now: `color1` and `normal` textures, `combine`, `weight0`, `weight1`, `softDistance`, `ribbons`, their tracks, and `glare`, `distortion`. A surface with `pass` `distortion` is skipped entirely.
 
 Details:
 - Tracks are `{"interp": "linear" or "step", "keys": [[ms, value...], ...]}`; `ms` is MDX time, ascending. Default `linear`.
 - Only keys inside the playing sequence count; the first and last of them are held. Without any, the MDX value applies.
 - `alphaRef` is tested before opacity, geoset and effect alpha, so fading keeps the shape. It replaces the model's fixed cutoffs; 0 discards nothing.
-- Without an `alphaRef` field and a key in the playing sequence, the model's fixed cutoffs apply.
+- The tested alpha is color texture alpha x falloff x vertex alpha; shadows leave out falloff.
+- Without an `alphaRef` field and a key in the playing sequence, the model's fixed cutoffs apply and see vertex alpha.
 - Falloff ramp columns: left is a surface seen edge-on, right faces the camera, measured against the camera view axis.
 - Falloff applies before `alphaRef` and the fixed cutoffs, not to shadows; the ramp is always clamped (`uvSet`, wrap ignored).
 - A `falloff` field or track without a falloff texture does nothing; a missing or undecodable one is dropped with one log line.
 - Falloff needs real surface normals in the MDX; non-uniform bone scale is handled.
 - While a `uv0Offset` or `uv0Scale` track applies, the layer's MDX texture animation is off.
+- `vertexColor` holds 4 x `vertexCount` values in final MDX vertex order, per surface (one geoset and layer).
+- `positionCrc32` is the CRC-32 of the MDX vertex positions as stored (x, y, z floats). Without it only `vertexCount` is checked.
+- A wrong length, bad value or CRC mismatch skips `vertexColor` with one log line; the rest of the surface applies.
 - A key exactly at a sequence's end is never shown in normal playback, for any model. End at least 33 ms after the last key.
 - `color0` also overrides texture flipbooks, replaceable textures (team colour) and texture swaps on that layer.
 - Paths must end in `.blp`, `.tga` or `.dds`. Among map files with the same path without extension, `.blp` wins over `.tga`, then `.dds`.
