@@ -58,7 +58,7 @@ Effects attached to a unit ignore position, orientation and alpha. Images are no
 | One-shot engine art off-screen | bugfix | Finishes and leaves. |
 | `BlzPlaySpecialEffect` with a type other than STAND or WALK | deliberate | Plays once, then Stand. |
 | `BlzSetSpecialEffectTimeScale(e, 0)` with `BlzSetSpecialEffectTime` | bugfix | The set frame is held. |
-| `AddSpecialEffect` with an empty model path | bugfix | Returns an invisible handle instead of nil. |
+| `AddSpecialEffect`, `AddSpecialEffectLoc` with an empty model path | bugfix | Returns an invisible handle instead of nil, placed on ground or walkable surface. |
 | `CreateImage` family | stored-only | State is kept; nothing is drawn. |
 | `TerrainDeformCrater`, `TerrainDeformRipple`, `TerrainDeformWave`, `TerrainDeformRandom`, `TerrainDeformStop`, `TerrainDeformStopAll` | stub | Do nothing; the four creators return a null handle, so the terrain never deforms. |
 

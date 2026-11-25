@@ -56,20 +56,26 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 
 ### Walkable surfaces
 
-Custom bridges and platforms (walkable destructables) raise units, but several terrain reads and edge cases ignore them.
+Custom bridges and platforms (walkable destructables) raise units and `GetLocationZ`; some terrain reads still ignore them.
 
 | Native | Status | What differs |
 |---|---|---|
-| `GetLocationZ` | gap | Terrain only, without water or walkables, and a nil location errors; documented Warcraft III returns the surface height. |
+| `GetLocationZ` | bugfix | Returns ground or walkable surface height, whichever is higher; a nil location returns 0. |
+| `GetLocationZ` over water | unverified | Water height is not counted; documented Warcraft III includes it. |
+| `CreateDestructable` without a height | bugfix | Takes the walkable surface height, even if the bridge was never drawn. |
 | `GetTerrainCliffLevel` | gap | Terrain level only; documented Warcraft III adds a walkable destructable's cliff height. |
 | `SetTextTagPos` | gap | Height starts at the terrain; documented Warcraft III also includes walkable surfaces. |
 | `BlzGetUnitZ`, `BlzGetLocalUnitZ` | gap | Not implemented; documented Warcraft III (1.30+) returns surface height plus the unit's occluder height. |
 | Walkable destructable pathing | unverified | Only adds blocking: water and gaps are crossable only where the map's own pathing is open. |
-| Walkable destructable scaled above 1 | unverified | The outer part of the scaled model gives no height. |
-| Walkable destructable the camera has not drawn | unverified | Gives no height until drawn, so units and effects there stay low. |
-| Walkable model with several walk surfaces | unverified | The first selectable, visible part hit sets the height, not the highest one. |
-| Script-created walkable destructable | unverified | Can be drawn black. |
-| Preplaced destroyed destructable | unverified | Its destroyed-state blocking stays after revive and after `RemoveDestructable`. |
+| Walkable destructable scale and terrain tilt | bugfix | Walk height covers the whole scaled model and follows its tilt. |
+| Walkable destructable the camera has not drawn | bugfix | Gives walk height from creation. |
+| Walkable model with several walk surfaces | bugfix | The highest selectable, visible part sets the height; Reforged not measured. |
+| Script-created destructables | bugfix | No longer drawn black. |
+| Preplaced destroyed destructable | bugfix | Revive and `RemoveDestructable` no longer leave its destroyed-state blocking behind. |
+| Destroyed walkable destructable height | unverified | Parts visible at the end of Death set script heights; bone movement is ignored. |
+| Destroyed stock bridges | unverified | `GetLocationZ` still reports the intact deck height. |
+| Walkable height and model files | unverified | Script reads use each player's model files, so SD and HD data would differ. |
+| Destructable pathing at angles between 90-degree steps | deliberate | Snaps to the nearest 90 degrees, centred and unscaled; Warcraft III rule not measured. |
 
 ## Regions and unit groups
 

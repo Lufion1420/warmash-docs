@@ -174,6 +174,9 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `GetLocationZ` includes walkable destructables and returns 0 for a nil location (2026-11-25)
+- Walk height works before a bridge is drawn and follows scale, tilt and the highest part (2026-11-25)
+- Preplaced destroyed bridges stop blocking after revive, script-created destructables are no longer drawn black, and `RemoveDestructable` in a death trigger no… (2026-11-25)
 - The camera height follows smoothed terrain including cliffs and ignores water and deformations, as in Warcraft III (2026-11-25)
 - Thunder Clap (`AHtc`) now works (before, it did nothing) (2026-11-25)
 - A netted flyer reads its pre-net fly height (was 0), and removing a script-added snare restores the pre-snare height (2026-11-25)
@@ -382,6 +385,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### WC3 compatibility
 
+- Walkable destructables, unverified against Reforged: `GetLocationZ` ignores water, destroyed stock bridges still report deck height, odd-angle pathing snaps to… (2026-11-25)
 - Unverified in Reforged: Thunder Clap stacking, added enemy targets and damage-before-slow order (2026-11-25)
 - Spell events (CHANNEL, CAST, EFFECT, FINISH, ENDCAST), `EVENT_UNIT_USE_ITEM`, `EVENT_UNIT_DROP_ITEM` and `EVENT_UNIT_PAWN_ITEM` now fire the owner's… (2026-11-22)
 - `BlzSetUnitSkin` resets the script vertex colour: now measured in Reforged 3.0.1 (2026-11-20)
