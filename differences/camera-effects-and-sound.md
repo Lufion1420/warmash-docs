@@ -68,6 +68,7 @@ Effects attached to a unit ignore position, orientation and alpha. Images are no
 |---|---|---|
 | MDX texture wrap flags | bugfix | Applied per model; one model no longer changes another. |
 | MDX texture animation id out of range | unverified | Ignored instead of failing the model. |
+| MDX texture animation scale | unverified | U scales with the key's x, V with its y. |
 | `Preload` with a model path | bugfix | Loads the model for `AddSpecialEffect`. |
 | Effect model preload at map load | deliberate | Model paths in the script are loaded during the loading screen; `-nopreloadfx` turns it off. |
 | Ribbon with no visibility key in the animation | unverified | Does not emit. |

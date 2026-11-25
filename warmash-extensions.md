@@ -190,7 +190,8 @@ An optional JSON file that changes how WarMash draws parts of a model. Warcraft 
 | File name | `Name.wmfx.json` beside `Name.mdx`; import both into the same folder. |
 | Models | MDX version 800 only. |
 | Required | Root `version` = 1; per surface `geoset`, `layer` (inside its material) and `vertexCount` (must match). |
-| Texture names | Give each sidecar texture a base name no other map image has, such as suffix `_sa`. |
+| Texture paths | Resolved like MDX texture paths, from the map or data-source root, never the model's folder. |
+| Texture names | Give each texture a path, without extension, that no other map image has, such as suffix `_sa`. |
 | Errors | The model still loads; the bad file, surface or field is skipped and logged with `[wmfx]`. |
 | World Editor, HiveWE | Whether they keep the imported file is not confirmed. |
 
@@ -204,16 +205,17 @@ Fields that work today, per entry in `surfaces`:
 | `tracks.opacity` | Replaces the layer alpha; 0 to 1. |
 | `tracks.color` | RGB multiplier, 0 or more; values above 1 brighten. |
 | `tracks.uv0Offset` | Moves the texture: `uv * scale + offset`. |
-| `tracks.uv0Scale` | Scales from UV (0, 0); U and V must be equal, non-zero and one sign in every key. |
+| `tracks.uv0Scale` | Scales U and V separately from UV (0, 0); zero and negative values work. |
 
 Parsed but ignored for now: `falloff`, `alphaRef`, `vertexColor`, `color1`, `falloff` and `normal` textures, `combine`, `weight0`, `weight1`, `softDistance`, `ribbons`, their tracks, and `glare`, `distortion`. A surface with `pass` `distortion` is skipped entirely.
 
 Details:
 - Tracks are `{"interp": "linear" or "step", "keys": [[ms, value...], ...]}`; `ms` is MDX time, ascending. Default `linear`.
 - Only keys inside the playing sequence count; the first and last of them are held. Without any, the MDX value applies.
-- While a `uv0Offset` or `uv0Scale` track applies, the layer's MDX texture animation is off. An invalid `uv0Scale` track is ignored.
+- While a `uv0Offset` or `uv0Scale` track applies, the layer's MDX texture animation is off.
+- A key exactly at a sequence's end is never shown in normal playback, for any model. End at least 33 ms after the last key.
 - `color0` also overrides texture flipbooks, replaceable textures (team colour) and texture swaps on that layer.
-- Paths must end in `.blp`, `.tga` or `.dds`. Among map files of one base name, `.blp` wins over `.tga`, then `.dds`.
+- Paths must end in `.blp`, `.tga` or `.dds`. Among map files with the same path without extension, `.blp` wins over `.tga`, then `.dds`.
 - A missing or broken `color0` file leaves the MDX texture; a broken `.blp` may draw empty instead. Extra loader log lines can appear.
 
 ```json

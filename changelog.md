@@ -113,6 +113,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- MDX texture animation scale now uses x for U and y for V (before: x for both) (2026-11-25)
+- Sidecar `uv0Scale` tracks accept unequal, zero and negative values (before: such a track was ignored) (2026-11-25)
 - Order 851976 on a hero altar cancels the last queue slot instead of the front (unmeasured for altars) (2026-11-25)
 - After `WmsCameraFollowUnit` ends, the camera height eases over 0.5 s to the smoothed ground (2026-11-25)
 - Stat buffs sharing a stacking key now count the strongest bonus plus the strongest penalty (before: the highest value, so the weaker penalty won) (2026-11-25)
