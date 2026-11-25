@@ -203,18 +203,24 @@ Fields that work today, per entry in `surfaces`:
 | `twoSided`, `depthTest`, `depthWrite`, `unshaded`, `unfogged` | Booleans that override the layer flags. |
 | `textures` with `role` `color0` | Replaces the layer texture; takes `path`, `uvSet` (default 0), `wrapU`, `wrapV`. |
 | `alphaRef`, `tracks.alphaRef` | Discards pixels with color texture alpha at or below it; 0 to 1; the track wins. |
+| `textures` with `role` `falloff` | View-angle ramp (`path` only); its green channel multiplies alpha, RGB is untouched. |
+| `falloff`, `tracks.falloff` | Picks the ramp row; 0 (default, top) to 1; the track wins. |
 | `tracks.opacity` | Replaces the layer alpha; 0 to 1. |
 | `tracks.color` | RGB multiplier, 0 or more; values above 1 brighten. |
 | `tracks.uv0Offset` | Moves the texture: `uv * scale + offset`. |
 | `tracks.uv0Scale` | Scales U and V separately from UV (0, 0); zero and negative values work. |
 
-Parsed but ignored for now: `falloff`, `vertexColor`, `color1`, `falloff` and `normal` textures, `combine`, `weight0`, `weight1`, `softDistance`, `ribbons`, their tracks, and `glare`, `distortion`. A surface with `pass` `distortion` is skipped entirely.
+Parsed but ignored for now: `vertexColor`, `color1` and `normal` textures, `combine`, `weight0`, `weight1`, `softDistance`, `ribbons`, their tracks, and `glare`, `distortion`. A surface with `pass` `distortion` is skipped entirely.
 
 Details:
 - Tracks are `{"interp": "linear" or "step", "keys": [[ms, value...], ...]}`; `ms` is MDX time, ascending. Default `linear`.
 - Only keys inside the playing sequence count; the first and last of them are held. Without any, the MDX value applies.
 - `alphaRef` is tested before opacity, geoset and effect alpha, so fading keeps the shape. It replaces the model's fixed cutoffs; 0 discards nothing.
 - Without an `alphaRef` field and a key in the playing sequence, the model's fixed cutoffs apply.
+- Falloff ramp columns: left is a surface seen edge-on, right faces the camera, measured against the camera view axis.
+- Falloff applies before `alphaRef` and the fixed cutoffs, not to shadows; the ramp is always clamped (`uvSet`, wrap ignored).
+- A `falloff` field or track without a falloff texture does nothing; a missing or undecodable one is dropped with one log line.
+- Falloff needs real surface normals in the MDX; non-uniform bone scale is handled.
 - While a `uv0Offset` or `uv0Scale` track applies, the layer's MDX texture animation is off.
 - A key exactly at a sequence's end is never shown in normal playback, for any model. End at least 33 ms after the last key.
 - `color0` also overrides texture flipbooks, replaceable textures (team colour) and texture swaps on that layer.
