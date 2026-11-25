@@ -202,6 +202,10 @@ Fields that work today, per entry in `surfaces`:
 | `hideOtherLayers` | Draws no other layer of this geoset's material, on this geoset only. |
 | `twoSided`, `depthTest`, `depthWrite`, `unshaded`, `unfogged` | Booleans that override the layer flags. |
 | `textures` with `role` `color0` | Replaces the layer texture; takes `path`, `uvSet` (default 0), `wrapU`, `wrapV`. |
+| `textures` with `role` `color1` | Second texture, combined with the colour texture in one pass; same entry keys as `color0`. |
+| `combine` | How `color1` combines: `over`, `mix`, `multiply` (default) or `multiplyAddAlpha`. |
+| `weight0`, `weight1`, their tracks | Combine weights, 0 to 1, default 1; the track wins. |
+| `tracks.uv1Offset`, `tracks.uv1Scale` | Moves and scales `color1`: `uv * scale + offset`. |
 | `alphaRef`, `tracks.alphaRef` | Discards pixels whose tested alpha is at or below it; 0 to 1; the track wins. |
 | `textures` with `role` `falloff` | View-angle ramp (`path` only); its green channel multiplies alpha, RGB is untouched. |
 | `falloff`, `tracks.falloff` | Picks the ramp row; 0 (default, top) to 1; the track wins. |
@@ -212,13 +216,13 @@ Fields that work today, per entry in `surfaces`:
 | `tracks.uv0Offset` | Moves the texture: `uv * scale + offset`. |
 | `tracks.uv0Scale` | Scales U and V separately from UV (0, 0); zero and negative values work. |
 
-Parsed but ignored for now: `color1` and `normal` textures, `combine`, `weight0`, `weight1`, `softDistance`, `ribbons`, their tracks, and `glare`, `distortion`. A surface with `pass` `distortion` is skipped entirely.
+Parsed but ignored for now: `normal` textures, `softDistance`, `ribbons` and their tracks, and the `glare` and `distortion` tracks. A surface with `pass` `distortion` is skipped entirely.
 
 Details:
 - Tracks are `{"interp": "linear" or "step", "keys": [[ms, value...], ...]}`; `ms` is MDX time, ascending. Default `linear`.
 - Only keys inside the playing sequence count; the first and last of them are held. Without any, the MDX value applies.
 - `alphaRef` is tested before opacity, geoset and effect alpha, so fading keeps the shape. It replaces the model's fixed cutoffs; 0 discards nothing.
-- The tested alpha is color texture alpha x falloff x vertex alpha; shadows leave out falloff.
+- The tested alpha is texture alpha (combined with `color1`) x falloff x vertex alpha; shadows leave out falloff.
 - Without an `alphaRef` field and a key in the playing sequence, the model's fixed cutoffs apply and see vertex alpha.
 - Falloff ramp columns: left is a surface seen edge-on, right faces the camera, measured against the camera view axis.
 - Falloff applies before `alphaRef` and the fixed cutoffs, not to shadows; the ramp is always clamped (`uvSet`, wrap ignored).
@@ -232,6 +236,30 @@ Details:
 - `color0` also overrides texture flipbooks, replaceable textures (team colour) and texture swaps on that layer.
 - Paths must end in `.blp`, `.tga` or `.dds`. Among map files with the same path without extension, `.blp` wins over `.tga`, then `.dds`.
 - A missing or broken `color0` file leaves the MDX texture; a broken `.blp` may draw empty instead. Extra loader log lines can appear.
+- A `color0` entry without `uvSet` reads UV set 0, whatever the layer's MDX `coordId` says.
+- HD materials get no sidecar fields, `color1` included.
+
+### Two textures (`color1`)
+
+A is the `color0` (or MDX) sample, B the `color1` sample, r1 is `weight0`, r2 is `weight1`.
+
+| `combine` | Colour | Alpha |
+|---|---|---|
+| `over` | `A * (1 - B.a*r1) + B * (B.a*r1)` | `A.a` |
+| `mix` | `A*r1 + B*(1 - r1)` | Same formula on alpha. |
+| `multiply` | `(1 + (A-1)*r1) * (1 + (B-1)*r2)`, clamped to 0..1 | Same formula on alpha. |
+| `multiplyAddAlpha` | `B * (1 + (A-1)*r1)`, clamped to 0..1 | `A.a*r1 + B.a*r2`, clamped to 0..1 |
+
+- The result replaces the texture sample before vertex colour, falloff, `alphaRef` and opacity.
+- For the second UV set write `uvSet` 1 (default 0); the MDX geoset must have two UV sets.
+- An invalid `uvSet` on `color1` drops that entry with one log line.
+- A missing or undecodable `color1` draws `color0` alone; a broken `.blp` may draw empty instead.
+- Without a loaded `color1`, `combine` and the weights do nothing.
+- `color1` ignores MDX texture animation; only `uv1Offset` and `uv1Scale` move it.
+- Wrap defaults to the layer's MDX texture wrap flags; set `wrapU` and `wrapV` on a scrolling `color1`.
+- Use straight (not premultiplied) alpha, and a unique base name.
+- On additive layers using `combine` or `alphaRef`, also override `color0` with a straight-alpha texture.
+- Without OpenGL 3 sampler objects, or if the shaders fail to compile: one log line, no `color1`.
 
 ```json
 { "version": 1, "surfaces": [ {

@@ -41,7 +41,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `-qapendingpixmap` | Uses the old pending UI texture upload (zeroed Pixmap, then a second upload) for comparison. |
 | `-qagrab` | Keeps cursor catch and edge scrolling on (`-qalog` alone turns them off). |
 | `-qacursorpin <x>,<y>` | Pins the cursor position the in-game UI reads (window pixels, top-left origin); the OS cursor does not move. Needs `-qalog` and `-loadfile`. |
-| `WarMashQaReport(key, value)` | Writes a value into the log; at most 1000 keys per run. |
+| `WarMashQaReport(key, value)` | Writes a value into the log; at most 3000 keys per run. |
 | `WarMashQaExitNow()` | Ends the run like `-qaexit`. |
 | `open_spot.lua` (helper script) | `WarMashQaOpenSpot` and `WarMashQaClearance` find open walkable ground for test units. |
 
