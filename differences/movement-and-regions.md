@@ -52,6 +52,24 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 | `SetTerrainPathable` with peon-harvest, amphibious or any pathing | gap | Ignored with one log line. |
 | `GetTerrainType` | unverified | The tile of the nearest terrain corner. |
 | `SetTerrainType` | stub | The ground does not change. |
+| `SetUnitPathing` | gap | Not implemented: the call does nothing. |
+
+### Walkable surfaces
+
+Custom bridges and platforms (walkable destructables) raise units, but several terrain reads and edge cases ignore them.
+
+| Native | Status | What differs |
+|---|---|---|
+| `GetLocationZ` | gap | Terrain only, without water or walkables, and a nil location errors; documented Warcraft III returns the surface height. |
+| `GetTerrainCliffLevel` | gap | Terrain level only; documented Warcraft III adds a walkable destructable's cliff height. |
+| `SetTextTagPos` | gap | Height starts at the terrain; documented Warcraft III also includes walkable surfaces. |
+| `BlzGetUnitZ`, `BlzGetLocalUnitZ` | gap | Not implemented; documented Warcraft III (1.30+) returns surface height plus the unit's occluder height. |
+| Walkable destructable pathing | unverified | Only adds blocking: water and gaps are crossable only where the map's own pathing is open. |
+| Walkable destructable scaled above 1 | unverified | The outer part of the scaled model gives no height. |
+| Walkable destructable the camera has not drawn | unverified | Gives no height until drawn, so units and effects there stay low. |
+| Walkable model with several walk surfaces | unverified | The first selectable, visible part hit sets the height, not the highest one. |
+| Script-created walkable destructable | unverified | Can be drawn black. |
+| Preplaced destroyed destructable | unverified | Its destroyed-state blocking stays after revive and after `RemoveDestructable`. |
 
 ## Regions and unit groups
 

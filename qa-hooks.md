@@ -44,6 +44,8 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `WarMashQaReport(key, value)` | Writes a value into the log; at most 3000 keys per run. |
 | `WarMashQaExitNow()` | Ends the run like `-qaexit`. |
 | `open_spot.lua` (helper script) | `WarMashQaOpenSpot` and `WarMashQaClearance` find open walkable ground for test units. |
+| `walkable_gen.mjs <outDir> <baseMap>` (Node script) | Builds the walkable bridge test map; `<outDir>` must be below the temp folder and new, empty or generator-marked. |
+| `walkable_scene.lua` (scene script) | Measures walkable heights, clicks, crossing, destroy and revive on that map; ends the run itself. |
 
 ## Log fields worth knowing
 
@@ -109,6 +111,8 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `WarMashQaUnitInfo(u[, detail])` | Unit state: screen position, guard, pause, buffs, speed and more (JSON). |
 | `WarMashQaKeyPress(name)`, `WarMashQaChat(line)`, `WarMashQaChatType(text)` | Key presses and chat input. |
 | `WarMashQaTargetClick`, `WarMashQaPointerPress`, `WarMashQaPointerRelease` | Clicks at a world point or unit. |
+| `WarMashQaTargetClick(x, y, right, z)` | The optional `z` clicks at that height instead of the terrain (JSON). |
+| `WarMashQaWalkable(op, ...)` | Read only (JSON): `"at", x, y`; `"dest"`, `"item"` or `"unit"` with a handle; `"projectiles"`. |
 | `WarMashQaMouseMove(x, y)` | Fires a mouse move event at a ground point. |
 | `WarMashQaRayPickAt(unit)`, `WarMashQaCursorAt(x, y)`, `WarMashQaCursorInfo()` | Picking and cursor tint. |
 | `WarMashQaCanPlace`, `WarMashQaBuildMode`, `WarMashQaBuildModeInfo` | Placement checks (JSON). |

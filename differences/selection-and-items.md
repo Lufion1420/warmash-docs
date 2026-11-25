@@ -33,7 +33,7 @@ Shop purchases by script or UI work; the stock rules are unverified. Sell and pa
 | Native | Status | What differs |
 |---|---|---|
 | Destructable and item natives with a nil handle (`RemoveDestructable`, `KillDestructable`, `GetDestructableX`, `GetItemX`, `SetItemPosition`, `UnitRemoveItem` and similar) | bugfix | Setters do nothing and getters return 0, as in Warcraft III; a second `RemoveDestructable` is a no-op. |
-| `ShowDestructable` | unverified | `false` hides model, selection and preview and makes it untargetable (harvest and smart orders fail); it keeps its pathing. |
+| `ShowDestructable` | gap | `false` hides it and blocks targeting; pathing and walkable height stay, though documented Warcraft III drops the height. |
 | `QueueDestructableAnimation`, `SetDestructableAnimationSpeed` | unverified | Queued animation plays after the current one ends; speed persists across animation changes. Not checked visually. |
 | `SetDestructableMaxLife` | unverified | Current life stays unless above the new maximum, then it is clamped; a maximum of 0 or less never kills. |
 | `GetDestructableName`, `IsDestructableInvulnerable` | works | Name is the raw type name, no TRIGSTR lookup; invulnerable reads the `SetDestructableInvulnerable` flag. |
