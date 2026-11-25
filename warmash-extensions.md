@@ -20,6 +20,8 @@ end
 
 ## Natives
 
+Call `Wms` natives from `main()` or later; they are not available during `config()`.
+
 | Name | Signature | Behavior | Since | Stability |
 |---|---|---|---|---|
 | `WmsSetUnitUntargetable` | `(unit, boolean)` | While on, no other unit's attack, unit-target spell, auto-acquire or return fire can target the unit, whatever its targets-allowed say. | 2026-11-17 | experimental |
@@ -72,6 +74,10 @@ end
 | `WmsIsQuestLogHidden` | `(player) -> boolean` | The flag kept for that player; false for null or never set. | 2026-11-24 | experimental |
 | `WmsSetDestructableTypeOpensPathing` | `(integer destructableId, boolean flag)` | Lets a walkable destructable type open blocked terrain under its bridges; per game, default off. | 2026-11-25 | experimental |
 | `WmsIsDestructableTypeOpensPathing` | `(integer destructableId) -> boolean` | The type's opt-in flag; false for unknown or non-walkable types. | 2026-11-25 | experimental |
+| `WmsSetDoodadTypeWalkable` | `(integer doodadId, boolean flag)` | Gives placed doodads of the type a walk surface at model height; per game, default off. | 2026-11-25 | experimental |
+| `WmsIsDoodadTypeWalkable` | `(integer doodadId) -> boolean` | The type's walkable flag; false for an unknown id. | 2026-11-25 | experimental |
+| `WmsSetDoodadTypeOpensPathing` | `(integer doodadId, boolean flag)` | Lets a walkable doodad type open water, cliff and gap cells under it; default off. | 2026-11-25 | experimental |
+| `WmsIsDoodadTypeOpensPathing` | `(integer doodadId) -> boolean` | The stored opt-in flag, also while the type is not walkable; false for an unknown id. | 2026-11-25 | experimental |
 
 Details for ability interval events:
 - Passive abilities only (built-in passives, auras, ability-builder passives). Handlers use `GetTriggerUnit`, `GetTriggerPlayer`, `WmsGetEventAbilityId`, `WmsGetEventAbility`.
@@ -103,6 +109,22 @@ Details for terrain opening:
 local bridgeId = FourCC('B000') -- your walkable destructable type
 WmsSetDestructableTypeOpensPathing(bridgeId, true)
 print(WmsIsDestructableTypeOpensPathing(bridgeId)) --> true
+```
+
+Details for walkable doodads:
+- Applies to already placed plain doodads. Terrain (cliff-type) doodads are not supported: the call is stored and has no effect.
+- Turning walkable off removes the surfaces and leaves units where they are; a unit over water drops to the bed.
+- Opening works only while the type is walkable. Blocking pixels of the pathing texture, such as rails, still block.
+- A type without a pathing texture (`none`, `_`, empty or a missing file) opens nothing. An unknown id is logged once per id per game.
+- The Doodads.slk `walkable` column has no effect, as in Warcraft III.
+- Height comes from each player's model files, as for walkable destructables. There is one height per point.
+- Many surfaces stacked on one point are slow: about 68 µs per height lookup with 2000 stacked, under 1 µs spread out.
+- Not yet checked in game: items, effects, projectiles, clicks on a doodad deck, tilted or unevenly scaled doodads on slopes.
+
+```lua
+local deckId = FourCC('D000') -- your doodad type; call from main() or later
+WmsSetDoodadTypeWalkable(deckId, true)
+WmsSetDoodadTypeOpensPathing(deckId, true)
 ```
 
 Details for facing:

@@ -48,7 +48,7 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 | `GetUnitDefaultMoveSpeed` | unverified | The unit type's speed from object data; 0 for a null unit. |
 | Thunder Clap slow or speed upgrade while a speed buff is active | bugfix | The buff is never baked into the base speed; WC3's combination rule is unverified. |
 | `IsTerrainPathable` | partial | Works for walk, fly, build and float pathing; other types return false. |
-| `IsTerrainPathable` on a cell opened by a bridge | deliberate | Reads it as pathable, without counting rail blocking; only after opt-in. |
+| `IsTerrainPathable` on a cell opened by a bridge or doodad | deliberate | Reads it as pathable, without counting rail blocking; only after opt-in. |
 | `SetTerrainPathable` and blight on an opened cell | deliberate | The write is stored and takes effect after the cell closes. |
 | `SetTerrainPathable` | unverified | `true` clears the cell's blocking bit, or blight with `PATHING_TYPE_BLIGHTPATHING`. |
 | `SetTerrainPathable` with peon-harvest, amphibious or any pathing | gap | Ignored with one log line. |
@@ -58,7 +58,7 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 
 ### Walkable surfaces
 
-Custom bridges and platforms (walkable destructables) raise units and `GetLocationZ`; some terrain reads still ignore them.
+Walkable destructables and opted-in doodads raise units and `GetLocationZ`; some terrain reads still ignore them.
 
 | Native | Status | What differs |
 |---|---|---|
@@ -70,6 +70,8 @@ Custom bridges and platforms (walkable destructables) raise units and `GetLocati
 | `BlzGetUnitZ`, `BlzGetLocalUnitZ` | gap | Not implemented; documented Warcraft III (1.30+) returns surface height plus the unit's occluder height. |
 | Walkable destructable pathing | unverified | By default only adds blocking: water and gaps need pathing that is open in the map. |
 | `WmsSetDestructableTypeOpensPathing` (WarMash only) | deliberate | Opted-in bridge types open water, cliff and gap cells at runtime; Warcraft III cannot. |
+| `WmsSetDoodadTypeWalkable` (WarMash only) | deliberate | Opted-in doodad types raise units to model height; Warcraft III has no such native. |
+| `WmsSetDoodadTypeOpensPathing` (WarMash only) | deliberate | Opted-in walkable doodads open water, cliff and gap cells; blocking texture pixels still block. |
 | Walkable destructable scale and terrain tilt | bugfix | Walk height covers the whole scaled model and follows its tilt. |
 | Walkable destructable the camera has not drawn | bugfix | Gives walk height from creation. |
 | Walkable model with several walk surfaces | bugfix | The highest selectable, visible part sets the height; Reforged not measured. |
@@ -82,7 +84,7 @@ Custom bridges and platforms (walkable destructables) raise units and `GetLocati
 
 Details:
 
-- `WmsSetDestructableTypeOpensPathing`: rules and limits are on the [WarMash API page](../warmash-extensions.html#natives).
+- `WmsSetDestructableTypeOpensPathing`, `WmsSetDoodadTypeWalkable`, `WmsSetDoodadTypeOpensPathing`: rules and limits are on the [WarMash API page](../warmash-extensions.html#natives).
 
 ## Regions and unit groups
 
