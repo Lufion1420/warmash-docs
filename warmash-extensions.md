@@ -86,6 +86,12 @@ Call `Wms` natives from `main()` or later; they are not available during `config
 | `WmsAddDoodadBridgeDeck` | `(integer doodadId, real x, real y, rect rampA, rect rampB) -> boolean` | Declares a deck and two ramps on the placed walkable doodad near the point. | 2026-11-26 | experimental |
 | `WmsRemoveDoodadBridgeDeck` | `(integer doodadId, real x, real y) -> boolean` | Removes that doodad's deck; false if there is none. | 2026-11-26 | experimental |
 | `WmsIsDoodadBridgeDeck` | `(integer doodadId, real x, real y) -> boolean` | True while that doodad has a declared deck, even if it is currently off. | 2026-11-26 | experimental |
+| `WmsAttachUnitToUnit` | `(unit, unit holder, string point) -> boolean` | Holds the unit at the holder's attachment point; its position follows the holder. | 2026-11-26 | experimental |
+| `WmsAttachUnitToEffect` | `(unit, effect holder, string point) -> boolean` | Draws the unit at the effect's attachment point; its gameplay position does not change. | 2026-11-26 | experimental |
+| `WmsDetachUnit` | `(unit)` | Releases the unit from a unit or effect holder. | 2026-11-26 | experimental |
+| `WmsAttachEffectToUnit` | `(effect, unit holder, string point) -> boolean` | Moves the effect onto the unit's attachment point, like `AddSpecialEffectTarget`. | 2026-11-26 | experimental |
+| `WmsAttachEffectToEffect` | `(effect, effect holder, string point) -> boolean` | Moves the effect onto another effect's attachment point. | 2026-11-26 | experimental |
+| `WmsDetachEffect` | `(effect)` | Takes the effect off its holder and puts it back in the world. | 2026-11-26 | experimental |
 
 Details for ability interval events:
 - Passive abilities only (built-in passives, auras, ability-builder passives). Handlers use `GetTriggerUnit`, `GetTriggerPlayer`, `WmsGetEventAbilityId`, `WmsGetEventAbility`.
@@ -209,6 +215,46 @@ WmsSetDoodadTypeWalkable(deckId, true)
 print(WmsAddDoodadBridgeDeck(deckId, x, y, westRamp2, eastRamp2))
 WmsSetDoodadTypeWalkable(deckId, false) -- deck off, still declared
 print(WmsIsDoodadBridgeDeck(deckId, x, y)) --> true if the Add succeeded
+```
+
+Details for attaching:
+- Point names match as in `AddSpecialEffectTarget`, including its fallback; nil means origin. Null handles never raise an error.
+- Warcraft III has none of these natives.
+
+Details for units held by units:
+- Drawn at the point, moving with it; facing, scale and animation stay the unit's own, and fly height does not affect drawing.
+- Selection circle, health bar and clicks follow the drawn unit.
+- Gameplay x, y follow the topmost holder every tick, overriding script moves; deck layer follows the holder and region events fire.
+- The held unit has no collision and cannot walk. It can attack and cast; a move order is kept and resumes.
+- It stays targetable at its gameplay position. Its projectiles start there; projectiles aimed at it fly to the drawn height.
+- Chains work, and attaching a held unit again changes holder and point.
+- False for cycles, itself, a held building, a dead or hidden holder, a dead unit, or either unit inside a transport.
+
+Details for releasing a unit held by a unit:
+- Released by `WmsDetachUnit`, death or removal of either unit, a hidden or loaded holder, or the held unit loading or becoming a building.
+- On death the release happens before death triggers run. A dead, loaded or removed held unit is not moved.
+- Otherwise it goes to the nearest standable spot by the holder, on the holder's layer first, kept inside the map.
+- If there is none, it goes near the spot where it was grabbed, else onto that spot.
+- Carrying a unit across cliffs or rivers and dropping it therefore works. Pause and stun are not changed.
+
+Details for units held by effects:
+- Drawing only: set the gameplay position from the script.
+- True for any living unit that is not a building or in a transport, even with a null or broken effect (drawn normally).
+- The call also releases the unit from a unit holder, placed as on any release.
+
+Details for attached effects:
+- The effect inherits the point's rotation and scale; position, orientation and alpha natives do nothing while it is attached.
+- `WmsDetachEffect`, or destroying the holder effect, returns it to its earlier point, else to the former holder's x, y.
+- False for a null, destroyed or model-less effect or holder effect, a null or removed holder unit, itself or a cycle.
+- The results of `WmsAttachEffectToUnit` and `WmsAttachEffectToEffect` differ per player: do not branch gameplay on them.
+- Known limits: a holder unit that morphs stops showing attached effects until you attach them again.
+- Destroying an effect whose holder unit was removed does not free it, also for `AddSpecialEffectTarget` effects.
+
+```lua
+if WmsAttachUnitToUnit(victim, carrier, "hand right") then
+    -- later: drop the victim next to the carrier
+    WmsDetachUnit(victim)
+end
 ```
 
 Details for facing:

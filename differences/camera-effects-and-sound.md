@@ -47,6 +47,7 @@ Effects attached to a unit ignore position, orientation and alpha. Images are no
 | Effects on bones of a faded-out geoset | bugfix | Drawn at their current spot, not frozen. |
 | `BlzSpecialEffectAddSubAnimation`, `RemoveSubAnimation`, `ClearSubAnimations` | partial | `ROOTED`, `ENTANGLE` and `BERSERK` are ignored. |
 | `AddSpecialEffectTarget` attachment names | unverified | Case-insensitive token match; an unknown name attaches to origin. |
+| `AddSpecialEffectTarget` with a missing model | unverified | Returns a null handle (nil in Lua). |
 | `DestroyEffect` | bugfix | Death plays once, at once; particles fade out. |
 | Effect whose model has no Stand | unverified | Holds its last frame until `DestroyEffect`. |
 | Effect with only Birth and Death | bugfix | Appears once and holds its last frame; before, Birth restarted in a loop. Reforged: pulses until destroyed. |
