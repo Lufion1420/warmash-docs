@@ -86,6 +86,24 @@ Details:
 
 - `WmsSetDestructableTypeOpensPathing`, `WmsSetDoodadTypeWalkable`, `WmsSetDoodadTypeOpensPathing`: rules and limits are on the [WarMash API page](../warmash-extensions.html#natives).
 
+### Two-layer bridges
+
+Only bridges declared with `WmsAddBridgeDeck` behave this way; Warcraft III has one pathing layer.
+
+| Native | Status | What differs |
+|---|---|---|
+| `WmsAddBridgeDeck`, `WmsRemoveBridgeDeck`, `WmsIsBridgeDeck` (WarMash only) | deliberate | Declared bridges let units walk over and under, changing layer at two ramps. |
+| `WmsGetUnitPathingLayer`, `WmsSetUnitPathingLayer` (WarMash only) | deliberate | Read or set whether a unit is on a deck or below it. |
+| `CreateUnit`, `ReviveHero`, summons, teleports onto a deck | deliberate | New units and moves over 256 land on top; shorter moves follow the walking rule. |
+| Build orders near an active deck | deliberate | Refused on deck, ramp and rail cells; `CreateUnit` can still place buildings there. |
+| `CreateItem`, `BlzCreateItemWithSkin`, `SetItemPosition`, item drops | deliberate | Items on deck or ramp cells go to the nearest spot off them. |
+| Bridge rails with an active deck | deliberate | Stop blocking walking underneath; still block building and, on vision-blocking bridges, sight. |
+| Doodad decks, deck drawing and click targeting | gap | Only destructables can have decks; drawing and clicking are not done yet. |
+
+Details:
+
+- Ramp sizes, return values and limits are on the [WarMash API page](../warmash-extensions.html#natives).
+
 ## Regions and unit groups
 
 ```lua

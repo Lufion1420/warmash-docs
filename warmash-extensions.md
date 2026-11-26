@@ -78,6 +78,11 @@ Call `Wms` natives from `main()` or later; they are not available during `config
 | `WmsIsDoodadTypeWalkable` | `(integer doodadId) -> boolean` | The type's walkable flag; false for an unknown id. | 2026-11-25 | experimental |
 | `WmsSetDoodadTypeOpensPathing` | `(integer doodadId, boolean flag)` | Lets a walkable doodad type open water, cliff and gap cells under it; default off. | 2026-11-25 | experimental |
 | `WmsIsDoodadTypeOpensPathing` | `(integer doodadId) -> boolean` | The stored opt-in flag, also while the type is not walkable; false for an unknown id. | 2026-11-25 | experimental |
+| `WmsAddBridgeDeck` | `(destructable, rect rampA, rect rampB) -> boolean` | Declares a walkable destructable's deck and two ramps, so units can walk over and under it. | 2026-11-26 | experimental |
+| `WmsRemoveBridgeDeck` | `(destructable) -> boolean` | Removes the deck; false if the destructable has none or is null. | 2026-11-26 | experimental |
+| `WmsIsBridgeDeck` | `(destructable) -> boolean` | True while a deck is declared, even if it is currently off. | 2026-11-26 | experimental |
+| `WmsGetUnitPathingLayer` | `(unit) -> integer` | 1 while the unit is on a deck, else 0 (also for null). | 2026-11-26 | experimental |
+| `WmsSetUnitPathingLayer` | `(unit, integer layer) -> boolean` | Puts the unit on (1) or under (0) the deck without moving it. | 2026-11-26 | experimental |
 
 Details for ability interval events:
 - Passive abilities only (built-in passives, auras, ability-builder passives). Handlers use `GetTriggerUnit`, `GetTriggerPlayer`, `WmsGetEventAbilityId`, `WmsGetEventAbility`.
@@ -125,6 +130,45 @@ Details for walkable doodads:
 local deckId = FourCC('D000') -- your doodad type; call from main() or later
 WmsSetDoodadTypeWalkable(deckId, true)
 WmsSetDoodadTypeOpensPathing(deckId, true)
+```
+
+Details for bridge decks (declaring):
+- The deck is the cells under pathing texture pixels that are neither black nor red. Ramps are the cells centred in each rect.
+- Needs two separate ramps touching the deck, each at least 2 cells (64 units) deep.
+- A ramp fits a unit when `2 * collision size <= 32 * depth in cells`: up to 32 needs 2 cells, 40 or 48 need 3, 56 needs 4.
+- Deck cells are walkable on top, even over water. Ramp cells and the space under the deck use the terrain's pathing.
+- Decks may not share cells or touch another deck; two decks' ramps may touch each other.
+- False plus a log line: destructable null, removed, not walkable, already declared or without deck pixels.
+- Also false and logged: a ramp null, empty or off the map, a broken deck rule, or a building on deck, ramp or rails.
+
+Details for bridge decks (in play):
+- Walking units change layer only at the ramps. A move order onto a deck cell targets the top of the deck.
+- Units on the deck do not collide with units under it.
+- New units on a deck cell start on the deck. Moves over 256 onto it land on top; shorter ones follow the walking rule.
+- Flyers and ships ignore layers.
+- The deck is off while the destructable is dead or hidden; revive and show bring it back. `RemoveDestructable` removes it.
+- When it goes off, units on it drop to the ground alive where they are, even over water.
+- On return it lifts only the units it dropped that have not moved or died. The first activation lifts every ground unit on its deck cells.
+- A deck that cannot come back (building or other deck in the way) stays off until the next revive or show.
+- `WmsSetUnitPathingLayer` returns false for null, flyers, ships, structures, 1 off a deck cell, or while no deck is active.
+- Layer numbers other than 0 and 1 return false and are logged.
+
+Limits while a deck is active:
+- Build orders are refused on deck, ramp and rail cells. Buildings made with `CreateUnit` are still allowed there.
+- Items created, moved, dropped or already lying on deck or ramp cells go to the nearest spot off them.
+- Rails no longer block walking underneath, but still block building and, on vision-blocking bridges, sight.
+- Only destructable decks; doodad decks are not supported yet.
+- On bridges pre-placed over water or cliffs in the World Editor, the terrain pathing under the deck is lost.
+- Units with collision size 40 or more can get stranded on 2-cell ramps when created or teleported onto a deck.
+- Drawing and click targeting for decks are not done yet.
+
+```lua
+-- bridge: a walkable destructable; westRamp, eastRamp: rects over its two ends
+if WmsAddBridgeDeck(bridge, westRamp, eastRamp) then
+    local u = CreateUnit(Player(0), FourCC('hfoo'), GetWidgetX(bridge), GetWidgetY(bridge), 0)
+    print(WmsGetUnitPathingLayer(u))    --> 1 if that point is a deck cell
+    WmsSetUnitPathingLayer(u, 0)        -- now under the deck
+end
 ```
 
 Details for facing:

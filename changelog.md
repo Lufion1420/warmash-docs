@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Two-layer bridges (WarMash-only, experimental): `WmsAddBridgeDeck`, `WmsRemoveBridgeDeck`, `WmsIsBridgeDeck`, `WmsGetUnitPathingLayer` and… (2026-11-26)
 - Walkable doodads (WarMash-only, experimental): `WmsSetDoodadTypeWalkable` and `WmsSetDoodadTypeOpensPathing`, each with an `Is...` getter (2026-11-25)
 - Walkable bridges can open blocked terrain (WarMash-only): `WmsSetDestructableTypeOpensPathing(destructableId, flag)` and `WmsIsDestructableTypeOpensPathing` (2026-11-25)
 - Model effect sidecar `Name.wmfx.json` (WarMash-only) beside an MDX v800 model: hides other layers, overrides draw flags and the colour texture, and animates… (2026-11-25)

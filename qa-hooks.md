@@ -46,6 +46,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `open_spot.lua` (helper script) | `WarMashQaOpenSpot` and `WarMashQaClearance` find open walkable ground for test units. |
 | `walkable_gen.mjs <outDir> <baseMap>` (Node script) | Builds the walkable bridge test map; `<outDir>` must be below the temp folder and new, empty or generator-marked. |
 | `walkable_scene.lua` (scene script) | Measures walkable heights, clicks, crossing, destroy and revive on that map; ends the run itself. |
+| `walkable_deck_scene.lua` (scene script) | Checks the bridge deck natives, walking over and under, and build and item limits on that map. |
 
 ## Log fields worth knowing
 
