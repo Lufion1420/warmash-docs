@@ -48,7 +48,7 @@ print(BlzGetUnitRealField(u, UNIT_RF_SPEED))   --> 337.5
 | `GetUnitDefaultMoveSpeed` | unverified | The unit type's speed from object data; 0 for a null unit. |
 | Thunder Clap slow or speed upgrade while a speed buff is active | bugfix | The buff is never baked into the base speed; WC3's combination rule is unverified. |
 | `IsTerrainPathable` | partial | Works for walk, fly, build and float pathing; other types return false. |
-| `IsTerrainPathable` on a cell opened by a bridge or doodad | deliberate | Reads it as pathable, without counting rail blocking; only after opt-in. |
+| `IsTerrainPathable` on a cell opened by a bridge or doodad | deliberate | Opted-in openings and lifted doodad deck rails read pathable; rail blocking is not counted. |
 | `SetTerrainPathable` and blight on an opened cell | deliberate | The write is stored and takes effect after the cell closes. |
 | `SetTerrainPathable` | unverified | `true` clears the cell's blocking bit, or blight with `PATHING_TYPE_BLIGHTPATHING`. |
 | `SetTerrainPathable` with peon-harvest, amphibious or any pathing | gap | Ignored with one log line. |
@@ -88,17 +88,19 @@ Details:
 
 ### Two-layer bridges
 
-Only bridges declared with `WmsAddBridgeDeck` behave this way; Warcraft III has one pathing layer.
+Only bridges declared with `WmsAddBridgeDeck` or `WmsAddDoodadBridgeDeck` behave this way; Warcraft III has one pathing layer.
 
 | Native | Status | What differs |
 |---|---|---|
 | `WmsAddBridgeDeck`, `WmsRemoveBridgeDeck`, `WmsIsBridgeDeck` (WarMash only) | deliberate | Declared bridges let units walk over and under, changing layer at two ramps. |
+| `WmsAddDoodadBridgeDeck`, `WmsRemoveDoodadBridgeDeck`, `WmsIsDoodadBridgeDeck` (WarMash only) | deliberate | The same decks on placed walkable doodads, off while the type is not walkable. |
 | `WmsGetUnitPathingLayer`, `WmsSetUnitPathingLayer` (WarMash only) | deliberate | Read or set whether a unit is on a deck or below it. |
 | `CreateUnit`, `ReviveHero`, summons, teleports onto a deck | deliberate | New units and moves over 256 land on top; shorter moves follow the walking rule. |
 | Build orders near an active deck | deliberate | Refused on deck, ramp and rail cells; `CreateUnit` can still place buildings there. |
 | `CreateItem`, `BlzCreateItemWithSkin`, `SetItemPosition`, item drops | deliberate | Items on deck or ramp cells go to the nearest spot off them. |
-| Bridge rails with an active deck | deliberate | Stop blocking walking underneath; still block building and, on vision-blocking bridges, sight. |
-| Doodad decks, deck drawing and click targeting | gap | Only destructables can have decks; drawing and clicking are not done yet. |
+| Destructable bridge rails with an active deck | deliberate | Stop blocking walking underneath; still block building and, on vision-blocking bridges, sight. |
+| Doodad bridge rails with an active deck | deliberate | Stop blocking walking only over dry, level, ramp-free ground; rail cells stay unbuildable. |
+| Deck drawing and click targeting | gap | Not done yet; layer-0 units on or under a deck are still drawn at model height. |
 
 Details:
 

@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Doodad bridge decks (WarMash-only, experimental): `WmsAddDoodadBridgeDeck`, `WmsRemoveDoodadBridgeDeck` and `WmsIsDoodadBridgeDeck` give placed walkable… (2026-11-26)
 - Two-layer bridges (WarMash-only, experimental): `WmsAddBridgeDeck`, `WmsRemoveBridgeDeck`, `WmsIsBridgeDeck`, `WmsGetUnitPathingLayer` and… (2026-11-26)
 - Walkable doodads (WarMash-only, experimental): `WmsSetDoodadTypeWalkable` and `WmsSetDoodadTypeOpensPathing`, each with an `Is...` getter (2026-11-25)
 - Walkable bridges can open blocked terrain (WarMash-only): `WmsSetDestructableTypeOpensPathing(destructableId, flag)` and `WmsIsDestructableTypeOpensPathing` (2026-11-25)
@@ -178,6 +179,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `WmsSetDoodadTypeOpensPathing` now also opens doodads whose model file is missing (2026-11-26)
 - `GetLocationZ` includes walkable destructables and returns 0 for a nil location (2026-11-25)
 - Walk height works before a bridge is drawn and follows scale, tilt and the highest part (2026-11-25)
 - Preplaced destroyed bridges stop blocking after revive, script-created destructables are no longer drawn black, and `RemoveDestructable` in a death trigger no… (2026-11-25)

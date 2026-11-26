@@ -83,6 +83,9 @@ Call `Wms` natives from `main()` or later; they are not available during `config
 | `WmsIsBridgeDeck` | `(destructable) -> boolean` | True while a deck is declared, even if it is currently off. | 2026-11-26 | experimental |
 | `WmsGetUnitPathingLayer` | `(unit) -> integer` | 1 while the unit is on a deck, else 0 (also for null). | 2026-11-26 | experimental |
 | `WmsSetUnitPathingLayer` | `(unit, integer layer) -> boolean` | Puts the unit on (1) or under (0) the deck without moving it. | 2026-11-26 | experimental |
+| `WmsAddDoodadBridgeDeck` | `(integer doodadId, real x, real y, rect rampA, rect rampB) -> boolean` | Declares a deck and two ramps on the placed walkable doodad near the point. | 2026-11-26 | experimental |
+| `WmsRemoveDoodadBridgeDeck` | `(integer doodadId, real x, real y) -> boolean` | Removes that doodad's deck; false if there is none. | 2026-11-26 | experimental |
+| `WmsIsDoodadBridgeDeck` | `(integer doodadId, real x, real y) -> boolean` | True while that doodad has a declared deck, even if it is currently off. | 2026-11-26 | experimental |
 
 Details for ability interval events:
 - Passive abilities only (built-in passives, auras, ability-builder passives). Handlers use `GetTriggerUnit`, `GetTriggerPlayer`, `WmsGetEventAbilityId`, `WmsGetEventAbility`.
@@ -119,12 +122,13 @@ print(WmsIsDestructableTypeOpensPathing(bridgeId)) --> true
 Details for walkable doodads:
 - Applies to already placed plain doodads. Terrain (cliff-type) doodads are not supported: the call is stored and has no effect.
 - Turning walkable off removes the surfaces and leaves units where they are; a unit over water drops to the bed.
-- Opening works only while the type is walkable. Blocking pixels of the pathing texture, such as rails, still block.
+- A doodad whose model file is missing gets no walk surface, but opening and deck declaring still work on it.
+- Opening works only while the type is walkable. Blocking pixels, such as rails, still block, except under a declared doodad deck.
 - A type without a pathing texture (`none`, `_`, empty or a missing file) opens nothing. An unknown id is logged once per id per game.
 - The Doodads.slk `walkable` column has no effect, as in Warcraft III.
 - Height comes from each player's model files, as for walkable destructables. There is one height per point.
 - Many surfaces stacked on one point are slow: about 68 µs per height lookup with 2000 stacked, under 1 µs spread out.
-- Not yet checked in game: items, effects, projectiles, clicks on a doodad deck, tilted or unevenly scaled doodads on slopes.
+- Not yet checked in game: items, effects, projectiles, clicks on a doodad walk surface, tilted or unevenly scaled doodads on slopes.
 
 ```lua
 local deckId = FourCC('D000') -- your doodad type; call from main() or later
@@ -156,11 +160,23 @@ Details for bridge decks (in play):
 Limits while a deck is active:
 - Build orders are refused on deck, ramp and rail cells. Buildings made with `CreateUnit` are still allowed there.
 - Items created, moved, dropped or already lying on deck or ramp cells go to the nearest spot off them.
-- Rails no longer block walking underneath, but still block building and, on vision-blocking bridges, sight.
-- Only destructable decks; doodad decks are not supported yet.
+- Destructable rails no longer block walking underneath, but still block building and, on vision-blocking bridges, sight.
 - On bridges pre-placed over water or cliffs in the World Editor, the terrain pathing under the deck is lost.
 - Units with collision size 40 or more can get stranded on 2-cell ramps when created or teleported onto a deck.
-- Drawing and click targeting for decks are not done yet.
+- Deck drawing and click targeting are not done: layer-0 units on or under a deck are still drawn at model height.
+
+Details for doodad decks:
+- The doodad is the placed plain doodad of that type nearest to the point, within 128; a tie takes the first placed.
+- The type must be walkable (`WmsSetDoodadTypeWalkable`). Terrain (cliff-type) doodads are not supported.
+- Deck, ramp, deck-to-deck, failure and limit rules are the same as for destructable decks.
+- Add also returns false and logs for an unknown type, no doodad near the point or no pathing texture.
+- Turning the type walkable off drops units to the ground alive and keeps the declaration.
+- Turning it on brings the deck back and lifts only the dropped units that have not moved or died.
+- A deck that cannot come back stays off until the type is switched off and on again.
+- While the deck is on, rails stop blocking walking only over dry, level ground without ramps.
+- A rail cell stays blocked if its 128 tile has any water (also shallow, so shores), a ramp or two cliff levels.
+- Rails outside the playable area also stay blocked. Rail cells always stay unbuildable.
+- `WmsSetDoodadTypeOpensPathing` still opens the whole pathing texture, water and cliffs included.
 
 ```lua
 -- bridge: a walkable destructable; westRamp, eastRamp: rects over its two ends
@@ -169,6 +185,13 @@ if WmsAddBridgeDeck(bridge, westRamp, eastRamp) then
     print(WmsGetUnitPathingLayer(u))    --> 1 if that point is a deck cell
     WmsSetUnitPathingLayer(u, 0)        -- now under the deck
 end
+
+-- doodad deck: x, y at (or within 128 of) a placed doodad of your type
+local deckId = FourCC('D000')
+WmsSetDoodadTypeWalkable(deckId, true)
+print(WmsAddDoodadBridgeDeck(deckId, x, y, westRamp2, eastRamp2))
+WmsSetDoodadTypeWalkable(deckId, false) -- deck off, still declared
+print(WmsIsDoodadBridgeDeck(deckId, x, y)) --> true if the Add succeeded
 ```
 
 Details for facing:
