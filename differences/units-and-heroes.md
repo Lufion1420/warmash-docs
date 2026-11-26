@@ -118,6 +118,9 @@ Details:
 | `SetUnitTimeScale` | unverified | Kept across animation changes. |
 | `SetUnitAnimationByIndex` | unverified | A looping animation replays until any other animation request. |
 | `BlzSetUnitSkin`, `BlzCreateUnitWithSkin` | works | Change model, portrait, tint and sounds; the animation, a script vertex colour (as measured) and the script scale reset; `SetUnitScale` afterwards is absolute. |
+| Model change (skin, morph) with buff art, held units, rally flag or lightning | unverified | Each moves to the matching point of the new model, else origin. |
+| Model change of a dead unit | unverified | The death or decay stage continues on the new model without repeating sounds or splats. |
+| Resurrection of a unit with a changed skin | bugfix | The unit keeps its skin. |
 | `SetUnitVertexColor` | bugfix | Components clamp to 0..255, as measured. |
 | `SetUnitScale` with a scale buff | deliberate | Drawn scale is script scale times the buff bonus; the script scale survives the buff. |
 | `GetChangingUnitPrevOwner`, `SetUnitFlyHeight` | works | Both work now; see their rows in Players and Movement. |

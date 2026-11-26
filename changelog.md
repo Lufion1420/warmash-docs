@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `WmsSetUnitSkinKeepState(unit, skinId)` (WarMash-only, experimental): changes the skin like `BlzSetUnitSkin` but keeps scale, colours, time scale, animation… (2026-11-27)
 - Animation queries (WarMash-only, experimental): `WmsGetUnitAnimation*` and `WmsGetEffectAnimation*` read count, name, index and length (2026-11-26)
 - Attachment natives (WarMash-only, experimental): `WmsAttachUnitToUnit`, `WmsAttachUnitToEffect`, `WmsDetachUnit`, `WmsAttachEffectToUnit`… (2026-11-26)
 - Walkable surfaces and two-layer bridges are complete (WarMash-only, experimental): clicks and orders target the right level, units follow across ramps, and… (2026-11-26)
@@ -183,7 +184,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
-- A destroyed effect whose unit was removed or morphed is now freed on the next frame (before: never) (2026-11-26)
+- A resurrected unit keeps its changed skin (2026-11-27)
+- A destroyed effect whose unit was removed is now freed on the next frame (before: never) (2026-11-26)
 - `WmsSetDoodadTypeOpensPathing` now also opens doodads whose model file is missing (2026-11-26)
 - `GetLocationZ` includes walkable destructables and returns 0 for a nil location (2026-11-25)
 - Walk height works before a bridge is drawn and follows scale, tilt and the highest part (2026-11-25)
@@ -396,6 +398,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### WC3 compatibility
 
+- A model change (skin, morph, Polymorph) now keeps attached effects, buff art, held units, rally flag and lightning ends on the new model (2026-11-27)
+- A dead unit that changes model now continues its death or decay stage instead of showing Stand (2026-11-27)
 - Walkable destructables, unverified against Reforged: `GetLocationZ` ignores water, destroyed stock bridges still report deck height, odd-angle pathing snaps to… (2026-11-25)
 - Unverified in Reforged: Thunder Clap stacking, added enemy targets and damage-before-slow order (2026-11-25)
 - Spell events (CHANNEL, CAST, EFFECT, FINISH, ENDCAST), `EVENT_UNIT_USE_ITEM`, `EVENT_UNIT_DROP_ITEM` and `EVENT_UNIT_PAWN_ITEM` now fire the owner's… (2026-11-22)

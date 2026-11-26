@@ -103,6 +103,7 @@ Call `Wms` natives from `main()` or later; they are not available during `config
 | `WmsGetEffectAnimationDuration` | `(effect, string name) -> real` | Length in seconds of the named animation. | 2026-11-26 | experimental |
 | `WmsGetEffectAnimationDurationByIndex` | `(effect, integer index) -> real` | Length in seconds of the animation at the index. | 2026-11-26 | experimental |
 | `WmsPlayEffectAnimationByIndex` | `(effect, integer index)` | Plays exactly that animation on the effect. | 2026-11-26 | experimental |
+| `WmsSetUnitSkinKeepState` | `(unit, integer skinId)` | Like `BlzSetUnitSkin`, but keeps the unit's script look and current animation. | 2026-11-27 | experimental |
 
 Details for ability interval events:
 - Passive abilities only (built-in passives, auras, ability-builder passives). Handlers use `GetTriggerUnit`, `GetTriggerPlayer`, `WmsGetEventAbilityId`, `WmsGetEventAbility`.
@@ -258,8 +259,9 @@ Details for attached effects:
 - `WmsDetachEffect`, or destroying the holder effect, returns it to its earlier point, else to the former holder's x, y.
 - False for a null, destroyed or model-less effect or holder effect, a null or removed holder unit, itself or a cycle.
 - The results of `WmsAttachEffectToUnit` and `WmsAttachEffectToEffect` differ per player: do not branch gameplay on them.
-- Known limits: a holder unit that morphs stops showing attached effects until you attach them again.
-- A destroyed effect whose holder unit was removed or morphed is freed on the next frame; `WmsDetachEffect` then cannot bring its death back.
+- A holder unit that changes model (skin, morph, Polymorph) keeps attached effects and held units on the matching point, else origin.
+- A later model that has the point gets them back there. Reforged behaviour is not confirmed.
+- A destroyed effect whose holder unit was removed is freed on the next frame; `WmsDetachEffect` then cannot bring its death back.
 
 ```lua
 if WmsAttachUnitToUnit(victim, carrier, "hand right") then
@@ -276,7 +278,7 @@ Details for animation queries:
 - Units: names resolve with the unit's animation tags and spell fallback. Effects use their sub-animations, without the spell fallback.
 - A nil, unknown or unmatched name gives -1, although `SetUnitAnimation` may still play an untagged animation for an unknown name.
 - Several variants: the lowest index is read (maybe a rare variant), with no random draw. Play that index to match the length.
-- Effects: null, placeholder and freed effects read empty. Living effects whose holder unit was removed or morphed still answer.
+- Effects: null, placeholder and freed effects read empty. Living effects whose holder unit was removed still answer.
 - `WmsPlayEffectAnimationByIndex` follows `BlzPlaySpecialEffect`: Stand and Walk repeat; others play once, then Stand or hold.
 - On a destroyed effect that is still there, the played animation runs, then the effect leaves.
 - Values match across players only with identical model files; per-player paths, skins or data can desync gameplay timed from them.
@@ -287,6 +289,16 @@ if index >= 0 then
     SetUnitAnimationByIndex(u, index)
     local seconds = WmsGetUnitAnimationDurationByIndex(u, index)
 end
+```
+
+Details for `WmsSetUnitSkinKeepState`:
+
+- Kept: `SetUnitScale` scale, vertex colour, `SetUnitColor`, `SetUnitTimeScale`, animation properties, look-at, current animation and queue.
+- Not kept: `SetUnitBlendTime` and the position inside the animation. `BlzSetUnitSkin` resets are unchanged.
+- A null unit, an unknown skin id or the current skin id does nothing.
+
+```lua
+WmsSetUnitSkinKeepState(u, FourCC("hkni"))
 ```
 
 Details for facing:
