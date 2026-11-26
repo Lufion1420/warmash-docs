@@ -92,6 +92,17 @@ Call `Wms` natives from `main()` or later; they are not available during `config
 | `WmsAttachEffectToUnit` | `(effect, unit holder, string point) -> boolean` | Moves the effect onto the unit's attachment point, like `AddSpecialEffectTarget`. | 2026-11-26 | experimental |
 | `WmsAttachEffectToEffect` | `(effect, effect holder, string point) -> boolean` | Moves the effect onto another effect's attachment point. | 2026-11-26 | experimental |
 | `WmsDetachEffect` | `(effect)` | Takes the effect off its holder and puts it back in the world. | 2026-11-26 | experimental |
+| `WmsGetUnitAnimationCount` | `(unit) -> integer` | Number of animations on the unit's current model. | 2026-11-26 | experimental |
+| `WmsGetUnitAnimationName` | `(unit, integer index) -> string` | Model name of the animation at the 0-based index. | 2026-11-26 | experimental |
+| `WmsGetUnitAnimationIndex` | `(unit, string name) -> integer` | Index of the animation `SetUnitAnimation` resolves the name to, else -1. | 2026-11-26 | experimental |
+| `WmsGetUnitAnimationDuration` | `(unit, string name) -> real` | Length in seconds of the named animation. | 2026-11-26 | experimental |
+| `WmsGetUnitAnimationDurationByIndex` | `(unit, integer index) -> real` | Length in seconds of the animation at the index. | 2026-11-26 | experimental |
+| `WmsGetEffectAnimationCount` | `(effect) -> integer` | Number of animations on the effect's model. | 2026-11-26 | experimental |
+| `WmsGetEffectAnimationName` | `(effect, integer index) -> string` | Model name of the animation at the 0-based index. | 2026-11-26 | experimental |
+| `WmsGetEffectAnimationIndex` | `(effect, string name) -> integer` | Index the name resolves to with the effect's sub-animations, else -1. | 2026-11-26 | experimental |
+| `WmsGetEffectAnimationDuration` | `(effect, string name) -> real` | Length in seconds of the named animation. | 2026-11-26 | experimental |
+| `WmsGetEffectAnimationDurationByIndex` | `(effect, integer index) -> real` | Length in seconds of the animation at the index. | 2026-11-26 | experimental |
+| `WmsPlayEffectAnimationByIndex` | `(effect, integer index)` | Plays exactly that animation on the effect. | 2026-11-26 | experimental |
 
 Details for ability interval events:
 - Passive abilities only (built-in passives, auras, ability-builder passives). Handlers use `GetTriggerUnit`, `GetTriggerPlayer`, `WmsGetEventAbilityId`, `WmsGetEventAbility`.
@@ -248,12 +259,33 @@ Details for attached effects:
 - False for a null, destroyed or model-less effect or holder effect, a null or removed holder unit, itself or a cycle.
 - The results of `WmsAttachEffectToUnit` and `WmsAttachEffectToEffect` differ per player: do not branch gameplay on them.
 - Known limits: a holder unit that morphs stops showing attached effects until you attach them again.
-- Destroying an effect whose holder unit was removed does not free it, also for `AddSpecialEffectTarget` effects.
+- A destroyed effect whose holder unit was removed or morphed is freed on the next frame; `WmsDetachEffect` then cannot bring its death back.
 
 ```lua
 if WmsAttachUnitToUnit(victim, carrier, "hand right") then
     -- later: drop the victim next to the carrier
     WmsDetachUnit(victim)
+end
+```
+
+Details for animation queries:
+
+- Index is 0-based, as in `SetUnitAnimationByIndex`. Lengths are at speed 1, ignoring attack speed, blend time and time scale.
+- Bad input reads 0, "" or -1; an invalid play does nothing. The getters change nothing playing.
+- Units: dead, hidden, loaded and off-screen units answer, also right after a morph or skin change. Removed units read 0, even in removal handlers.
+- Units: names resolve with the unit's animation tags and spell fallback. Effects use their sub-animations, without the spell fallback.
+- A nil, unknown or unmatched name gives -1, although `SetUnitAnimation` may still play an untagged animation for an unknown name.
+- Several variants: the lowest index is read (maybe a rare variant), with no random draw. Play that index to match the length.
+- Effects: null, placeholder and freed effects read empty. Living effects whose holder unit was removed or morphed still answer.
+- `WmsPlayEffectAnimationByIndex` follows `BlzPlaySpecialEffect`: Stand and Walk repeat; others play once, then Stand or hold.
+- On a destroyed effect that is still there, the played animation runs, then the effect leaves.
+- Values match across players only with identical model files; per-player paths, skins or data can desync gameplay timed from them.
+
+```lua
+local index = WmsGetUnitAnimationIndex(u, "attack")
+if index >= 0 then
+    SetUnitAnimationByIndex(u, index)
+    local seconds = WmsGetUnitAnimationDurationByIndex(u, index)
 end
 ```
 

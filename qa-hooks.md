@@ -132,6 +132,7 @@ Runs with `-qamem`, `-qadsverify` or `-qablpverify` are slow: never use them for
 | `WarMashQaEffectInfo(effect)` | Script and render state of an effect (JSON). |
 | `WarMashQaEffectScan(text)`, `WarMashQaEffectWatch(text, frames)` | Logs live effects whose model path contains the text. |
 | `WarMashQaAttachInfo(unitOrEffect)` | Attach state of a unit or effect, simulation and drawn positions (JSON). |
+| `WarMashQaRenderEffects()` | Counts of live and stuck entries in the effect list (JSON). |
 | `WarMashQaDnc()` | State of the day and night light models (JSON). |
 | `WarMashQaModelInfo(path)`, `WarMashQaEffectCandidates()` | Model contents and preload candidates (JSON). |
 | `WarMashQaWmfxInfo(pathSuffix)` | Load counts of a `.wmfx.json` sidecar (JSON); `{}` if none was read. |

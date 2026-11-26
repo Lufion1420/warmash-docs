@@ -19,6 +19,7 @@ Lua 5.3 with 64-bit integers. A declared but missing native returns nil and logs
 | Strings passed to natives | gap | Invalid UTF-8 becomes U+FFFD. |
 | Null string results | unverified | Appear as nil. |
 | `ExecuteFunc` | unverified | Queued as a new thread; an unknown name is logged once. |
+| `SetRandomSeed`, `math.randomseed` | gap | Not implemented: logs the missing-native line, so seeding has no effect. |
 | `TriggerSleepAction` outside a trigger action | unverified | The callback ends with one logged traceback. |
 | Handles as weak-table keys | unverified | The key can vanish while the handle lives. |
 | `GetLocalPlayer()` stored at load time | unverified | Should work in WarMash; in Reforged call it at use time. |

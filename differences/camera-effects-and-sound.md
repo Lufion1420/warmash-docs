@@ -48,7 +48,7 @@ Effects attached to a unit ignore position, orientation and alpha. Images are no
 | `BlzSpecialEffectAddSubAnimation`, `RemoveSubAnimation`, `ClearSubAnimations` | partial | `ROOTED`, `ENTANGLE` and `BERSERK` are ignored. |
 | `AddSpecialEffectTarget` attachment names | unverified | Case-insensitive token match; an unknown name attaches to origin. |
 | `AddSpecialEffectTarget` with a missing model | unverified | Returns a null handle (nil in Lua). |
-| `DestroyEffect` | bugfix | Death plays once, at once; particles fade out. |
+| `DestroyEffect` | bugfix | Death plays once, at once; particles fade out. Effects of removed or morphed units are freed next frame. |
 | Effect whose model has no Stand | unverified | Holds its last frame until `DestroyEffect`. |
 | Effect with only Birth and Death | bugfix | Appears once and holds its last frame; before, Birth restarted in a loop. Reforged: pulses until destroyed. |
 | `DestroyEffect` at time scale 0 | deliberate | Death plays at speed 1 so the effect is removed. |

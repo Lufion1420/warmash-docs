@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Animation queries (WarMash-only, experimental): `WmsGetUnitAnimation*` and `WmsGetEffectAnimation*` read count, name, index and length (2026-11-26)
 - Attachment natives (WarMash-only, experimental): `WmsAttachUnitToUnit`, `WmsAttachUnitToEffect`, `WmsDetachUnit`, `WmsAttachEffectToUnit`… (2026-11-26)
 - Walkable surfaces and two-layer bridges are complete (WarMash-only, experimental): clicks and orders target the right level, units follow across ramps, and… (2026-11-26)
 - Doodad bridge decks (WarMash-only, experimental): `WmsAddDoodadBridgeDeck`, `WmsRemoveDoodadBridgeDeck` and `WmsIsDoodadBridgeDeck` give placed walkable… (2026-11-26)
@@ -182,6 +183,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- A destroyed effect whose unit was removed or morphed is now freed on the next frame (before: never) (2026-11-26)
 - `WmsSetDoodadTypeOpensPathing` now also opens doodads whose model file is missing (2026-11-26)
 - `GetLocationZ` includes walkable destructables and returns 0 for a nil location (2026-11-25)
 - Walk height works before a bridge is drawn and follows scale, tilt and the highest part (2026-11-25)
