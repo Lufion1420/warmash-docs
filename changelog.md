@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Walkable surfaces and two-layer bridges are complete (WarMash-only, experimental): clicks and orders target the right level, units follow across ramps, and… (2026-11-26)
 - Doodad bridge decks (WarMash-only, experimental): `WmsAddDoodadBridgeDeck`, `WmsRemoveDoodadBridgeDeck` and `WmsIsDoodadBridgeDeck` give placed walkable… (2026-11-26)
 - Two-layer bridges (WarMash-only, experimental): `WmsAddBridgeDeck`, `WmsRemoveBridgeDeck`, `WmsIsBridgeDeck`, `WmsGetUnitPathingLayer` and… (2026-11-26)
 - Walkable doodads (WarMash-only, experimental): `WmsSetDoodadTypeWalkable` and `WmsSetDoodadTypeOpensPathing`, each with an `Is...` getter (2026-11-25)

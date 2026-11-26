@@ -146,7 +146,7 @@ Details for bridge decks (declaring):
 - Also false and logged: a ramp null, empty or off the map, a broken deck rule, or a building on deck, ramp or rails.
 
 Details for bridge decks (in play):
-- Walking units change layer only at the ramps. A move order onto a deck cell targets the top of the deck.
+- Walking units change layer only at the ramps. A clicked or script point order onto a deck cell targets the top of the deck.
 - Units on the deck do not collide with units under it.
 - New units on a deck cell start on the deck. Moves over 256 onto it land on top; shorter ones follow the walking rule.
 - Flyers and ships ignore layers.
@@ -164,11 +164,23 @@ Details for bridge decks (in play):
 
 Limits while a deck is active:
 - Build orders are refused on deck, ramp and rail cells. Buildings made with `CreateUnit` are still allowed there.
-- Items created, moved, dropped or already lying on deck or ramp cells go to the nearest spot off them. An item moved onto the rails is drawn on top of the bridge.
+- Ancients cannot root where their footprint covers a deck or ramp cell.
+- Items created, moved, dropped or already lying on deck or ramp cells go to the nearest spot off them. An item moved onto the rails is drawn on top of the bridge, but only a ground-level unit can pick it up.
 - Destructable rails no longer block walking underneath, but still block building and, on vision-blocking bridges, sight.
 - On bridges pre-placed over water or cliffs in the World Editor, the terrain pathing under the deck is lost.
 - Units with collision size 40 or more can get stranded on 2-cell ramps when created or teleported onto a deck.
-- Clicking and following across the two levels is not done yet.
+- A portrait click on a unit sends a plain point, so on a two-layer point the deck wins.
+
+Details for orders and actions across levels:
+- Patrol and guard return points keep the unit's level.
+- Orders on a unit walk to its level and track changes. A follower is with its target only where they could touch.
+- Melee attacks (instant attacks up to range 128 included) need the same level.
+- So do item pickup, give, drop and pawn, repair, building, gold-mine harvest and returning resources.
+- So do load, unload, way gates, shop service and unit merging.
+- Ranged attacks, spells, auras, area effects, script natives and tree harvest ignore levels.
+- Auto-acquire and retaliation prefer a touchable target at equal priority. Units that cannot walk skip untouchable ones.
+- A target that cannot be reached is given up like any unreachable target.
+- Clicking picks the nearest unit hit; a declared bridge never hides a unit from clicks.
 
 Details for doodad decks:
 - The doodad is the placed plain doodad of that type nearest to the point, within 128; a tie takes the first placed.

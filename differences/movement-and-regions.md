@@ -96,12 +96,21 @@ Only bridges declared with `WmsAddBridgeDeck` or `WmsAddDoodadBridgeDeck` behave
 | `WmsAddDoodadBridgeDeck`, `WmsRemoveDoodadBridgeDeck`, `WmsIsDoodadBridgeDeck` (WarMash only) | deliberate | The same decks on placed walkable doodads, off while the type is not walkable. |
 | `WmsGetUnitPathingLayer`, `WmsSetUnitPathingLayer` (WarMash only) | deliberate | Read or set whether a unit is on a deck or below it. |
 | `CreateUnit`, `ReviveHero`, summons, teleports onto a deck | deliberate | New units and moves over 256 land on top; shorter moves follow the walking rule. |
-| Build orders near an active deck | deliberate | Refused on deck, ramp and rail cells; `CreateUnit` can still place buildings there. |
+| Build and root orders near an active deck | deliberate | Building is refused on deck, ramp and rail cells, rooting on deck and ramp cells; `CreateUnit` still places buildings. |
 | `CreateItem`, `BlzCreateItemWithSkin`, `SetItemPosition`, item drops | deliberate | Items on deck or ramp cells go to the nearest spot off them. |
 | Destructable bridge rails with an active deck | deliberate | Stop blocking walking underneath; still block building and, on vision-blocking bridges, sight. |
 | Doodad bridge rails with an active deck | deliberate | Stop blocking walking only over dry, level, ramp-free ground; rail cells stay unbuildable. |
 | Units drawn under an active deck | deliberate | Drawn on the ground, hidden by the bridge model; the health bar still shows through. |
-| Clicking and following across levels | gap | Not done yet for the two levels of a declared deck. |
+| Point orders onto a two-layer point (clicks and script) | deliberate | Go to the deck; patrol and guard return points keep the unit's level. |
+| Orders on a unit, following | deliberate | Units walk to the target's level and track changes; followers settle only where they could touch the target. |
+| Melee attacks across levels | deliberate | Need the same level, including instant attacks with range up to 128. |
+| Item, worker, transport, shop and merge actions | deliberate | Need the same level: items, repair, building, gold, returning resources, load, unload, way gates, shops. |
+| Ranged attacks, spells, auras, area effects, script natives, tree harvest | deliberate | Ignore levels. |
+| Auto-acquire and retaliation across levels | deliberate | Prefer touchable targets at equal priority; units that cannot walk skip untouchable ones. |
+| Unreachable targets on the other level | deliberate | Given up like any other unreachable target. |
+| Clicking units while a deck is active | deliberate | Picks the nearest unit hit; a declared bridge never hides a unit from clicks. |
+| Item on a bridge rail | partial | Drawn on the rail, but only a ground-level unit can pick it up. |
+| Portrait click on a unit | partial | Sends a plain point, so on a two-layer point the deck wins. |
 
 Details:
 

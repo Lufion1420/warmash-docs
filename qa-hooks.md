@@ -49,6 +49,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `walkable_deck_scene.lua` (scene script) | Checks the bridge deck natives, walking over and under, and build and item limits on that map. |
 | `walkable_doodad_deck_scene.lua` (scene script) | Checks the doodad bridge deck natives, rails, and build and item limits on that map. |
 | `walkable_deck_draw_scene.lua` (scene script) | Checks drawn heights of units, items, effects and projectiles around a bridge deck on that map. |
+| `walkable_deck_touch_scene.lua` (scene script) | Checks orders, melee, follow, pickup and unit clicks across the two levels on that map. |
 
 ## Log fields worth knowing
 
