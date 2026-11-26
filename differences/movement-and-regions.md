@@ -100,7 +100,8 @@ Only bridges declared with `WmsAddBridgeDeck` or `WmsAddDoodadBridgeDeck` behave
 | `CreateItem`, `BlzCreateItemWithSkin`, `SetItemPosition`, item drops | deliberate | Items on deck or ramp cells go to the nearest spot off them. |
 | Destructable bridge rails with an active deck | deliberate | Stop blocking walking underneath; still block building and, on vision-blocking bridges, sight. |
 | Doodad bridge rails with an active deck | deliberate | Stop blocking walking only over dry, level, ramp-free ground; rail cells stay unbuildable. |
-| Deck drawing and click targeting | gap | Not done yet; layer-0 units on or under a deck are still drawn at model height. |
+| Units drawn under an active deck | deliberate | Drawn on the ground, hidden by the bridge model; the health bar still shows through. |
+| Clicking and following across levels | gap | Not done yet for the two levels of a declared deck. |
 
 Details:
 

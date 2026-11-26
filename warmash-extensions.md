@@ -156,14 +156,19 @@ Details for bridge decks (in play):
 - A deck that cannot come back (building or other deck in the way) stays off until the next revive or show.
 - `WmsSetUnitPathingLayer` returns false for null, flyers, ships, structures, 1 off a deck cell, or while no deck is active.
 - Layer numbers other than 0 and 1 return false and are logged.
+- A unit under an active deck stands on the ground, hidden by the bridge model. Its health bar shows through, its selection circle does not.
+- Ramps must reach where the model meets the ground; short ramps make ground units sink into the slope, then jump up.
+- Model ends that miss the ground cause height jumps at the deck ends: about 195 on a stock bridge at flat-ground height.
+- Projectiles launch from the height of the unit at the launch point, also bounces and Storm Bolt.
+- Removing the deck declaration turns the bridge back into an ordinary single-level walkable surface.
 
 Limits while a deck is active:
 - Build orders are refused on deck, ramp and rail cells. Buildings made with `CreateUnit` are still allowed there.
-- Items created, moved, dropped or already lying on deck or ramp cells go to the nearest spot off them.
+- Items created, moved, dropped or already lying on deck or ramp cells go to the nearest spot off them. An item moved onto the rails is drawn on top of the bridge.
 - Destructable rails no longer block walking underneath, but still block building and, on vision-blocking bridges, sight.
 - On bridges pre-placed over water or cliffs in the World Editor, the terrain pathing under the deck is lost.
 - Units with collision size 40 or more can get stranded on 2-cell ramps when created or teleported onto a deck.
-- Deck drawing and click targeting are not done: layer-0 units on or under a deck are still drawn at model height.
+- Clicking and following across the two levels is not done yet.
 
 Details for doodad decks:
 - The doodad is the placed plain doodad of that type nearest to the point, within 128; a tie takes the first placed.

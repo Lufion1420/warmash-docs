@@ -122,6 +122,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- Two-layer bridges: units under an active declared deck are now drawn on the ground, hidden by the bridge model (2026-11-26)
 - MDX texture animation scale now uses x for U and y for V (before: x for both) (2026-11-25)
 - Sidecar `uv0Scale` tracks accept unequal, zero and negative values (before: such a track was ignored) (2026-11-25)
 - Order 851976 on a hero altar cancels the last queue slot instead of the front (unmeasured for altars) (2026-11-25)
