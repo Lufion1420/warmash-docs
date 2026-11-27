@@ -17,6 +17,10 @@ In a single-player start of a non-melee map only the local player's slot is play
 | `SetPlayerState` | bugfix | Config phase keeps only `ALLIED_VICTORY` and `GIVES_BOUNTY`; in-game states fixed. |
 | Slot states in a single-player non-melee start | unverified | Other user slots are empty, not playing. |
 | `IsUnitOwnedByPlayer` | works | False when an argument is nil. |
+| `SetPlayerColor`, `SetUnitColor` with a nil argument or removed unit | bugfix | Do nothing and log once instead of raising an error; Reforged unmeasured. |
+| `GetPlayerColor(nil)`, `SetCinematicScene` with a nil colour | bugfix | Return nil, or draw colour 0, instead of raising an error; Reforged unmeasured. |
+| `ConvertPlayerColor` outside 0 to 27 | unverified | Returns nil and logs once (a negative index raised an error); Reforged may return a handle. |
+| `GetPlayerColor` of slots 25 to 27 | unverified | Black, with colour index equal to the slot (was nil); lobby swatches show red for 24 to 27. |
 | `GetChangingUnit`, `GetChangingUnitPrevOwner`, change-owner events | bugfix | Fire for `SetUnitOwner` and Charm; nesting stops at 16 levels. |
 | `GetPlayerUnitCount` | unverified | Living units including structures; units in a training queue never count. |
 | `GetPlayerStructureCount` | bugfix | Counts living structures only. |

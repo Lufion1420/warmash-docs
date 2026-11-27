@@ -67,7 +67,7 @@ Missing natives are not listed one by one. Stored-only and stub natives are in t
 | `BlzDeleteHeroAbility` (declared by 1.29 `common.j` only) | gap | Not implemented. |
 | A declared native without implementation | gap | Returns nil and logs one line; no error is raised. |
 | `MathRound` | unverified | Half away from zero. |
-| `PLAYER_COLOR_BLACK` | works | `ConvertPlayerColor(24)` is a valid colour for `SetPlayerColor` and `GetPlayerColor`; the lobby still shows 24 colours. |
+| `PLAYER_COLOR_BLACK` | works | `ConvertPlayerColor(24)` is a valid colour for `SetPlayerColor` and `GetPlayerColor`; its lobby swatch shows red. |
 | `MAP_RELOADED` | gap | nil. |
 | `Convert*` anim, subanim, fog style, key and mouse values | gap | Values exist, but no native uses the new ones yet. |
 
