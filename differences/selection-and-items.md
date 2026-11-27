@@ -38,14 +38,8 @@ Shop purchases by script or UI work; the stock rules are unverified. Sell and pa
 | `QueueDestructableAnimation`, `SetDestructableAnimationSpeed` | unverified | Queued animation plays after the current one ends; speed persists across animation changes. Not checked visually. |
 | `SetDestructableMaxLife` | unverified | Current life stays unless above the new maximum, then it is clamped; a maximum of 0 or less never kills. |
 | `GetDestructableName`, `IsDestructableInvulnerable` | works | Name is the raw type name, no TRIGSTR lookup; invulnerable reads the `SetDestructableInvulnerable` flag. |
-| `BlzGetItemIntegerField` with `'iarm'` and tint fields | gap | Return 0 with one log line. |
 | `BlzSetItemName`, `BlzSetItemDescription`, `BlzSetItemTooltip`, `BlzSetItemExtendedTooltip`, `BlzSetItemIconPath`, `BlzGetItemTooltip`, `BlzGetItemExtendedTooltip` | works | Per-item overrides; a script icon also replaces the disabled icon. |
-| `BlzItemRemoveAbility` | works | Removes the ability from the item. |
 | `UnitDropItemPoint` | unverified | Returns true and drops on a later tick; false for a unit that cannot move when the point is out of drop range. |
-| `BlzSetItemBooleanField` | partial | Four fields; others return false. |
-| `BlzItemAddAbility`, `BlzGetItemAbility`, `BlzGetItemAbilityByIndex` | gap | Not implemented. |
-| `BlzGetItemBooleanField`, `BlzGetItemRealField`, `BlzGetItemStringField` | gap | Not implemented. |
-| `BlzSetItemIntegerField`, `BlzSetItemRealField`, `BlzSetItemStringField` | gap | Not implemented. |
 | `UnitAddItem`, `UnitHasItem` | bugfix | `UnitAddItem` returns a boolean. |
 | `UnitAddItemById`, `UnitAddItemToSlotById` on a dead unit | bugfix | Return nil and create no item, as measured; `UnitAddItem` returns false (inferred). |
 | `UnitUseItem`, `UnitUseItemTarget` | deliberate | False when the order is refused (a potion at full life); Reforged returns true. |
@@ -73,3 +67,29 @@ Shop purchases by script or UI work; the stock rules are unverified. Sell and pa
 | Handler that kills the giver during a give | gap | The give still completes. |
 | `IssueNeutralPointOrder`, `IssueNeutralPointOrderById`, `IssueNeutralTargetOrder`, `IssueNeutralTargetOrderById` | unverified | `neutralinteract` sets the shop selection for the ordering player only. |
 | `IssueNeutralImmediateOrder` (string form) | gap | Not implemented on purpose. |
+
+### Item fields and item abilities
+
+Field values belong to one item, not its type. Script changes to tint, scale, model, priority and random choice have no effect.
+
+| Native | Status | What differs |
+|---|---|---|
+| `BlzGetItemBooleanField`, `BlzGetItemIntegerField`, `BlzGetItemRealField`, `BlzGetItemStringField` and the `BlzSetItem...Field` forms | unverified | Per item; values survive drop, give, slot swap, death drop and revive. |
+| Refused item field writes | unverified | Unknown or wrong field, max HP below 1, armor type outside 0 to 5, NaN and infinity. |
+| `ITEM_IF_PRIORITY`, `ITEM_BF_INCLUDE_AS_RANDOM_CHOICE`, `ITEM_SF_MODEL_USED`, `ITEM_RF_SCALING_VALUE`, `ITEM_IF_TINTING_COLOR_RED`, `GREEN`, `BLUE`, `ALPHA` | stored-only | Stored and read back only; nothing is drawn or picked differently. |
+| `BlzGetItemIntegerField` (armor type, tint), `BlzSetItemBooleanField` (perishable, powerup, random choice) | bugfix | Now answered and accepted; before they returned 0 or false. |
+| `GetItemLevel`, `IsItemPawnable`, `IsItemPowerup` | bugfix | Read the individual item; `IsItemPawnable` ignored `SetItemPawnable` before. |
+| `BlzItemAddAbility` | unverified | Needs a carrier; false on the ground, for duplicates and for unknown or uncreatable abilities. |
+| `BlzGetItemAbility`, `BlzGetItemAbilityByIndex` | unverified | Nil on a ground item or removed holder; a new handle after each pickup. |
+| `BlzItemRemoveAbility` | works | Removes the ability from the item. |
+| Field and item ability natives on a removed item | unverified | Getters return defaults; setters, adding and removing return false. |
+| `SetWidgetLife` on an item with 0 or less | unverified | Fires death events, drops a carried item and removes its collision; handlers run after the drop. |
+| `SetWidgetLife`, `ITEM_IF_HIT_POINTS` on a removed item | unverified | Changes nothing. |
+| Unit morph while holding items | bugfix | Item abilities and bonuses stay; before, they were lost or subtracted twice. |
+| Temporary buff damage bonuses (Avatar and similar) on a morph | gap | Still lost. |
+
+Details:
+
+- Tint values are clamped to 0 to 255.
+- `ITEM_IF_ARMOR_TYPE` uses the `ConvertArmorType` numbers 0 to 5.
+- Each refused field is logged once.

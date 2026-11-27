@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- The item field and item ability natives exist: `BlzGetItemBooleanField`/`RealField`/`StringField`, `BlzSetItemIntegerField`/`RealField`/`StringField`… (2026-11-27)
 - The remaining ability field natives exist: non-level `BlzGet/SetAbility*Field`, boolean level, `BlzSetAbilityStringLevelField` and the level array… (2026-11-27)
 - `WmsSetUnitSkinKeepState(unit, skinId)` (WarMash-only, experimental): changes the skin like `BlzSetUnitSkin` but keeps scale, colours, time scale, animation… (2026-11-27)
 - Animation queries (WarMash-only, experimental): `WmsGetUnitAnimation*` and `WmsGetEffectAnimation*` read count, name, index and length (2026-11-26)
@@ -187,6 +188,9 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `BlzGetItemIntegerField` answers armor type and tint, `BlzSetItemBooleanField` accepts perishable, powerup and random choice, and `GetItemLevel`… (2026-11-27)
+- `SetWidgetLife` with 0 or less on an item now fires its death events and drops it if carried (2026-11-27)
+- A unit morph keeps held item abilities and bonuses (before: lost or subtracted twice) (2026-11-27)
 - `BlzSetAbilityIntegerLevelField` and `BlzSetAbilityRealLevelField` with a huge level on a per-level list field no longer hang or run out of memory (2026-11-27)
 - A resurrected unit keeps its changed skin (2026-11-27)
 - A destroyed effect whose unit was removed is now freed on the next frame (before: never) (2026-11-26)
@@ -402,6 +406,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### WC3 compatibility
 
+- Item field rules are unverified against Reforged: values survive drops, `BlzItemAddAbility` needs a carrier, ground items give no ability handle, out-of-range… (2026-11-27)
 - A model change (skin, morph, Polymorph) now keeps attached effects, buff art, held units, rally flag and lightning ends on the new model (2026-11-27)
 - A dead unit that changes model now continues its death or decay stage instead of showing Stand (2026-11-27)
 - Walkable destructables, unverified against Reforged: `GetLocationZ` ignores water, destroyed stock bridges still report deck height, odd-angle pathing snaps to… (2026-11-25)
