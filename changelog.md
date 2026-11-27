@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Machine-readable script API reference `warmash-api.json`: natives with signature and status, plus events, constants and types, for map and editor developers (2026-11-27)
 - Unit number fields for bounty, level, targeted-as, priority, minimum range, death time, current life and mana and fly height, plus read-only type values (2026-11-27)
 - Unit number fields for hero stats (`ustc`, `uagc`, `uinc`; `ustb`, `uagb`, `uinb` read only), per-level growth (`ustp`, `uagp`, `uinp`), primary attribute… (2026-11-27)
 - Weapon fields `uaen` (attacks enabled), `ua1g` and `ua1p` (target bitfields) can be read and written per unit attack (2026-11-27)

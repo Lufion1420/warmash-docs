@@ -60,7 +60,7 @@ Missing natives are not listed one by one. Stored-only and stub natives are in t
 
 | Native | Status | What differs |
 |---|---|---|
-| Unimplemented natives | gap | 594 declared natives missing in the Lua game VM (count of 2026-11-16); see Details for the list. |
+| Unimplemented natives | gap | 503 natives of the bundled `common.j` are missing in the Lua game VM (count of 2026-11-27). |
 | A declared native without implementation | gap | Returns nil and logs one line; no error is raised. |
 | `MathRound` | unverified | Half away from zero. |
 | `PLAYER_COLOR_BLACK` | works | `ConvertPlayerColor(24)` is a valid colour for `SetPlayerColor` and `GetPlayerColor`; the lobby still shows 24 colours. |
@@ -69,4 +69,4 @@ Missing natives are not listed one by one. Stored-only and stub natives are in t
 
 Details:
 - Get the list: launch a Lua map and read the sorted `[lua] natives declared without implementation` list (the second one) in the newest `Logs/*.err.log` in the game's assets folder.
-- Earlier counts: a stock JASS melee map 304 (2026-11-16); 865 of 1712 before later work.
+- A stock JASS melee map: 261 missing (2026-11-27).
