@@ -31,6 +31,9 @@ Interface parts that continue [UI frames](ui-frames.html).
 | Hero buttons after a script moved one | deliberate | Buttons the script never moved are not drawn and take no clicks, even after `BlzFrameSetVisible(true)`; `BlzFrameIsVisible` still reads true. As in Reforged; cause unverified. |
 | `ORIGIN_FRAME_PORTRAIT` | deliberate | Drawn exactly in the frame rect; Reforged's offset quirk is not copied. |
 | Selected unit's portrait on morph or Polymorph | bugfix | The 3D portrait follows the new model without reselecting, as in WC3. |
+| Portrait camera after a model change | bugfix | The new model's camera applies at once; a model without one no longer keeps the old camera. |
+| `BlzHideOriginFrames` off and on with `ShowInterface` in one callback | bugfix | The portrait no longer stays hidden. |
+| Portrait of a speaking unit that changes model | unverified | The talk animation continues until its voice line ends, also after an animation tag change. |
 | Multi-selection group icons and transport cargo icons when `ConsoleUI` moves | bugfix | Follow its position, so a map that moves it off screen hides them, as in Reforged. |
 | `BlzFrameSetVisible(ConsoleUI, false)` and build-queue icons | bugfix | Hiding `ConsoleUI` also hides the group, cargo and build-queue icons, and they follow a moved `ConsoleUI`. |
 | Inventory parts when `ConsoleUI` moves | bugfix | Follow its position, not its visibility, alpha or scale. |

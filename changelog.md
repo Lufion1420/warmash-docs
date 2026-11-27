@@ -203,6 +203,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 - `ExecuteFunc` functions now read the caller's event getters and triggering trigger, and their waits always wait (2026-11-27)
 - `BlzSetEventDamage` and the damage type setters change nothing after their damage event ended (type setters return false) and log once (2026-11-27)
 - The selected unit's 3D portrait now follows a morph or Polymorph without reselecting, as in Warcraft III (2026-11-27)
+- Unit portrait: a morph shows the new model's camera at once, unhiding with `ShowInterface` calls in one callback works, and 2D images no longer flash misplaced (2026-11-27)
+- A speaking unit's portrait keeps the talk animation when its model or animation tags change during the line (not measured in Warcraft III) (2026-11-27)
 - Item writes of `ITEM_SF_MODEL_USED`, `ITEM_RF_SCALING_VALUE` and the `ITEM_IF_TINTING_COLOR_*` fields now change the ground item (before: stored only) (2026-11-27)
 - A unit type with bounty dice but sides 0 or less no longer raises an error when the unit dies (2026-11-27)
 - `SetHeroStr`, `SetHeroAgi` and `SetHeroInt` with a nil unit no longer throw (2026-11-27)

@@ -313,8 +313,9 @@ Details for 2D portraits:
 - A unit's own image stays through model changes and revives, until the unit is removed.
 - Only the in-game unit portrait changes. Talking heads stay 3D on purpose; items and destructables stay 3D.
 - The image is centred on black at its own aspect ratio.
-- A `.png` is read by its exact path, at most 8192 pixels wide and high. Other paths load like HUD textures.
-- A failed load is logged once, is not retried on that map, and the 3D model stays.
+- A `.png` is read by its exact path. Other paths load like HUD textures.
+- A `.png` must be real PNG data: at most 4096x4096 pixels in total, 8192 per side and 96 MB.
+- A failed or refused load leaves the 3D model; each exact path spelling is tried and logged once per map.
 - A unit's own image that failed to load shows the 3D model, not the type's image.
 - Flipbook frames run row by row from the top left. A rate of 0 or less shows the first frame.
 - Columns and rows are 1 to 256, at most 4096 frames; otherwise the call is ignored and logged once per native.
