@@ -57,7 +57,13 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `UNIT_IF_UNIT_CLASSIFICATION` writes | bugfix | Bit 128 is only Ancient and never blocks targeting; `IsUnitType(ANCIENT)` and ancient target lists read it, as measured. |
 | `UNIT_IF_UNIT_CLASSIFICATION` write replaces the field | bugfix | Writing 128 or 0 clears `IsUnitType(MECHANICAL)`, and 0 clears the type's own Ancient, as measured. |
 | `UnitAddType`, `UnitRemoveType` after a classification write | bugfix | Set and clear the mechanical, undead and ancient bits (128 plus mechanical reads 136), as measured. |
-| `BlzGetUnitBooleanField` | partial | 12 fields, read from the unit type, not the unit; `BlzSetUnitBooleanField` is missing. |
+| `BlzGetUnitBooleanField` | bugfix | Reads the unit's own value, not only the type's; `uatg` and `ufhp` return what was written. |
+| `BlzSetUnitBooleanField` | partial | `urai`, `udec`, `uhhb`, `unbm` apply per unit until a type change; `ubdg` returns false. |
+| `BlzSetUnitBooleanField`, other fields | stored-only | Stored per unit and read back until a type change; no effect. |
+| `BlzSetUnitBooleanField(hero, UNIT_BF_RAISABLE, true)` | deliberate | Returns false and writes nothing unless the hero type is already raisable; Warcraft III behavior not confirmed. |
+| `BlzGetUnitStringField`, `BlzSetUnitStringField` | partial | `unam` and `upro` work per unit; other unsupported fields read empty and set false. |
+| `BlzSetUnitStringField` with `uubs`, `ushu` | stored-only | Stored per unit and read back; nothing visible changes. |
+| `BlzSetUnitName` | unverified | Per-unit name for `GetUnitName` and the HUD; nil or empty is ignored; lost on type change. |
 | `SetUnitState` life and mana | bugfix | Clamped to the maximum; lowering max life does not lower current life. |
 | `BlzGetUnitCollisionSize`, `GetDestructableTypeId`, `GetDestructableOccluderHeight` | works | Implemented. |
 | `IsUnitInRange`, `IsUnitInRangeLoc`, `IsUnitInRangeXY` | bugfix | Real range checks from the first unit's edge; `IsUnitInRangeXY` was always false. |
@@ -70,7 +76,8 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 
 Details:
 - `BlzGetUnitRealField` fields: `uhpr`, `umpr`, `udfc`, `usir`, `uacq`, `ucpt`, `ucbs`, `ustp`, `uagp`, `uinp`, `uhpc`, `umpc`, `umvc`, `umvr`, `ufyh`, `usca`, `ussc`. Armor is unrounded; `usca` ignores `SetUnitScale`; sight radius excludes ability bonuses.
-- `BlzGetUnitBooleanField` fields: `urai`, `udec`, `ubdg`, `ulos`, `unbm`, `uhhb`, `uhhm`, `uhhd`, `uhom`, `uscb`, `usew`, `ushr`.
+- Boolean fields: `urai`, `udec`, `ubdg`, `ulos`, `unbm`, `uhhb`, `uhhm`, `uhhd`, `uhom`, `uscb`, `usew`, `ushr`, `uatg`, `ufhp`; others read false.
+- Stored-only boolean fields: `ulos`, `uhhm`, `uhhd`, `uhom`, `uscb`, `usew`, `ushr`, `uatg`, `ufhp`.
 - Weapon index of the `BlzSet/GetUnit*` damage natives is 0 or 1; out of range a setter does nothing and a getter returns 0.
 
 ### Heroes
@@ -82,7 +89,7 @@ Details:
 | `SetHeroStr`, `SetHeroAgi`, `SetHeroInt` | bugfix | `GetHeroStr(false)` and the others return the value set; the non-permanent form does nothing. |
 | `GetHeroLevel`, `GetUnitLevel`, `GetHeroXP` | works | Implemented. |
 | `GetHeroProperName` | works | Returns nil for a non-hero. |
-| `BlzSetHeroProperName` | works | The hero-bar tooltip and revive button show the new name only after their next rebuild. |
+| `BlzSetHeroProperName` | bugfix | Resolves `TRIGSTR_n` and refreshes cargo and tooltips; unresolvable text stays literal, also in unit name and texture setters. |
 | Hero proper name at creation | gap | Stock heroes always get their first proper name, not a random one. |
 | `ResurrectUnit`, Resurrection, Reincarnation end | bugfix | Food and tech count released by death come back once by the stored amounts; a unit killed again during the revive is skipped. |
 | `ResurrectUnit` on a dead hero in an altar revive queue | unverified | The hero leaves the queue and the altar's food and gold are refunded; Reforged behavior not confirmed. |

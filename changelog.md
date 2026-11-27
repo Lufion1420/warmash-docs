@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- `BlzGetUnitStringField`, `BlzSetUnitStringField`, `BlzSetUnitBooleanField` and `BlzSetUnitName` exist, per unit (2026-11-27)
 - The item field and item ability natives exist: `BlzGetItemBooleanField`/`RealField`/`StringField`, `BlzSetItemIntegerField`/`RealField`/`StringField`… (2026-11-27)
 - The remaining ability field natives exist: non-level `BlzGet/SetAbility*Field`, boolean level, `BlzSetAbilityStringLevelField` and the level array… (2026-11-27)
 - `WmsSetUnitSkinKeepState(unit, skinId)` (WarMash-only, experimental): changes the skin like `BlzSetUnitSkin` but keeps scale, colours, time scale, animation… (2026-11-27)
@@ -188,6 +189,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `BlzGetUnitBooleanField` reads the unit's own value instead of only the type's (2026-11-27)
+- `BlzSetHeroProperName` resolves `TRIGSTR_n` and refreshes cargo and tooltips (2026-11-27)
 - `BlzGetItemIntegerField` answers armor type and tint, `BlzSetItemBooleanField` accepts perishable, powerup and random choice, and `GetItemLevel`… (2026-11-27)
 - `SetWidgetLife` with 0 or less on an item now fires its death events and drops it if carried (2026-11-27)
 - A unit morph keeps held item abilities and bonuses (before: lost or subtracted twice) (2026-11-27)
