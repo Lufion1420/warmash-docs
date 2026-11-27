@@ -14,6 +14,7 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | Native | Status | What differs |
 |---|---|---|
 | `BlzGetUnitBaseDamage` | unverified | Weapon damage plus the hero's primary-attribute bonus; upgrades excluded and weapon index 0-based, as measured. |
+| `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitBaseDamage` | bugfix | Extreme values are clamped and non-finite cooldowns ignored; negative sides crashed and huge dice froze. |
 | Attack dice upgrade (`BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`) | works | The upgrade raises the number of dice only, as measured. |
 | `BlzGetUnitAttackCooldown`, `BlzIsUnitInvulnerable` | works | The cooldown is the base value without attack-speed bonuses. |
 | `BlzGetUnitRealField` | partial | 17 fields (see Details); other fields return 0 with one log line. |
@@ -79,6 +80,24 @@ Details:
 - Boolean fields: `urai`, `udec`, `ubdg`, `ulos`, `unbm`, `uhhb`, `uhhm`, `uhhd`, `uhom`, `uscb`, `usew`, `ushr`, `uatg`, `ufhp`; others read false.
 - Stored-only boolean fields: `ulos`, `uhhm`, `uhhd`, `uhom`, `uscb`, `usew`, `ushr`, `uatg`, `ufhp`.
 - Weapon index of the `BlzSet/GetUnit*` damage natives is 0 or 1; out of range a setter does nothing and a getter returns 0.
+
+### Weapon fields
+
+| Native | Status | What differs |
+|---|---|---|
+| `BlzGetUnitWeapon*Field`, `BlzSetUnitWeapon*Field` (Integer, Real, Boolean, String) | partial | Per-unit attack values at index 0 or 1; writes are lost on unit type change. |
+| Weapon fields on a dead unit | deliberate | Read and write like a living unit's; Warcraft III behavior not confirmed. |
+| Weapon fields on a removed unit, bad index or missing attack | unverified | Setters return false; getters read 0, false or empty. |
+| `uaen`, `ua1g`, `ua1p` | gap | Not supported yet: getters read 0 or false, setters return false. |
+| Setting `udl1`, `usd1`, `usr1`, `umh1` | stub | Returns true and changes nothing. |
+| Fields the attack's weapon type does not hold | stub | Stored on the attack and read back; no effect. |
+| `uwu1` (show attack in UI) | partial | Stored and read back, but the info panel still shows attack 1. |
+| `ua1t`, `ucs1` integers | unverified | Follow `ConvertAttackType` and `ConvertWeaponType` order; out-of-range values return false. |
+| Weapon field value limits | unverified | Values outside the limits are clamped; NaN and infinity return false. |
+
+Details:
+- Fields: `ua1d`, `ua1b`, `ua1s`, `utc1`, `ua1t`, `ucs1`, `ubs1`, `udp1`, `ua1c`, `udl1`, `uhd1`, `uqd1`, `usd1`, `usr1`, `ua1z`, `uma1`, `ua1f`, `ua1h`, `ua1q`, `ua1r`, `uwu1`, `umh1`, `ua1m`.
+- Limits: dice 0-10000, sides 0-100000, cooldown, damage point, backswing 0-3600, areas and speed 0-100000, range 16-100000, targets 1-10000, `uhd1`/`uqd1` 0-1000, `uma1` -10 to 10.
 
 ### Heroes
 

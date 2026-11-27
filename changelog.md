@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- The unit weapon field natives `BlzGet/SetUnitWeapon{Integer,Real,Boolean,String}Field` exist, per unit attack (2026-11-27)
 - `BlzGetUnitStringField`, `BlzSetUnitStringField`, `BlzSetUnitBooleanField` and `BlzSetUnitName` exist, per unit (2026-11-27)
 - The item field and item ability natives exist: `BlzGetItemBooleanField`/`RealField`/`StringField`, `BlzSetItemIntegerField`/`RealField`/`StringField`… (2026-11-27)
 - The remaining ability field natives exist: non-level `BlzGet/SetAbility*Field`, boolean level, `BlzSetAbilityStringLevelField` and the level array… (2026-11-27)
@@ -189,6 +190,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown` and `BlzSetUnitBaseDamage` clamp extreme values (2026-11-27)
 - `BlzGetUnitBooleanField` reads the unit's own value instead of only the type's (2026-11-27)
 - `BlzSetHeroProperName` resolves `TRIGSTR_n` and refreshes cargo and tooltips (2026-11-27)
 - `BlzGetItemIntegerField` answers armor type and tint, `BlzSetItemBooleanField` accepts perishable, powerup and random choice, and `GetItemLevel`… (2026-11-27)
