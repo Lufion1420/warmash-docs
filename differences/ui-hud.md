@@ -30,6 +30,7 @@ Interface parts that continue [UI frames](ui-frames.html).
 | Stock hero bar position | deliberate | Sits at the widescreen window's left edge, as in Reforged. |
 | Hero buttons after a script moved one | deliberate | Buttons the script never moved are not drawn and take no clicks, even after `BlzFrameSetVisible(true)`; `BlzFrameIsVisible` still reads true. As in Reforged; cause unverified. |
 | `ORIGIN_FRAME_PORTRAIT` | deliberate | Drawn exactly in the frame rect; Reforged's offset quirk is not copied. |
+| Selected unit's portrait on morph or Polymorph | bugfix | The 3D portrait follows the new model without reselecting, as in WC3. |
 | Multi-selection group icons and transport cargo icons when `ConsoleUI` moves | bugfix | Follow its position, so a map that moves it off screen hides them, as in Reforged. |
 | `BlzFrameSetVisible(ConsoleUI, false)` and build-queue icons | bugfix | Hiding `ConsoleUI` also hides the group, cargo and build-queue icons, and they follow a moved `ConsoleUI`. |
 | Inventory parts when `ConsoleUI` moves | bugfix | Follow its position, not its visibility, alpha or scale. |

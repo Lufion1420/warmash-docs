@@ -104,6 +104,10 @@ Call `Wms` natives from `main()` or later; they are not available during `config
 | `WmsGetEffectAnimationDurationByIndex` | `(effect, integer index) -> real` | Length in seconds of the animation at the index. | 2026-11-26 | experimental |
 | `WmsPlayEffectAnimationByIndex` | `(effect, integer index)` | Plays exactly that animation on the effect. | 2026-11-26 | experimental |
 | `WmsSetUnitSkinKeepState` | `(unit, integer skinId)` | Like `BlzSetUnitSkin`, but keeps the unit's script look and current animation. | 2026-11-27 | experimental |
+| `WmsSetUnitPortraitTexture` | `(unit, string path)` | Shows a 2D image instead of the 3D model in this unit's portrait. | 2026-11-27 | experimental |
+| `WmsSetUnitTypePortraitTexture` | `(integer unitTypeId, string path)` | Same for every unit of the type without its own image. | 2026-11-27 | experimental |
+| `WmsSetUnitPortraitFlipbook` | `(unit, string path, integer columns, integer rows, real framesPerSecond)` | Plays an image grid as a looping animation in this unit's portrait. | 2026-11-27 | experimental |
+| `WmsSetUnitTypePortraitFlipbook` | `(integer unitTypeId, string path, integer columns, integer rows, real framesPerSecond)` | Same for every unit of the type without its own image. | 2026-11-27 | experimental |
 
 Details for ability interval events:
 - Passive abilities only (built-in passives, auras, ability-builder passives). Handlers use `GetTriggerUnit`, `GetTriggerPlayer`, `WmsGetEventAbilityId`, `WmsGetEventAbility`.
@@ -299,6 +303,32 @@ Details for `WmsSetUnitSkinKeepState`:
 
 ```lua
 WmsSetUnitSkinKeepState(u, FourCC("hkni"))
+```
+
+Details for 2D portraits:
+
+- Local drawing only: for a per-player portrait, call inside a `GetLocalPlayer` check. There are no getters.
+- A unit's own image beats its type's image. `""`, nil or `"NONE"` removes that entry, whatever the grid.
+- The type is the current `GetUnitTypeId`. Polymorph keeps it in WarMash, so the original type's image stays; a skin change keeps it too.
+- A unit's own image stays through model changes and revives, until the unit is removed.
+- Only the in-game unit portrait changes. Talking heads stay 3D on purpose; items and destructables stay 3D.
+- The image is centred on black at its own aspect ratio.
+- A `.png` is read by its exact path, at most 8192 pixels wide and high. Other paths load like HUD textures.
+- A failed load is logged once, is not retried on that map, and the 3D model stays.
+- A unit's own image that failed to load shows the 3D model, not the type's image.
+- Flipbook frames run row by row from the top left. A rate of 0 or less shows the first frame.
+- Columns and rows are 1 to 256, at most 4096 frames; otherwise the call is ignored and logged once per native.
+- A flipbook restarts when the shown unit or its image changes; setting the same values again does not restart it.
+- Null or removed unit, or a map without a HUD: no-op.
+
+```lua
+local u = CreateUnit(Player(0), FourCC("Hpal"), 0, 0, 0)
+WmsSetUnitTypePortraitTexture(FourCC("Hpal"), "war3mapImported\\paladin.png")
+if GetLocalPlayer() == Player(0) then
+    WmsSetUnitPortraitFlipbook(u, "war3mapImported\\paladin_sheet.blp", 4, 2, 8.0)
+end
+-- later: remove the unit's own image, the type image shows again
+WmsSetUnitPortraitTexture(u, nil)
 ```
 
 Details for facing:

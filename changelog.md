@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- 2D unit portraits (WarMash-only, experimental): `WmsSetUnitPortraitTexture`, `WmsSetUnitTypePortraitTexture`, `WmsSetUnitPortraitFlipbook` and… (2026-11-27)
 - Machine-readable script API reference `warmash-api.json`: natives with signature and status, plus events, constants and types, for map and editor developers (2026-11-27)
 - Unit number fields for bounty, level, targeted-as, priority, minimum range, death time, current life and mana and fly height, plus read-only type values (2026-11-27)
 - Unit number fields for hero stats (`ustc`, `uagc`, `uinc`; `ustb`, `uagb`, `uinb` read only), per-level growth (`ustp`, `uagp`, `uinp`), primary attribute… (2026-11-27)
@@ -197,6 +198,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- The selected unit's 3D portrait now follows a morph or Polymorph without reselecting, as in Warcraft III (2026-11-27)
 - Item writes of `ITEM_SF_MODEL_USED`, `ITEM_RF_SCALING_VALUE` and the `ITEM_IF_TINTING_COLOR_*` fields now change the ground item (before: stored only) (2026-11-27)
 - A unit type with bounty dice but sides 0 or less no longer raises an error when the unit dies (2026-11-27)
 - `SetHeroStr`, `SetHeroAgi` and `SetHeroInt` with a nil unit no longer throw (2026-11-27)
