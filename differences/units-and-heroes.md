@@ -50,12 +50,13 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `RemoveUnit` on a live haunted or entangled gold mine | bugfix | The parent mine is restored at the next unit-add step, so `IsUnitHidden(parent)` is still true inside the same trigger; Reforged not measured. |
 | `RemoveUnit` on a hero queued at an altar | unverified | The queue entry is cancelled and gold, lumber and food are refunded to the altar owner. |
 | `BlzSetUnitMaxMana` with 0 or less | unverified | Max mana is clamped to at least 0. |
-| `BlzSetUnitRealField` | partial | Sight radius, HP and mana regeneration, acquisition range, turn rate, cast point and cast backswing work; other fields return false. |
+| `BlzSetUnitRealField` | partial | Sight, regeneration, acquisition, turn rate, move speed, cast times, armor and hero growth work; others return false. |
 | `BlzSetUnitRealField(UNIT_RF_CAST_POINT)`, `UNIT_RF_CAST_BACK_SWING` | works | Set per unit and used by casts; negative values become 0; kept across a morph (not confirmed in Reforged). |
 | `GetUnitCastPoint`, `GetUnitCastBackswingPoint` | bugfix | Return the per-unit value, not only the unit type's. |
-| `BlzGetUnitIntegerField` | partial | Only primary attribute and the four tint fields; other fields return 0. |
-| `BlzSetUnitIntegerField` | partial | Only the classification field works; it reads back as written, and other fields return false. |
-| `BlzSetUnitIntegerField` with `UNIT_IF_PRIMARY_ATTRIBUTE`, `UNIT_IF_MOVE_TYPE` | gap | Return false and change nothing; Reforged 2.0.3 applies both, as documented. |
+| `BlzGetUnitIntegerField` | partial | Hero stats, primary attribute, defense type, armor type and tint fields; other fields return 0. |
+| `BlzSetUnitIntegerField` | partial | Classification, hero base stats, primary attribute, defense type and armor type work; others return false. |
+| `BlzSetUnitIntegerField` with `UNIT_IF_MOVE_TYPE` | gap | Returns false and changes nothing; Reforged 2.0.3 applies it, as documented. |
+| `BlzSetUnitIntegerField` with `UNIT_IF_PRIMARY_ATTRIBUTE` | bugfix | Now applies, as Reforged 2.0.3 documents; see the hero stat fields below. |
 | `UNIT_IF_UNIT_CLASSIFICATION` writes | bugfix | Bit 128 is only Ancient and never blocks targeting; `IsUnitType(ANCIENT)` and ancient target lists read it, as measured. |
 | `UNIT_IF_UNIT_CLASSIFICATION` write replaces the field | bugfix | Writing 128 or 0 clears `IsUnitType(MECHANICAL)`, and 0 clears the type's own Ancient, as measured. |
 | `UnitAddType`, `UnitRemoveType` after a classification write | bugfix | Set and clear the mechanical, undead and ancient bits (128 plus mechanical reads 136), as measured. |
@@ -81,6 +82,24 @@ Details:
 - Boolean fields: `urai`, `udec`, `ubdg`, `ulos`, `unbm`, `uhhb`, `uhhm`, `uhhd`, `uhom`, `uscb`, `usew`, `ushr`, `uatg`, `ufhp`; others read false.
 - Stored-only boolean fields: `ulos`, `uhhm`, `uhhd`, `uhom`, `uscb`, `usew`, `ushr`, `uatg`, `ufhp`.
 - Weapon index of the `BlzSet/GetUnit*` damage natives is 0 or 1; out of range a setter does nothing and a getter returns 0.
+
+### Hero stat and defense fields
+
+| Native | Status | What differs |
+|---|---|---|
+| `ustc`, `uagc`, `uinc` (integer) | unverified | Read and write hero stats without bonuses; writes clamp to 0..1000000. |
+| `ustb`, `uagb`, `uinb` (integer) | unverified | Read hero stats with bonuses; setting them returns false. |
+| `ustm`, `uagm`, `uinm` (integer) | gap | Read 0, and setting returns false. |
+| `ustp`, `uagp`, `uinp` (real) | unverified | Read and write the hero's own per-level growth, 0..1000, kept across a morph. |
+| Hero stat and growth fields on a non-hero | unverified | Stats read 0, growth reads the type's value, and setters return false. |
+| `upra` write | unverified | Takes 1 STR, 2 INT, 3 AGI on a hero; reset on unit type change. |
+| `upra` read on a non-hero | deliberate | Reads 0, even when the unit type has a primary attribute. |
+| `udty` (integer) | unverified | Sets the unit's defense type, 0..7; reset on unit type change. |
+| `udty` with Polymorph or Root | unverified | Polymorph ending, rooting or uprooting can overwrite a scripted value. |
+| `uarm` (integer) | unverified | Sets hit-sound armor type 0..5; 0 has no sound and also replaces custom armor text; reset on type change. |
+| `BlzSetUnitRealField(UNIT_RF_DEFENSE)` | unverified | Sets base armor exactly, buffs still add; the last write wins against `BlzSetUnitArmor`. |
+| NaN or infinity in `ustp`, `uagp`, `uinp`, `udfc` | unverified | The setter returns false. |
+| Hero stat and defense fields on a removed unit | unverified | Writes return false and reads give 0. |
 
 ### Weapon fields
 
@@ -128,9 +147,10 @@ Details:
 
 | Native | Status | What differs |
 |---|---|---|
-| `BlzGetHeroPrimaryStat` (hidden native) | bugfix | Returns STR 0, AGI 1, INT 2 as in Reforged; 0 for a non-hero. |
+| `BlzGetHeroPrimaryStat` (hidden native) | bugfix | Returns STR 0, AGI 1, INT 2 as in Reforged, following `upra` writes; 0 for a non-hero. |
 | `GetHeroStr`, `GetHeroAgi`, `GetHeroInt` | works | Values match a Reforged run on one hero. |
-| `SetHeroStr`, `SetHeroAgi`, `SetHeroInt` | bugfix | `GetHeroStr(false)` and the others return the value set; the non-permanent form does nothing. |
+| `SetHeroStr`, `SetHeroAgi`, `SetHeroInt` | bugfix | Getters return the value set and a nil unit is ignored; the non-permanent form does nothing. |
+| Hero stat changes inside a life state-event handler | bugfix | No longer overwritten with stale armor or regeneration; state events fire once, after the recalculation. |
 | `GetHeroLevel`, `GetUnitLevel`, `GetHeroXP` | works | Implemented. |
 | `GetHeroProperName` | works | Returns nil for a non-hero. |
 | `BlzSetHeroProperName` | bugfix | Resolves `TRIGSTR_n` and refreshes cargo and tooltips; unresolvable text stays literal, also in unit name and texture setters. |

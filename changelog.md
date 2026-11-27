@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Unit number fields for hero stats (`ustc`, `uagc`, `uinc`; `ustb`, `uagb`, `uinb` read only), per-level growth (`ustp`, `uagp`, `uinp`), primary attribute… (2026-11-27)
 - Weapon fields `uaen` (attacks enabled), `ua1g` and `ua1p` (target bitfields) can be read and written per unit attack (2026-11-27)
 - The unit weapon field natives `BlzGet/SetUnitWeapon{Integer,Real,Boolean,String}Field` exist, per unit attack (2026-11-27)
 - `BlzGetUnitStringField`, `BlzSetUnitStringField`, `BlzSetUnitBooleanField` and `BlzSetUnitName` exist, per unit (2026-11-27)
@@ -131,6 +132,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- `BlzGetUnitIntegerField(UNIT_IF_PRIMARY_ATTRIBUTE)` reads 0 on a non-hero (was the unit type's value), and `BlzGetHeroPrimaryStat` follows primary attribute… (2026-11-27)
 - `BlzGetAbilityStringLevelField` returns a script-set value first, and now returns object data for more string fields that apply to the ability (was "") (2026-11-27)
 - `IncUnitAbilityLevel`, `DecUnitAbilityLevel` and `SetUnitAbilityLevel` called from inside that ability's own level change are applied right after it… (2026-11-27)
 - Two-layer bridges: units under an active declared deck are now drawn on the ground, hidden by the bridge model (2026-11-26)
@@ -191,6 +193,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `SetHeroStr`, `SetHeroAgi` and `SetHeroInt` with a nil unit no longer throw (2026-11-27)
 - Silence, disarm and ethereal keep the rooted or uprooted attacks of a unit with Root (2026-11-27)
 - `GetUnitAttackWidgetBehavior`, `GetUnitAttackGroundBehavior` and `GetUnitAttackGroundBehaviorLoc` return null for an out-of-range attack index instead of… (2026-11-27)
 - `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown` and `BlzSetUnitBaseDamage` clamp extreme values (2026-11-27)
