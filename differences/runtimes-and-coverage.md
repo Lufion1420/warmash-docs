@@ -54,6 +54,7 @@ A map with `war3map.lua` is a Lua map. Data a non-melee map does not override co
 | Missing BLP texture file | works | Logs one line and the texture stays empty. |
 | Map object data changes at index above 0 | bugfix | Fields the base row lacks (button positions, per-level tooltips, attack-2 missile fields) are kept instead of dropped. |
 | Map textures vs game textures | deliberate | A map file of the same base name wins, also across `.blp`, `.tga` and `.dds`. |
+| `Preloader`, `LoadScriptFile`, `Preload`, `BlzFrameSetTexture`, `CreateSound`, model paths | bugfix | Paths leaving a data folder (above its root, rooted, drive or invalid forms) act like missing files; Reforged unmeasured. |
 
 ## Native coverage and constants
 

@@ -198,6 +198,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- File paths from scripts and models can no longer leave a data folder (`..` above its root, rooted, drive, UNC, device or invalid paths) (2026-11-27)
 - Event getters outside their event return null, 0 or an empty string instead of ending JASS maps with `ClassCastException` (values inferred) (2026-11-27)
 - Timer interval, variable and time-of-day handlers: `GetTriggerEventId` and `GetTriggeringTrigger` work, and `GetEventGameState` no longer raises an error (2026-11-27)
 - `ExecuteFunc` functions now read the caller's event getters and triggering trigger, and their waits always wait (2026-11-27)
