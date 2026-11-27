@@ -17,7 +17,7 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitBaseDamage` | bugfix | Extreme values are clamped and non-finite cooldowns ignored; negative sides crashed and huge dice froze. |
 | Attack dice upgrade (`BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`) | works | The upgrade raises the number of dice only, as measured. |
 | `BlzGetUnitAttackCooldown`, `BlzIsUnitInvulnerable` | works | The cooldown is the base value without attack-speed bonuses. |
-| `BlzGetUnitRealField` | partial | 17 fields (see Details); other fields return 0 with one log line. |
+| `BlzGetUnitRealField` | partial | 32 fields (see Details); other fields return 0 with one log line. |
 | `BlzGetUnitRealField(UNIT_RF_SELECTION_SCALE)` | bugfix | Returns the type's selection scale (footman 1.0, knight 1.4), as measured; was 0. |
 | Hero armor from agility | unverified | Damage reduction uses the fractional armor; the display still rounds. |
 | `BlzSetUnitBaseDamage`, `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown`, `BlzSetUnitArmor`, `BlzSetUnitMaxHP`, `BlzSetUnitMaxMana`, `BlzGetUnitMaxHP`, `BlzGetUnitMaxMana`, `BlzGetUnitDiceNumber`, `BlzGetUnitDiceSides`, `BlzGetUnitSkin` | works | Raising max mana or max HP of a living unit leaves the current value unchanged, as measured; lowering clamps. |
@@ -35,6 +35,7 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `BlzSetUnitMaxHP` with 0 on a unit with Reincarnation | deliberate | Reforged triggers the Reincarnation, as measured; WarMash skips it and the unit stays dead. Ankh behaves the same in both. |
 | Reincarnation delay ending with max life 0 | deliberate | Reforged leaves a zombie alive at life 0 without events, as measured; WarMash turns it into a real death. |
 | Reincarnation false death | works | Fires no death event, bounty or XP, as measured. |
+| Death of a unit type with bounty dice but sides 0 or less | bugfix | No longer raises an error. |
 | Timed buffs on a unit revived by a death-replacement ability | bugfix | Slow, Bloodlust, stun and other timed buffs are cleared at death, as measured; timed life stays. |
 | Summoned unit with Reincarnation | gap | It loses its timed life on reincarnating and never expires; Warcraft III behavior not confirmed. |
 | `RemoveUnit` on a unit in a Reincarnation delay | deliberate | The unit stays removed with no revive or death event; Reforged keeps its typed unit count, WarMash releases it. |
@@ -50,11 +51,11 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `RemoveUnit` on a live haunted or entangled gold mine | bugfix | The parent mine is restored at the next unit-add step, so `IsUnitHidden(parent)` is still true inside the same trigger; Reforged not measured. |
 | `RemoveUnit` on a hero queued at an altar | unverified | The queue entry is cancelled and gold, lumber and food are refunded to the altar owner. |
 | `BlzSetUnitMaxMana` with 0 or less | unverified | Max mana is clamped to at least 0. |
-| `BlzSetUnitRealField` | partial | Sight, regeneration, acquisition, turn rate, move speed, cast times, armor and hero growth work; others return false. |
+| `BlzSetUnitRealField` | partial | Sight, regeneration, acquisition, turn rate, speed, cast times, armor, growth and some unit values work. |
 | `BlzSetUnitRealField(UNIT_RF_CAST_POINT)`, `UNIT_RF_CAST_BACK_SWING` | works | Set per unit and used by casts; negative values become 0; kept across a morph (not confirmed in Reforged). |
 | `GetUnitCastPoint`, `GetUnitCastBackswingPoint` | bugfix | Return the per-unit value, not only the unit type's. |
-| `BlzGetUnitIntegerField` | partial | Hero stats, primary attribute, defense type, armor type and tint fields; other fields return 0. |
-| `BlzSetUnitIntegerField` | partial | Classification, hero base stats, primary attribute, defense type and armor type work; others return false. |
+| `BlzGetUnitIntegerField` | partial | Hero, defense, armor, tint, bounty, level, targeting, regeneration, movement and some type fields work. |
+| `BlzSetUnitIntegerField` | partial | Classification, hero base stats, attribute, defense, armor, bounty, level and targeted-as work. |
 | `BlzSetUnitIntegerField` with `UNIT_IF_MOVE_TYPE` | gap | Returns false and changes nothing; Reforged 2.0.3 applies it, as documented. |
 | `BlzSetUnitIntegerField` with `UNIT_IF_PRIMARY_ATTRIBUTE` | bugfix | Now applies, as Reforged 2.0.3 documents; see the hero stat fields below. |
 | `UNIT_IF_UNIT_CLASSIFICATION` writes | bugfix | Bit 128 is only Ancient and never blocks targeting; `IsUnitType(ANCIENT)` and ancient target lists read it, as measured. |
@@ -78,7 +79,7 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `SetWidgetLife`, `SetUnitState(UNIT_STATE_LIFE)` and heals on a killed unit | bugfix | Ignored: a killed unit stays at 0 life until a real revive (was a crash). |
 
 Details:
-- `BlzGetUnitRealField` fields: `uhpr`, `umpr`, `udfc`, `usir`, `uacq`, `ucpt`, `ucbs`, `ustp`, `uagp`, `uinp`, `uhpc`, `umpc`, `umvc`, `umvr`, `ufyh`, `usca`, `ussc`. Armor is unrounded; `usca` ignores `SetUnitScale`; sight radius excludes ability bonuses.
+- `BlzGetUnitRealField` fields: `uhpr`, `umpr`, `udfc`, `usir`, `uacq`, `upri`, `uamn`, `udtm`, `uerd`, `ufrd`, `umxp`, `umxr`, `urun`, `uwal`, `uslz`, `ushh`, `ushw`, `ushx`, `ushy`, `uocc`, `ucpt`, `ucbs`, `ustp`, `uagp`, `uinp`, `uhpc`, `umpc`, `umvc`, `umvr`, `ufyh`, `usca`, `ussc`. Armor is unrounded; `usca` ignores `SetUnitScale`; sight radius excludes ability bonuses.
 - Boolean fields: `urai`, `udec`, `ubdg`, `ulos`, `unbm`, `uhhb`, `uhhm`, `uhhd`, `uhom`, `uscb`, `usew`, `ushr`, `uatg`, `ufhp`; others read false.
 - Stored-only boolean fields: `ulos`, `uhhm`, `uhhd`, `uhom`, `uscb`, `usew`, `ushr`, `uatg`, `ufhp`.
 - Weapon index of the `BlzSet/GetUnit*` damage natives is 0 or 1; out of range a setter does nothing and a getter returns 0.
@@ -100,6 +101,26 @@ Details:
 | `BlzSetUnitRealField(UNIT_RF_DEFENSE)` | unverified | Sets base armor exactly, buffs still add; the last write wins against `BlzSetUnitArmor`. |
 | NaN or infinity in `ustp`, `uagp`, `uinp`, `udfc` | unverified | The setter returns false. |
 | Hero stat and defense fields on a removed unit | unverified | Writes return false and reads give 0. |
+
+### Bounty, level and other unit fields
+
+| Native | Status | What differs |
+|---|---|---|
+| `ubba`, `ubdi`, `ubsi`, `ulba`, `ulbd`, `ulbs` (integer) | unverified | Read and write this unit's gold and lumber bounty base, dice and sides. |
+| `ulev` (integer) | unverified | Writes a non-hero's level; on a hero it reads the hero level and returns false. |
+| `GetUnitLevel` after a `ulev` write | unverified | Returns the written level on non-heroes. |
+| `utar` (integer) | unverified | Replaces which target types this unit counts as. |
+| `upri`, `uamn`, `udtm` (real) | unverified | Read and write this unit's priority, minimum attack range and death time. |
+| Long `udtm` on a hero | unverified | Also delays its death event, decay and altar revival. |
+| `uhpc`, `umpc` write (real) | unverified | Sets current life or mana; an unchanged value triggers no state events. |
+| `uhpc` write above 0 on a dead unit | unverified | Returns false and does not revive it. |
+| `ufyh` write (real) | unverified | Changes the fly height at once. |
+| `uhrt` write (integer) | stub | Returns true but the regeneration type does not change; reading works. |
+| `umvt`, `ufor`, `uori`, `uept`, `ulfi`, `ulfo` (integer) | unverified | Read only; setting returns false. |
+| `uerd`, `ufrd`, `umxp`, `umxr`, `urun`, `uwal`, `uslz`, `ushh`, `ushw`, `ushx`, `ushy`, `uocc` (real) | unverified | Read the unit type's value; setting returns false. |
+| Setting `usca`, `ussc`, `uclr`, `uclg`, `uclb`, `ucal`, `upar`, `ufmh` | gap | Returns false and changes nothing. |
+| Written bounty, `ulev`, `utar`, `upri`, `uamn`, `udtm` | unverified | Lost on unit type change. |
+| Bounty, level, life, mana and other fields above on a removed unit | unverified | Writes return false and reads give 0. |
 
 ### Weapon fields
 

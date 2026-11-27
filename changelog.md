@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Unit number fields for bounty, level, targeted-as, priority, minimum range, death time, current life and mana and fly height, plus read-only type values (2026-11-27)
 - Unit number fields for hero stats (`ustc`, `uagc`, `uinc`; `ustb`, `uagb`, `uinb` read only), per-level growth (`ustp`, `uagp`, `uinp`), primary attribute… (2026-11-27)
 - Weapon fields `uaen` (attacks enabled), `ua1g` and `ua1p` (target bitfields) can be read and written per unit attack (2026-11-27)
 - The unit weapon field natives `BlzGet/SetUnitWeapon{Integer,Real,Boolean,String}Field` exist, per unit attack (2026-11-27)
@@ -193,6 +194,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- A unit type with bounty dice but sides 0 or less no longer raises an error when the unit dies (2026-11-27)
 - `SetHeroStr`, `SetHeroAgi` and `SetHeroInt` with a nil unit no longer throw (2026-11-27)
 - Silence, disarm and ethereal keep the rooted or uprooted attacks of a unit with Root (2026-11-27)
 - `GetUnitAttackWidgetBehavior`, `GetUnitAttackGroundBehavior` and `GetUnitAttackGroundBehaviorLoc` return null for an out-of-range attack index instead of… (2026-11-27)
