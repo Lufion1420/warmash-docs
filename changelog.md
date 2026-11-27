@@ -194,6 +194,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Item writes of `ITEM_SF_MODEL_USED`, `ITEM_RF_SCALING_VALUE` and the `ITEM_IF_TINTING_COLOR_*` fields now change the ground item (before: stored only) (2026-11-27)
 - A unit type with bounty dice but sides 0 or less no longer raises an error when the unit dies (2026-11-27)
 - `SetHeroStr`, `SetHeroAgi` and `SetHeroInt` with a nil unit no longer throw (2026-11-27)
 - Silence, disarm and ethereal keep the rooted or uprooted attacks of a unit with Root (2026-11-27)

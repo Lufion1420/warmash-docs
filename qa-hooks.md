@@ -121,6 +121,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `WarMashQaRayPickAt(unit)`, `WarMashQaCursorAt(x, y)`, `WarMashQaCursorInfo()` | Picking and cursor tint. |
 | `WarMashQaCanPlace`, `WarMashQaBuildMode`, `WarMashQaBuildModeInfo` | Placement checks (JSON). |
 | `WarMashQaShopInfo(unit[, player])` | What a shop sells and its stock (JSON). |
+| `WarMashQaItemInfo(item[, modelFilter[, mode]])` | How a ground item is drawn: model, scale, colour, visibility and picking (JSON). |
 | `WarMashQaQueueOrder(unit, orderId[, target])` | Queues an order (Shift) on a unit or widget target, or with no target; true when an ability took it (stop needs none). |
 
 ## Effects, sound and performance

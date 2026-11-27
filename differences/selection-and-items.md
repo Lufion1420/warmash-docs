@@ -70,13 +70,20 @@ Shop purchases by script or UI work; the stock rules are unverified. Sell and pa
 
 ### Item fields and item abilities
 
-Field values belong to one item, not its type. Script changes to tint, scale, model, priority and random choice have no effect.
+Field values belong to one item, not its type. Model, scale and tint writes change the ground item; priority and random choice writes have no effect.
 
 | Native | Status | What differs |
 |---|---|---|
 | `BlzGetItemBooleanField`, `BlzGetItemIntegerField`, `BlzGetItemRealField`, `BlzGetItemStringField` and the `BlzSetItem...Field` forms | unverified | Per item; values survive drop, give, slot swap, death drop and revive. |
 | Refused item field writes | unverified | Unknown or wrong field, max HP below 1, armor type outside 0 to 5, NaN and infinity. |
-| `ITEM_IF_PRIORITY`, `ITEM_BF_INCLUDE_AS_RANDOM_CHOICE`, `ITEM_SF_MODEL_USED`, `ITEM_RF_SCALING_VALUE`, `ITEM_IF_TINTING_COLOR_RED`, `GREEN`, `BLUE`, `ALPHA` | stored-only | Stored and read back only; nothing is drawn or picked differently. |
+| `ITEM_IF_PRIORITY`, `ITEM_BF_INCLUDE_AS_RANDOM_CHOICE` | stored-only | Stored and read back only; nothing is picked differently. |
+| `ITEM_SF_MODEL_USED`, `ITEM_RF_SCALING_VALUE`, `ITEM_IF_TINTING_COLOR_RED`, `GREEN`, `BLUE`, `ALPHA` | bugfix | Change the ground item; portrait, inventory icon, shadow and selection circle keep the type's look. |
+| `ITEM_RF_SCALING_VALUE`, item tint values | unverified | A written scale or tint channel, alpha included, replaces the type's; scale draws within 0 to 1000, reads back unchanged. |
+| `ITEM_SF_MODEL_USED`: new model | unverified | Keeps position, facing, scale, tint, visibility and death progress. |
+| `ITEM_SF_MODEL_USED`: empty or unloadable path | unverified | Keeps the drawn model and logs once; the getter returns the written path. |
+| `ITEM_SF_MODEL_USED`: same path, other case or slashes | partial | Loads a second copy of the model and restarts the animation. |
+| Timing of item model, scale and tint writes | partial | Drawn one frame later; a just-created item can show the type model for one frame. |
+| Item tint under HD shaders, item scale on sphere hit shapes | gap | Both are ignored (from reading the code, not tested). |
 | `BlzGetItemIntegerField` (armor type, tint), `BlzSetItemBooleanField` (perishable, powerup, random choice) | bugfix | Now answered and accepted; before they returned 0 or false. |
 | `GetItemLevel`, `IsItemPawnable`, `IsItemPowerup` | bugfix | Read the individual item; `IsItemPawnable` ignored `SetItemPawnable` before. |
 | `BlzItemAddAbility` | unverified | Needs a carrier; false on the ground, for duplicates and for unknown or uncreatable abilities. |
