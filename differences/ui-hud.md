@@ -73,6 +73,7 @@ Details:
 | Passive ability with no button position | deliberate | Gets no command button; Reforged hides some passives even with one and draws item passives without one. |
 | Disabled button without disabled art | bugfix | Normal icon at 45 percent brightness. |
 | Cursor tint | deliberate | Red over enemies, green over own or allied units, yellow over neutral units and objects. |
+| `SetOrderButtonHidden` (JASS ability script native) | gap | Raises an error when called. |
 
 ### Chat and text messages
 
@@ -105,6 +106,7 @@ Details:
 | Quest log suppression | deliberate | `WmsSetQuestLogHidden` hides the Quests button and blocks the dialog; Warcraft III has no equivalent. Defeat-condition natives are still missing. |
 | `QuestSetEnabled`, `DestroyQuest` | partial | On JASS maps enabling a quest enables the Quests button and nothing disables it; Lua maps keep it always enabled. |
 | `CreateDefeatCondition`, `DestroyDefeatCondition`, `DefeatConditionSetDescription` | gap | Not implemented; the dialog shows no defeat conditions. |
+| `LeaderboardGetItemCount`, `LeaderboardGetPlayerIndex` | stub | Always return 0. |
 
 ### Cinematic filters and interface
 

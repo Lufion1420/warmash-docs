@@ -42,7 +42,7 @@ Call `Wms` natives from `main()` or later; they are not available during `config
 | `WmsGetEventAbility` | `() -> ability` | Event response: the ability or buff handle, also valid in the REMOVED and LOST events. | 2026-11-24 | experimental |
 | `WMS_EVENT_UNIT_ABILITY_INTERVAL` | unit event | Fires for the owner of a passive ability every N seconds; N is the per-level real field `Wmsi` (0 = off); register with `TriggerRegisterUnitEvent`. | 2026-11-24 | experimental |
 | `WMS_EVENT_PLAYER_UNIT_ABILITY_INTERVAL` | player unit event | Same event for any unit of the player; register with `TriggerRegisterPlayerUnitEvent`. | 2026-11-24 | experimental |
-| `Wmsi` (ability real level field) | field | Interval in seconds, passive abilities only; set with `BlzSetAbilityRealLevelField(a, ConvertAbilityRealLevelField('Wmsi'), level0Based, seconds)`. | 2026-11-24 | experimental |
+| `Wmsi` (ability real level field) | field | Interval in seconds, passive abilities only; set with `BlzSetAbilityRealLevelField(a, ConvertAbilityRealLevelField(FourCC('Wmsi')), level0Based, seconds)`. | 2026-11-24 | experimental |
 | `WmsIsUnitFacingUnit` | `(unit, target, coneDegrees) -> boolean` | True when the target is inside the unit's facing cone (full angle). | 2026-11-23 | experimental |
 | `WmsIsUnitFacingUnitInRange` | `(unit, target, coneDegrees, range) -> boolean` | Facing cone plus centre-to-centre range (no collision size, unlike `IsUnitInRange`). | 2026-11-23 | experimental |
 | `WmsIsUnitFacingPoint` | `(unit, x, y, coneDegrees) -> boolean` | Same cone test against a point. | 2026-11-23 | experimental |
@@ -107,14 +107,14 @@ Call `Wms` natives from `main()` or later; they are not available during `config
 
 Details for ability interval events:
 - Passive abilities only (built-in passives, auras, ability-builder passives). Handlers use `GetTriggerUnit`, `GetTriggerPlayer`, `WmsGetEventAbilityId`, `WmsGetEventAbility`.
-- The first event comes one interval after the ability becomes active. Read the field back with `BlzGetAbilityRealLevelField`. Not a JASS constant: use `ConvertAbilityRealLevelField('Wmsi')`.
+- The first event comes one interval after the ability becomes active. Read the field back with `BlzGetAbilityRealLevelField`. Not a JASS constant: use `ConvertAbilityRealLevelField(FourCC('Wmsi'))`.
 - No events while the ability is disabled, or the unit is dead, under construction, upgrading or an entangled gold mine; the timer restarts after those gaps. A paused unit or a script-hidden ability keeps firing.
 - At most one event per tick, no catch-up. The interval rounds to the nearest tick (50 ms), minimum 1 tick; 0 turns it off.
 - A level change keeps the phase and re-reads the interval; a morph keeps the timer of kept abilities. Setting only `Wmsi` does not re-run the ability's level-change code.
 - No ability-JSON option for the interval yet.
 
 ```lua
-BlzSetAbilityRealLevelField(abil, ConvertAbilityRealLevelField('Wmsi'), 0, 2.0)
+BlzSetAbilityRealLevelField(abil, ConvertAbilityRealLevelField(FourCC('Wmsi')), 0, 2.0)
 ```
 
 Details for the quest log:

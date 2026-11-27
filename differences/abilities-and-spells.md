@@ -44,6 +44,7 @@ BlzUnitHideAbility(hero, FourCC("A000"), false)
 | `GetSpellAbility`, `GetSpellTargetDestructable`, `GetSpellTargetItem`, `BlzGetUnitAbilityCooldown`, `BlzGetUnitAbilityManaCost`, `BlzGetAbilityCooldown`, `UnitResetCooldown`, `GetWidgetLife`, `SetWidgetLife` | works | `UnitResetCooldown` also ends item cooldowns; `SetWidgetLife` is capped at max life. |
 | `BlzSetUnitAbilityCooldown` | partial | Works for Channel and engine spells; stored-only for other ability kinds. |
 | `BlzEndUnitAbilityCooldown` | bugfix | Also ends Channel cooldowns. |
+| `AbilityId`, `AbilityId2String` | stub | Always return 0 and an empty string. |
 
 ### Channel and spell events
 

@@ -40,7 +40,10 @@ In a single-player start of a non-melee map only the local player's slot is play
 | `RestartGame`, `ChangeLevel` | deliberate | Leave to the menu. |
 | `DisplayTimedTextFromPlayer`, `GetDefaultDifficulty`, `UnitSuspendDecay` | works | Implemented. |
 | `GetSellingUnit`, `GetBuyingUnit`, `GetSoldUnit`, `GetSoldItem` | bugfix | Return the shop, buyer, new unit and item during a sale. |
-| `GetRescuer` | gap | Always nil: no rescue events. |
+| `GetRescuer` | stub | Always nil: no rescue events. |
+| `GetIntegerGameState` | stub | Returns 0 for divine intervention and disconnected. |
+| `ConvertMapSetting`, `ConvertMapVisibility` | stub | Always return nil. |
+| `GetTournamentScore`, `GetTournamentFinishNowPlayer`, `GetTournamentFinishNowRule`, `GetTournamentFinishSoonTimeRemaining`, `GetSaveBasicFilename` | gap | Raise an error when called. |
 | `PLAYER_STATE_GOLD_GATHERED`, `PLAYER_STATE_LUMBER_GATHERED` | stored-only | Written only by `SetPlayerState`, never by gameplay, so state events on them never fire in play. |
 | `PauseGame`, `DisplayLoadDialog`, `PingMinimap`, `UnitAddIndicator`, `VolumeGroupSetVolume`, `AddItemToStock`, `RemoveItemFromStock`, `DestroyUbersplat`, `RemoveWeatherEffect` | stub | One log line, no effect. |
 

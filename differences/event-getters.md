@@ -16,32 +16,37 @@ A missing getter fails at the call with an "had no native implementation" log li
 | Event family | Status | What a map sees |
 |---|---|---|
 | Damage: `EVENT_UNIT_DAMAGED`, `EVENT_PLAYER_UNIT_DAMAGED`, `EVENT_UNIT_DAMAGING`, `EVENT_PLAYER_UNIT_DAMAGING` | works | One DAMAGING then one DAMAGED per hit; all `GetEvent*` and `BlzGetEvent*` damage getters work. |
-| Attack: `EVENT_UNIT_ATTACKED`, `EVENT_PLAYER_UNIT_ATTACKED` | partial | Fires at swing start for unit targets only; attacks on trees and other non-unit targets fire nothing. |
+| Attack: `EVENT_UNIT_ATTACKED`, `EVENT_PLAYER_UNIT_ATTACKED` | works | Fires at swing start for unit targets; attacks on trees and other non-unit targets fire nothing. |
 | Death: `EVENT_UNIT_DEATH`, `EVENT_PLAYER_UNIT_DEATH`, `EVENT_WIDGET_DEATH` | works | `GetDyingUnit`, `GetTriggerUnit` and `GetKillingUnit` are set; the killer is nil when nothing killed the unit. |
-| Spells: `*_SPELL_CHANNEL`, `_CAST`, `_EFFECT`, `_FINISH`, `_ENDCAST` | works | See the spell rows below; the player event fires before the unit event. |
-| Orders: `*_ISSUED_ORDER`, `_ISSUED_POINT_ORDER`, `_ISSUED_TARGET_ORDER` | works | Order id, point and target getters are set for the matching event only. |
-| Items: `*_PICKUP_ITEM`, `_DROP_ITEM`, `_USE_ITEM`, `_PAWN_ITEM`, `_SELL_ITEM` | works | Fire with the item getters of that event; see "Traps" for which getter belongs to which event. |
+| Spells: `*_SPELL_CHANNEL`, `_CAST`, `_EFFECT`, `_FINISH`, `_ENDCAST` | partial | `GetTriggerPlayer` and `GetTriggerWidget` are nil; the player event fires before the unit event. |
+| Orders: `*_ISSUED_ORDER`, `_ISSUED_POINT_ORDER`, `_ISSUED_TARGET_ORDER` | partial | Order id, point and target getters work; `GetTriggerPlayer` is nil. |
+| Items: `*_PICKUP_ITEM`, `_DROP_ITEM`, `_USE_ITEM` | partial | Item getters work; `GetTriggerPlayer` is nil. |
+| Items: `*_PAWN_ITEM`, `_SELL_ITEM` | works | Fire with the item getters of that event; see "Traps" for which getter belongs to which event. |
 | Shops: `EVENT_UNIT_SELL`, `EVENT_PLAYER_UNIT_SELL` | works | Fire during the purchase for the shop and the shop owner's player. |
 | Hero: `EVENT_PLAYER_HERO_LEVEL`, `EVENT_UNIT_HERO_LEVEL` | works | `GetLevelingUnit` and `GetTriggerUnit` return the hero; `GetTriggerPlayer` the owner, `GetTriggerWidget` the hero. |
 | Hero skill: `EVENT_PLAYER_UNIT_HERO_SKILL`, `EVENT_UNIT_HERO_SKILL` | works | Fire on every skill learn (`SelectHeroSkill`, learn button), not on `UnitAddAbility` or `SetUnitAbilityLevel`. Player event first (inferred). |
-| Hero revive: `EVENT_PLAYER_HERO_REVIVABLE` | partial | Fires with `GetTriggerUnit`, `GetTriggerPlayer` (owner) and `GetTriggerWidget` (hero). |
+| Hero revive: `EVENT_PLAYER_HERO_REVIVABLE` | works | Fires when the hero death animation ends, with trigger unit, widget (hero) and player (owner). |
 | Hero revive: `EVENT_PLAYER_UNIT_HERO_REVIVE_START`, `_CANCEL`, `_FINISH` and `EVENT_UNIT_HERO_REVIVE_*` | works | `ReviveHero`/`ReviveHeroLoc`: START then FINISH (START skipped if the hero is already in an altar queue; a failed revive fires nothing; no CANCEL). Altar: START at queue, CANCEL on cancel (timing inferred), FINISH at completion. Player event first. |
 | Summon: `EVENT_PLAYER_UNIT_SUMMON`, `EVENT_UNIT_SUMMON` | partial | Fire for the engine summon abilities (Figurine, Phoenix, Grizzly, Hawk, Quilbeast, Feral Spirit, Force of Nature, Factory, Pocket Factory, Water Elemental, Raise Dead, Animate Dead) and JSON summons that opt in; player event first. Script `CreateUnit` fires nothing, as in Reforged. |
-| Construction start and cancel: `EVENT_PLAYER_UNIT_CONSTRUCT_START`, `_CANCEL`, `EVENT_UNIT_CONSTRUCT_CANCEL` | unverified | START fires on placement (human, orc, undead, night elf builds, non-instant Entangled Gold Mine); CANCEL only on the cancel order, not on death or upgrade cancel. Player event first. `EVENT_UNIT_CONSTRUCT_START` does not exist in `common.j`. |
-| Construction and training: `*_CONSTRUCT_FINISH`, `*_TRAIN_FINISH`, `*_RESEARCH_FINISH` | works | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearched`, `GetResearchingUnit`. TRAIN and RESEARCH FINISH run inline, player event first, as measured. |
+| Construction start and cancel: `EVENT_PLAYER_UNIT_CONSTRUCT_START`, `_CANCEL`, `EVENT_UNIT_CONSTRUCT_CANCEL` | unverified | START fires on placement (not for an instant Entangled Gold Mine); CANCEL only on an explicit cancel, not on building death or removal; player event first. |
+| Training and research finish: `*_TRAIN_FINISH`, `*_RESEARCH_FINISH` | works | `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearched`, `GetResearchingUnit`; run inline, player event first, as measured. |
+| Construction finish: `*_CONSTRUCT_FINISH` | partial | `GetConstructedStructure` works; `GetTriggerPlayer` is nil. |
 | Training finish order | bugfix | `*_TRAIN_FINISH` handlers run first, then the rally order is issued to the trained unit, then the next queue item starts; a handler's own order on the unit is overridden by the rally order. |
 | Rally order id | bugfix | A unit trained with a point rally reports `851970` as in Reforged; rally on a unit or item target and altar revive still report `851971`. `OrderId2String(851970)` returns a name, Reforged none. |
 | `ISSUED_*_ORDER` events after training | unverified | Dispatched after same-tick train events even when the order came first; the Warcraft III order is not measured. |
-| Train and research start and cancel: `*_TRAIN_START`, `_TRAIN_CANCEL`, `*_RESEARCH_START`, `_RESEARCH_CANCEL` | partial | TRAIN_START fires when production starts with its food paid, as measured; a food-blocked item waits silently. CANCEL on an explicit cancel, before the refund (research unverified). Building death and `RemoveUnit` fire neither CANCEL nor START. |
-| Upgrade: `*_UPGRADE_START`, `_CANCEL`, `_FINISH` | unverified | START on accepted order, CANCEL on explicit cancel, FINISH when the building becomes the new type. Player event first. Death of the upgrading building fires no CANCEL. Cancel refunds 75% (rounded down), none if the building dies mid-upgrade. |
+| Train and research start and cancel: `*_TRAIN_START`, `_TRAIN_CANCEL`, `*_RESEARCH_START`, `_RESEARCH_CANCEL` | works | START fires when paid production starts; CANCEL only on an explicit cancel, not on building death or removal. |
+| Upgrade: `*_UPGRADE_START`, `_CANCEL`, `_FINISH` | unverified | CANCEL (75% refund) only on explicit cancel, not on building death or removal; death refunds nothing; player event first. |
 | Decay: `EVENT_PLAYER_UNIT_DECAY`, `EVENT_UNIT_DECAY` | bugfix | Fire once at the end of the death animation (about 3 s, unit still dead) only for raisable and decaying corpses (death type 3), as measured. |
 | Decay for other death types and units | works | Decay-only corpses (type 2) fire nothing and go at about 91 s; types 0 and 1 are removed after the animation, as measured. Never for heroes or buildings. |
 | Selection: `*_SELECTED`, `*_DESELECTED` | works | `GetTriggerUnit` and `GetTriggerPlayer` set. |
-| Ownership: `*_CHANGE_OWNER` | works | `GetChangingUnit`, `GetChangingUnitPrevOwner`. |
+| Ownership: `*_CHANGE_OWNER` | works | `GetChangingUnit`, `GetChangingUnitPrevOwner`; an Animate Dead takeover raises no event. |
 | Regions: `TriggerRegisterEnterRegion`, `TriggerRegisterLeaveRegion` | works | `GetEnteringUnit` or `GetLeavingUnit`, `GetTriggeringRegion`, `GetTriggerUnit`. |
-| Player: chat, leave, key, mouse, end cinematic | works | Local player only for key and mouse. |
-| Dialogs: `TriggerRegisterDialogEvent`, `TriggerRegisterDialogButtonEvent` | works | `GetClickedDialog`, `GetClickedButton`. |
-| Timers and variables: `TriggerRegisterTimerEvent`, `TriggerRegisterTimerExpireEvent`, `TriggerRegisterVariableEvent` | works | Fire as expected. |
+| Player: chat, key, mouse, end cinematic | works | Local player only for chat, key and mouse. |
+| Player leave: `EVENT_PLAYER_LEAVE` | partial | Raised only by `RemovePlayer` for a player other than the local one. |
+| Dialogs: `TriggerRegisterDialogEvent`, `TriggerRegisterDialogButtonEvent` | partial | `GetClickedDialog` and `GetClickedButton` work; `GetTriggerPlayer` is nil. |
+| Timer object: `TriggerRegisterTimerExpireEvent` | partial | Fires; `GetTriggerEventId` returns nil. |
+| Timer interval: `TriggerRegisterTimerEvent` | partial | Fires; some trigger getters fail (see "Getters by event"). |
+| `TriggerRegisterVariableEvent` | partial | Watches JASS globals only; a Lua map global raises an error; trigger getters fail. |
 
 ## Events that never fire
 
@@ -56,18 +61,21 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `TriggerRegisterPlayerStateEvent`, `GetEventPlayerState` | unverified | Fires on every change after which the comparison holds; a same-value write fires nothing, and late registration fires nothing until the value changes. A trigger that changes the same resource while its condition holds re-queues itself (unverified). |
 | `TriggerRegisterPlayerAllianceChange` | works | Fires only when that alliance type really changes; no getter tells which type or other player. |
 | `EVENT_PLAYER_DEFEAT`, `EVENT_PLAYER_VICTORY`, `EVENT_GAME_VICTORY`, `EVENT_GAME_END_LEVEL`, `EVENT_GAME_LOADED`, `EVENT_GAME_SAVE` | gap | Never fire. |
+| `TriggerRegisterGameEvent` | stub | The registration is dropped with one log line, so the trigger never fires from it. |
 | `EVENT_PLAYER_ARROW_*`, `EVENT_PLAYER_SYNC_DATA` | gap | Never fire; `BlzGetTriggerSyncData`, `BlzGetTriggerSyncPrefix` and `BlzTriggerRegisterPlayerSyncEvent` are missing. |
 | `TriggerRegisterUnitStateEvent`, `GetEventUnitState` | works (MANA and max states unverified) | Edge-triggered, EQ never fires, registering fires nothing; measured for life. A death hit fires it after the death; regen events are queued. |
-| `TriggerRegisterGameStateEvent` | partial | Only time of day is handled; other states raise an error. The limit is now read from the right argument (bugfix). |
+| `TriggerRegisterGameStateEvent` | partial | Only time of day; other states raise an error, and trigger getters fail. |
 | `TriggerRegisterTrackableHitEvent`, `TriggerRegisterTrackableTrackEvent`, `GetTriggeringTrackable`, `GetEventGameState`, `GetWinningPlayer` | gap | Raise "not yet implemented" when called. |
 
 ## Getters by event
 
 | Getter | Status | What differs |
 |---|---|---|
-| `GetTriggerUnit` | works | Set in every firing event above; for sale events it is the shop, for pawn events the pawning unit. |
-| `GetTriggerPlayer` in spell, order, item and train start/cancel events, and construction finish | gap | Returns nil; only chat, leave, key, mouse, damage, death, attack, selection, ownership, research and sale events set it. |
-| `GetTriggerWidget` in spell, order, item and hero events, and construction finish | gap | Returns nil in spell events; works for death, damage, order and selection events. |
+| `GetTriggerUnit` | partial | Set in unit events (shop in sales, hero in pawns); nil in dialog events. |
+| `GetTriggerEventId`, `GetTriggerUnit`, `GetTriggerPlayer` in timer interval, variable and game-state events | gap | Lua: nil. JASS: the game ends (from code, not run). |
+| `GetTriggeringTrigger` in a `TriggerRegisterTimerEvent` handler | gap | Returns nil in Lua. |
+| `GetTriggerPlayer` in spell, order, pickup, drop, use-item, dialog and construction-finish events | gap | Returns nil. |
+| `GetTriggerWidget` in spell events | gap | Returns nil; order, item, hero and construction events set it. |
 | `GetKillingUnit`, `GetDyingUnit` | works | Valid in death events only; the killer is nil for script kills such as a max life of 0. |
 | `GetAttacker` | works | Valid in attack events only; nil in damage events (use `GetEventDamageSource`). |
 | `GetEventDamage`, `GetEventDamageSource`, `BlzGetEventDamageTarget`, `BlzGetEventIsAttack` | works | Valid in damage events; outside one they return 0, nil or false. |
@@ -96,7 +104,7 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `GetConstructingStructure`, `GetCancelledStructure` | unverified | START and CANCEL only: the structure. Trigger unit and widget = the structure, trigger player = its owner. A handler that removes or kills the structure is refunded once; Entangle START/CANCEL, unit-level CANCEL after a player handler removed the structure, and an order given to the builder in START (overridden by the build) are unconfirmed. |
 | `GetConstructedStructure`, `GetTrainedUnit`, `GetTrainedUnitType`, `GetResearchingUnit`, `GetResearched` | works | Finish events only. |
 | `GetDecayingUnit` | unverified | Decay events only: the decaying unit. |
-| `GetTrainedUnitType`, `GetResearchingUnit`, `GetResearched` in START and CANCEL | unverified | Set as in finish events; `GetTrainedUnit` is nil there because the unit does not exist yet. `GetTriggerPlayer` is now set in TRAIN_FINISH (bugfix). |
+| `GetTrainedUnitType`, `GetResearchingUnit`, `GetResearched` in START and CANCEL | unverified | Set as in finish events; `GetTrainedUnit` is nil because the unit does not exist yet. |
 | `GetRescuer` | stub | Always nil. |
 | `GetEnteringUnit`, `GetLeavingUnit`, `GetTriggeringRegion` | works | Region events. |
 | `GetEventPlayerChatString`, `GetEventPlayerChatStringMatched` | works | Return an empty string outside a chat event. |

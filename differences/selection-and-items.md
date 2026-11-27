@@ -67,6 +67,7 @@ Shop purchases by script or UI work; the stock rules are unverified. Sell and pa
 | Handler that kills the giver during a give | gap | The give still completes. |
 | `IssueNeutralPointOrder`, `IssueNeutralPointOrderById`, `IssueNeutralTargetOrder`, `IssueNeutralTargetOrderById` | unverified | `neutralinteract` sets the shop selection for the ordering player only. |
 | `IssueNeutralImmediateOrder` (string form) | gap | Not implemented on purpose. |
+| `SetAllItemTypeSlots`, `SetAllUnitTypeSlots` | stub | Do nothing; there is no marketplace. |
 
 ### Item fields and item abilities
 

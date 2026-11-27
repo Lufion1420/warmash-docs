@@ -63,6 +63,7 @@ Effects attached to a unit ignore position, orientation and alpha. Images are no
 | `AddSpecialEffect`, `AddSpecialEffectLoc` with an empty model path | bugfix | Returns an invisible handle instead of nil, placed on ground or walkable surface. |
 | `CreateImage` family | stored-only | State is kept; nothing is drawn. |
 | `TerrainDeformCrater`, `TerrainDeformRipple`, `TerrainDeformWave`, `TerrainDeformRandom`, `TerrainDeformStop`, `TerrainDeformStopAll` | stub | Do nothing; the four creators return a null handle, so the terrain never deforms. |
+| `AddWeatherEffect`, `EnableWeatherEffect` | stub | Do nothing; `AddWeatherEffect` returns nil. |
 
 ### Models and textures
 
@@ -97,7 +98,8 @@ Effects attached to a unit ignore position, orientation and alpha. Images are no
 | `SetSoundDistanceCutoff` | works | Applied at the next start; with stop-when-out-of-range on, a sound beyond the cutoff is not started. |
 | `AttachSoundToUnit` | partial | Uses the unit's position at attach and at each start, but does not follow it while playing; 2D sounds ignore it. |
 | `StartSoundEx` | deliberate | Same as `StartSound`; the fade-in is ignored. |
-| `SetSoundChannel`, `SetSoundConeAngles`, `SetSoundConeOrientation`, `SetSoundVelocity` | stub | Do nothing. |
+| `SetSoundChannel`, `SetSoundConeAngles`, `SetSoundConeOrientation`, `SetSoundVelocity`, `SetSoundParamsFromLabel`, `SetSoundDuration`, `SetSoundPitch` | stub | Do nothing. |
+| `NewSoundEnvironment` | stub | Only writes a log message; the sound environment does not change. |
 | `SetCameraOrientController` | stub | Does nothing; WC3 shows no visible effect either (measured). |
 | 3D script sounds with a reference distance | deliberate | They now fade with distance, like unit sounds. |
 | Sounds never killed | bugfix | Released when the map closes. |

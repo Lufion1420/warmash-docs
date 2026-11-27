@@ -134,6 +134,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- Script API reference and docs: natives that return a constant or do nothing now read `stub` (2026-11-27)
+- Script API reference: hand-written descriptions, notes and `partial` statuses, a status for every event (93 works, 33 partial, 44 missing) and the ability API… (2026-11-27)
 - `BlzGetUnitIntegerField(UNIT_IF_PRIMARY_ATTRIBUTE)` reads 0 on a non-hero (was the unit type's value), and `BlzGetHeroPrimaryStat` follows primary attribute… (2026-11-27)
 - `BlzGetAbilityStringLevelField` returns a script-set value first, and now returns object data for more string fields that apply to the ability (was "") (2026-11-27)
 - `IncUnitAbilityLevel`, `DecUnitAbilityLevel` and `SetUnitAbilityLevel` called from inside that ability's own level change are applied right after it… (2026-11-27)

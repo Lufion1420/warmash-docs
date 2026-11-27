@@ -61,6 +61,8 @@ Missing natives are not listed one by one. Stored-only and stub natives are in t
 | Native | Status | What differs |
 |---|---|---|
 | Unimplemented natives | gap | 503 natives of the bundled `common.j` are missing in the Lua game VM (count of 2026-11-27). |
+| JASS ability script natives (`SetABConf*`, non-stacking stat buffs and others) | gap | 37 declared natives have no implementation. |
+| `BlzDeleteHeroAbility` (declared by 1.29 `common.j` only) | gap | Not implemented. |
 | A declared native without implementation | gap | Returns nil and logs one line; no error is raised. |
 | `MathRound` | unverified | Half away from zero. |
 | `PLAYER_COLOR_BLACK` | works | `ConvertPlayerColor(24)` is a valid colour for `SetPlayerColor` and `GetPlayerColor`; the lobby still shows 24 colours. |
