@@ -43,6 +43,9 @@ Shop purchases by script or UI work; the stock rules are unverified. Sell and pa
 | `BlzItemRemoveAbility` | works | Removes the ability from the item. |
 | `UnitDropItemPoint` | unverified | Returns true and drops on a later tick; false for a unit that cannot move when the point is out of drop range. |
 | `BlzSetItemBooleanField` | partial | Four fields; others return false. |
+| `BlzItemAddAbility`, `BlzGetItemAbility`, `BlzGetItemAbilityByIndex` | gap | Not implemented. |
+| `BlzGetItemBooleanField`, `BlzGetItemRealField`, `BlzGetItemStringField` | gap | Not implemented. |
+| `BlzSetItemIntegerField`, `BlzSetItemRealField`, `BlzSetItemStringField` | gap | Not implemented. |
 | `UnitAddItem`, `UnitHasItem` | bugfix | `UnitAddItem` returns a boolean. |
 | `UnitAddItemById`, `UnitAddItemToSlotById` on a dead unit | bugfix | Return nil and create no item, as measured; `UnitAddItem` returns false (inferred). |
 | `UnitUseItem`, `UnitUseItemTarget` | deliberate | False when the order is refused (a potion at full life); Reforged returns true. |

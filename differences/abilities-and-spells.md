@@ -7,7 +7,7 @@ parent: Differences from Warcraft III
 # Abilities and spells
 {: .no_toc }
 
-Channel-based (`ANcl`) spells have mana, cooldown, the five spell events and settable level fields. Disable and hide differ from Reforged on purpose:
+Channel-based (`ANcl`) spells have mana, cooldown, the five spell events and settable level fields (see [Ability fields and levels](ability-fields.html)). Disable and hide differ from Reforged on purpose:
 
 ```lua
 BlzUnitDisableAbility(hero, FourCC("A000"), true, true)
@@ -20,7 +20,7 @@ BlzUnitHideAbility(hero, FourCC("A000"), false)
 -- WarMash: shown again. Reforged: still hidden, one more false call needed.
 ```
 
-### Disable, hide, levels and fields
+### Disable, hide and cooldowns
 
 | Native | Status | What differs |
 |---|---|---|
@@ -35,30 +35,15 @@ BlzUnitHideAbility(hero, FourCC("A000"), false)
 | `BlzUnitDisableAbility`, `BlzUnitHideAbility` on `Aatk`, `Amov` | bugfix | Disables or hides the engine ability; a disabled attack stops, no auto-acquire, attack orders refused (rules inferred). |
 | `BlzEndUnitAbilityCooldown` on a Spell Book child | unverified | Ends the book's cooldown only when that child started it; a script cooldown on the book stays. |
 | `GetAbilityLevel(nil)` | bugfix | Returns 0 instead of raising an error. |
-| Boolean, non-level and array ability field natives (`BlzGet/SetAbilityBooleanField` and similar) | gap | Not implemented. |
 | Ability hidden by `BlzUnitHideAbility`: orders | bugfix | Refuses orders like a disabled ability, as measured; a running cast finishes. |
 | `ConvertAbilityDisableType(7)` | deliberate | Valid in WarMash (disable type POLYMORPH); out of range in WC3. |
 | `SetAbilityDisabled`, `SetAbilityIconShowing` (WarMash only) | deliberate | Script disable and icon switches; `SetAbilityIconShowing` does not refresh the command card by itself. |
 | `BlzGetUnitAbilityByIndex` | unverified | Index 0 is the newest ability; abilities the engine adds itself are skipped. |
-| `BlzGetAbilityStringLevelField` | partial | 14 string fields, 0-based level; other fields return "". |
-| Tooltip text from `BlzGetAbilityStringLevelField` | unverified | Returned raw, placeholders unresolved. |
-| `BlzSetAbilityIcon` | works | Sets the normal icon on all levels; the disabled icon is unchanged. |
-| `BlzGetAbilityRealLevelField`, `BlzGetAbilityIntegerLevelField` | works | Every field is known; level is 0-based; a script-set value is returned first. |
-| `BlzSetAbilityRealLevelField(ABILITY_RLF_CASTING_TIME)` on ability-builder spells | bugfix | Read on every cast; no level refresh needed. |
 | Shadow Strike slow and hit | bugfix | No error on hit; the slow always ends (buff removal, `UnitRemoveBuffs` or expiry). |
-| `BlzSetAbilityIntegerLevelField`, `BlzSetAbilityRealLevelField` | partial | Take effect on the next level change (Channel at once); some fields stay stored-only. |
-| `IncUnitAbilityLevel`, `DecUnitAbilityLevel`, `SetUnitAbilityLevel` with script-set fields | unverified | At an unchanged level they re-apply the data only when a script set fields. |
-| `DecUnitAbilityLevel` | works | Lowers by 1, not below 1; returns 0 without the ability. |
-| `IncUnitAbilityLevel`, `SetUnitAbilityLevel`, `SetAbilityLevel` out of range | bugfix | Clamped to the ability's levels instead of a script error. |
-| `GetUnitAbilityLevel` | bugfix | Returns the real level, 0 without the ability (was 1). |
-| Level change inside the ability's own `SPELL_EFFECT` handler | bugfix | The cooldown just started takes the new level's value. |
 | `UnitAddAbility` with a null unit or a duplicate | bugfix | Returns false without an error. |
 | `GetSpellAbility`, `GetSpellTargetDestructable`, `GetSpellTargetItem`, `BlzGetUnitAbilityCooldown`, `BlzGetUnitAbilityManaCost`, `BlzGetAbilityCooldown`, `UnitResetCooldown`, `GetWidgetLife`, `SetWidgetLife` | works | `UnitResetCooldown` also ends item cooldowns; `SetWidgetLife` is capped at max life. |
 | `BlzSetUnitAbilityCooldown` | partial | Works for Channel and engine spells; stored-only for other ability kinds. |
 | `BlzEndUnitAbilityCooldown` | bugfix | Also ends Channel cooldowns. |
-
-Details:
-- `BlzSetAbility*LevelField` stays stored-only for item life and mana bonuses (`AIml`, `AImm`; deliberate), abilities without an engine class, and abilities that read a value only when added.
 
 ### Channel and spell events
 
@@ -119,7 +104,6 @@ Details:
 | Pause during a Channel (`ANcl`) cast | works | The follow-through ends on schedule, then the order reads 851973 until the unpause (the overrun is unverified). |
 | Castless item abilities (ability-builder, e.g. a potion on Brilliance Aura) | works | All five spell events fire in the use tick with the item ability id; then one charge is spent and `EVENT_UNIT_USE_ITEM` fires. |
 | Castless item ability that cannot pay its mana at the cast point | bugfix | Ends with ENDCAST only: no charge spent, no `EVENT_UNIT_USE_ITEM`. |
-| `BlzSetUnitBooleanField` | gap | Not implemented; it is the last missing native that the reference map's spell code calls. |
 
 Details:
 - Channel event order: CHANNEL, CAST after the casting time, EFFECT (mana and cooldown taken), then FINISH and ENDCAST. An interrupted cast fires ENDCAST only.

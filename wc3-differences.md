@@ -14,7 +14,8 @@ Compared with Reforged 3.0.1 for Lua maps and 1.29 for JASS maps. "Measured" mea
 ## Topics
 
 - [Units and heroes](differences/units-and-heroes.html): Unit and hero stats, heroes, creation, guard positions, visibility.
-- [Abilities and spells](differences/abilities-and-spells.html): Ability fields, spell events, stock ability classes, targeting.
+- [Abilities and spells](differences/abilities-and-spells.html): Disable and hide, cooldowns, spell events, stock ability classes, targeting.
+- [Ability fields and levels](differences/ability-fields.html): Ability field natives, stub fields, level changes.
 - [Orders, damage and buffs](differences/combat-and-orders.html): Orders, damage and attack events, buffs.
 - [Movement, terrain and regions](differences/movement-and-regions.html): Movement, pathing, terrain, regions, unit groups.
 - [Players, game state and timers](differences/game-state-and-timers.html): Players, game state, timers, triggers, hashtables.

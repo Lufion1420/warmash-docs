@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- The remaining ability field natives exist: non-level `BlzGet/SetAbility*Field`, boolean level, `BlzSetAbilityStringLevelField` and the level array… (2026-11-27)
 - `WmsSetUnitSkinKeepState(unit, skinId)` (WarMash-only, experimental): changes the skin like `BlzSetUnitSkin` but keeps scale, colours, time scale, animation… (2026-11-27)
 - Animation queries (WarMash-only, experimental): `WmsGetUnitAnimation*` and `WmsGetEffectAnimation*` read count, name, index and length (2026-11-26)
 - Attachment natives (WarMash-only, experimental): `WmsAttachUnitToUnit`, `WmsAttachUnitToEffect`, `WmsDetachUnit`, `WmsAttachEffectToUnit`… (2026-11-26)
@@ -126,6 +127,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- `BlzGetAbilityStringLevelField` returns a script-set value first, and now returns object data for more string fields that apply to the ability (was "") (2026-11-27)
+- `IncUnitAbilityLevel`, `DecUnitAbilityLevel` and `SetUnitAbilityLevel` called from inside that ability's own level change are applied right after it… (2026-11-27)
 - Two-layer bridges: units under an active declared deck are now drawn on the ground, hidden by the bridge model (2026-11-26)
 - MDX texture animation scale now uses x for U and y for V (before: x for both) (2026-11-25)
 - Sidecar `uv0Scale` tracks accept unequal, zero and negative values (before: such a track was ignored) (2026-11-25)
@@ -184,6 +187,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `BlzSetAbilityIntegerLevelField` and `BlzSetAbilityRealLevelField` with a huge level on a per-level list field no longer hang or run out of memory (2026-11-27)
 - A resurrected unit keeps its changed skin (2026-11-27)
 - A destroyed effect whose unit was removed is now freed on the next frame (before: never) (2026-11-26)
 - `WmsSetDoodadTypeOpensPathing` now also opens doodads whose model file is missing (2026-11-26)
