@@ -55,6 +55,7 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `GetUnitCastPoint`, `GetUnitCastBackswingPoint` | bugfix | Return the per-unit value, not only the unit type's. |
 | `BlzGetUnitIntegerField` | partial | Only primary attribute and the four tint fields; other fields return 0. |
 | `BlzSetUnitIntegerField` | partial | Only the classification field works; it reads back as written, and other fields return false. |
+| `BlzSetUnitIntegerField` with `UNIT_IF_PRIMARY_ATTRIBUTE`, `UNIT_IF_MOVE_TYPE` | gap | Return false and change nothing; Reforged 2.0.3 applies both, as documented. |
 | `UNIT_IF_UNIT_CLASSIFICATION` writes | bugfix | Bit 128 is only Ancient and never blocks targeting; `IsUnitType(ANCIENT)` and ancient target lists read it, as measured. |
 | `UNIT_IF_UNIT_CLASSIFICATION` write replaces the field | bugfix | Writing 128 or 0 clears `IsUnitType(MECHANICAL)`, and 0 clears the type's own Ancient, as measured. |
 | `UnitAddType`, `UnitRemoveType` after a classification write | bugfix | Set and clear the mechanical, undead and ancient bits (128 plus mechanical reads 136), as measured. |
@@ -88,15 +89,39 @@ Details:
 | `BlzGetUnitWeapon*Field`, `BlzSetUnitWeapon*Field` (Integer, Real, Boolean, String) | partial | Per-unit attack values at index 0 or 1; writes are lost on unit type change. |
 | Weapon fields on a dead unit | deliberate | Read and write like a living unit's; Warcraft III behavior not confirmed. |
 | Weapon fields on a removed unit, bad index or missing attack | unverified | Setters return false; getters read 0, false or empty. |
-| `uaen`, `ua1g`, `ua1p` | gap | Not supported yet: getters read 0 or false, setters return false. |
 | Setting `udl1`, `usd1`, `usr1`, `umh1` | stub | Returns true and changes nothing. |
 | Fields the attack's weapon type does not hold | stub | Stored on the attack and read back; no effect. |
 | `uwu1` (show attack in UI) | partial | Stored and read back, but the info panel still shows attack 1. |
 | `ua1t`, `ucs1` integers | unverified | Follow `ConvertAttackType` and `ConvertWeaponType` order; out-of-range values return false. |
 | Weapon field value limits | unverified | Values outside the limits are clamped; NaN and infinity return false. |
 
+### Weapon fields: attacks enabled (`uaen`)
+
+| Native | Status | What differs |
+|---|---|---|
+| `uaen` write | unverified | Per-attack script value that survives silence, disarm and root; morph or upgrade resets it. |
+| `uaen` on a unit with Root | unverified | A script enable never exceeds what the current root state allows. |
+| `uaen` first enable without an Attack ability | unverified | Adds the Attack ability, unless a script removed it. |
+| `uaen` read | unverified | Returns the written value, else the type's setting, even while the attack is unusable. |
+| `uaen` off, then on, in one callback | unverified | The running or stun-parked attack continues. |
+| `uaen` off during a stun | unverified | If still off when the stun ends, the parked attack ends without damage. |
+
+### Weapon fields: targets (`ua1g`, `ua1p`)
+
+| Native | Status | What differs |
+|---|---|---|
+| `ua1g`, `ua1p` values | unverified | Documented target bits; undefined bits are ignored; flags without a bit, such as self refusal, stay. |
+| `ua1g`, `ua1p` reads | unverified | Ancient makes the integer negative; "friend" reads as `0x6000`. |
+| Written mask without any target bit (0, "none") | unverified | The attack targets nothing. |
+| Writing back the value just read | unverified | Changes nothing, so `ua1p = 0` on an empty type set still hits everything. |
+| Restoring a read 0 after another write, or copying it | unverified | The 0 then means "targets nothing". |
+| Mask with only alliance or class bits | unverified | Without ground, air or structure bits, WarMash applies no type limit. |
+| `ua1p` targeting nothing on a splash attack | unverified | The primary target is still hit. |
+| `ua1p` written on a bounce attack | unverified | The bounce never hits its attacker. |
+| `ua1p` on an attack without splash or bounce | stub | Stored and read back; no effect. |
+
 Details:
-- Fields: `ua1d`, `ua1b`, `ua1s`, `utc1`, `ua1t`, `ucs1`, `ubs1`, `udp1`, `ua1c`, `udl1`, `uhd1`, `uqd1`, `usd1`, `usr1`, `ua1z`, `uma1`, `ua1f`, `ua1h`, `ua1q`, `ua1r`, `uwu1`, `umh1`, `ua1m`.
+- Fields: `ua1d`, `ua1b`, `ua1s`, `utc1`, `ua1t`, `ucs1`, `ubs1`, `udp1`, `ua1c`, `udl1`, `uhd1`, `uqd1`, `usd1`, `usr1`, `ua1z`, `uma1`, `ua1f`, `ua1h`, `ua1q`, `ua1r`, `uwu1`, `umh1`, `ua1m`, `uaen`, `ua1g`, `ua1p`.
 - Limits: dice 0-10000, sides 0-100000, cooldown, damage point, backswing 0-3600, areas and speed 0-100000, range 16-100000, targets 1-10000, `uhd1`/`uqd1` 0-1000, `uma1` -10 to 10.
 
 ### Heroes

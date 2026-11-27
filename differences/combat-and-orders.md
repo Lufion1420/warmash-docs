@@ -52,6 +52,10 @@ Attack orders end when the target can no longer be attacked. A paused unit still
 | Follower snared while in follow range | bugfix | Resumes following when the snare ends (inferred); a follow begun while rooted does not resume after unrooting. |
 | Attack, cast or item give/get begun in range while snared | unverified | Walks after the target once the snare ends; a target leaving range during the snare drops the order. |
 | `GetUnitMoveFollowBehavior` with a null target | bugfix | Returns null instead of raising an error. |
+| `GetUnitAttackWidgetBehavior`, `GetUnitAttackGroundBehavior`, `GetUnitAttackGroundBehaviorLoc` with a bad attack index | bugfix | Return nil instead of raising an error; the index counts only current attacks. |
+| Silence, disarm or ethereal on a unit with Root | bugfix | The rooted or uprooted attacks stay; before, the unit type's attacks came back. |
+| `UnitRemoveAbility` of Root | bugfix | The unit type's weapons come back at once. |
+| Root disabled before it was added | bugfix | The unit no longer gets the uprooted attacks. |
 
 ## Damage and attack events
 

@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Weapon fields `uaen` (attacks enabled), `ua1g` and `ua1p` (target bitfields) can be read and written per unit attack (2026-11-27)
 - The unit weapon field natives `BlzGet/SetUnitWeapon{Integer,Real,Boolean,String}Field` exist, per unit attack (2026-11-27)
 - `BlzGetUnitStringField`, `BlzSetUnitStringField`, `BlzSetUnitBooleanField` and `BlzSetUnitName` exist, per unit (2026-11-27)
 - The item field and item ability natives exist: `BlzGetItemBooleanField`/`RealField`/`StringField`, `BlzSetItemIntegerField`/`RealField`/`StringField`… (2026-11-27)
@@ -190,6 +191,8 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Silence, disarm and ethereal keep the rooted or uprooted attacks of a unit with Root (2026-11-27)
+- `GetUnitAttackWidgetBehavior`, `GetUnitAttackGroundBehavior` and `GetUnitAttackGroundBehaviorLoc` return null for an out-of-range attack index instead of… (2026-11-27)
 - `BlzSetUnitDiceNumber`, `BlzSetUnitDiceSides`, `BlzSetUnitAttackCooldown` and `BlzSetUnitBaseDamage` clamp extreme values (2026-11-27)
 - `BlzGetUnitBooleanField` reads the unit's own value instead of only the type's (2026-11-27)
 - `BlzSetHeroProperName` resolves `TRIGSTR_n` and refreshes cargo and tooltips (2026-11-27)
@@ -411,6 +414,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### WC3 compatibility
 
+- Weapon target masks are unverified against Reforged: a written mask without a target bit targets nothing, except that writing back the value just read changes… (2026-11-27)
 - Item field rules are unverified against Reforged: values survive drops, `BlzItemAddAbility` needs a carrier, ground items give no ability handle, out-of-range… (2026-11-27)
 - A model change (skin, morph, Polymorph) now keeps attached effects, buff art, held units, rally flag and lightning ends on the new model (2026-11-27)
 - A dead unit that changes model now continues its death or decay stage instead of showing Stand (2026-11-27)
