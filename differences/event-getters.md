@@ -92,8 +92,8 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `GetAttacker` | works | Valid in attack events only; nil in damage events (use `GetEventDamageSource`). |
 | `GetEventDamage`, `GetEventDamageSource`, `BlzGetEventDamageTarget`, `BlzGetEventIsAttack` | works | Valid in damage events; outside one they return 0, nil or false. |
 | `BlzSetEventDamage`, `BlzSetEventAttackType`, `BlzSetEventDamageType`, `BlzSetEventWeaponType` | works | Take effect in DAMAGING and DAMAGED; outside a damage event they do nothing. |
-| `GetSpellAbilityUnit`, `GetSpellAbilityId`, `GetSpellAbility` | partial | Set in all five spell events, lost in [loops, filters and `TriggerExecute`](event-use.html#spell-getters-in-loops-and-sub-triggers). |
-| `GetSpellTargetUnit`, `GetSpellTargetItem`, `GetSpellTargetDestructable` | partial | Only the one matching the target kind is non-nil; lost in the same places. |
+| `GetSpellAbilityUnit`, `GetSpellAbilityId`, `GetSpellAbility` | bugfix | Also set in [loops, filters and `TriggerExecute`](event-use.html#spell-getters-in-loops-and-sub-triggers), where they read nil before. |
+| `GetSpellTargetUnit`, `GetSpellTargetItem`, `GetSpellTargetDestructable` | works | Only the one matching the target kind is non-nil. |
 | `GetSpellTargetX`, `GetSpellTargetY`, `GetSpellTargetLoc` | unverified | The target point, else the target's position, else 0. |
 | `GetOrderedUnit`, `GetIssuedOrderId`, `GetOrderPointX`, `GetOrderPointY`, `GetOrderPointLoc` | works | Point getters are 0 in non-point orders. |
 | `GetOrderTarget`, `GetOrderTargetUnit`, `GetOrderTargetItem`, `GetOrderTargetDestructable` | works | Only for target orders. |

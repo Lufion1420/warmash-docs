@@ -198,6 +198,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- `GetSpell*` getters keep the event's values in `ForGroup`, `ForForce`, enumeration callbacks and filters, `TriggerExecute` and `TriggerEvaluate` (2026-11-27)
 - Player colours: nil or out-of-range arguments to `SetPlayerColor`, `GetPlayerColor`, `ConvertPlayerColor`, `SetUnitColor` and `SetCinematicScene` no longer… (2026-11-27)
 - Starting a map by an absolute path or one that leaves a data folder (`-loadfile`) no longer logs path refusal warnings (2026-11-27)
 - File paths from scripts and models can no longer leave a data folder (`..` above its root, rooted, drive, UNC, device or invalid paths) (2026-11-27)

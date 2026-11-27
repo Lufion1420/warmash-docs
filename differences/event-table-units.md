@@ -14,7 +14,7 @@ How to read the tables:
 - **Fires**: `yes`, `partial` or `never`. A never-firing event registers without an error.
 - **Unit / widget / player**: what `GetTriggerUnit`, `GetTriggerWidget` and `GetTriggerPlayer` return; "nil" means no value.
 - `GetTriggerEventId` and `GetTriggeringTrigger` work in every event on this page.
-- Spell getters are lost in loops and sub-triggers: see [the trap](event-use.html#spell-getters-in-loops-and-sub-triggers).
+- Spell getters keep their values in loops and sub-triggers, not in timer callbacks: see [details](event-use.html#spell-getters-in-loops-and-sub-triggers).
 
 ## Combat and death
 

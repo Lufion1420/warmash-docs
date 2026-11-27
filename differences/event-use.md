@@ -15,8 +15,8 @@ The status words describe WarMash. `unverified` means Warcraft III was not compa
 
 | You want | Use | Watch out |
 |---|---|---|
-| Casting unit | `GetSpellAbilityUnit`, `GetTriggerUnit` | Only `GetTriggerUnit` survives `ForGroup`. |
-| Spell id | `GetSpellAbilityId` | Save it in a local before loops. |
+| Casting unit | `GetSpellAbilityUnit`, `GetTriggerUnit` | Both are nil in `TimerStart` callbacks. |
+| Spell id | `GetSpellAbilityId` | Save it in a local before starting a timer. |
 | Spell target unit | `GetSpellTargetUnit` | Nil for point and no-target casts. |
 | Spell target point | `GetSpellTargetX`, `GetSpellTargetY` | No allocation, unlike `GetSpellTargetLoc`. |
 | Player of a caster or ordered unit | `GetOwningPlayer(GetTriggerUnit())` | `GetTriggerPlayer` is nil there. |
@@ -44,24 +44,24 @@ The status words describe WarMash. `unverified` means Warcraft III was not compa
 
 ## Spell getters in loops and sub-triggers
 
-This is the trap most likely to break a spell script. Spell getters work in the handler, but not in code that gets its own event context.
-
-In the `gap` rows the getters return nil or 0, and `GetSpellTargetLoc` a location at 0,0.
+Spell getters keep the event's values in callbacks and sub-triggers. A `TimerStart` callback gets none, so store them first.
 
 | Where | Status | What happens |
 |---|---|---|
-| `ForGroup`, `ForForce` and rect enumeration callbacks | gap | All `GetSpell*` getters return nil or 0. |
-| Filters of `GroupEnumUnits*` and other enumerations | gap | All `GetSpell*` getters return nil or 0. |
-| The filter given to `TriggerRegisterPlayerUnitEvent` | gap | All `GetSpell*` getters return nil or 0; use a trigger condition. |
-| `TriggerExecute` and `TriggerEvaluate` | gap | The other trigger reads nil or 0 from all `GetSpell*` getters. |
+| `ForGroup`, `ForForce` and rect enumeration callbacks | bugfix | Spell getters keep the event's values; before, they read nil or 0. |
+| Filters of `GroupEnumUnits*` and other enumerations | bugfix | Spell getters keep the event's values; before, they read nil or 0. |
+| The filter given to `TriggerRegisterPlayerUnitEvent` | unverified | Reads the event's spell values; before, nil or 0. |
+| `TriggerExecute` and `TriggerEvaluate` | bugfix | The other trigger reads the caller's spell values; before, nil or 0. |
 | Trigger conditions, actions, `ExecuteFunc` functions | works | Spell getters keep their values. |
+| `TimerStart` callbacks | unverified | Spell getters return nil or 0, and `GetSpellTargetLoc` a location at 0,0. |
 
-The other event getters listed in these tables, including damage and order getters, keep their values in all of these places.
+Other event getters, including damage and order getters, also keep their values everywhere above except in timer callbacks.
 
 ```lua
 local caster, spell = GetSpellAbilityUnit(), GetSpellAbilityId()
-ForGroup(group, function()
+TimerStart(CreateTimer(), 0.5, false, function()
     -- use caster and spell here
+    DestroyTimer(GetExpiredTimer())
 end)
 ```
 

@@ -43,6 +43,7 @@ BlzUnitHideAbility(hero, FourCC("A000"), false)
 | `UnitAddAbility` with a null unit or a duplicate | bugfix | Returns false without an error. |
 | `GetSpellAbility`, `GetSpellTargetDestructable`, `GetSpellTargetItem`, `BlzGetUnitAbilityCooldown`, `BlzGetUnitAbilityManaCost`, `BlzGetAbilityCooldown`, `UnitResetCooldown`, `GetWidgetLife`, `SetWidgetLife` | works | `UnitResetCooldown` also ends item cooldowns; `SetWidgetLife` is capped at max life. |
 | `BlzSetUnitAbilityCooldown` | partial | Works for Channel and engine spells; stored-only for other ability kinds. |
+| Cooldown and ability level natives in callbacks during `SPELL_EFFECT` | unverified | Loops, filters and `TriggerExecute` there retime the running cast's cooldown, like the handler. |
 | `BlzEndUnitAbilityCooldown` | bugfix | Also ends Channel cooldowns. |
 | `AbilityId`, `AbilityId2String` | stub | Always return 0 and an empty string. |
 
