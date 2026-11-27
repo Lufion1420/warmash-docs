@@ -9,6 +9,8 @@ parent: Differences from Warcraft III
 
 Audit of which events fire and which event getters return a value, per event family. Many events never fire, and some getters are missing.
 
+Per event lookup: [which getter to use](event-use.html), [unit events](event-table-units.html), [player, game, frame and other events](event-table-other.html).
+
 A missing getter fails at the call with an "had no native implementation" log line and returns nothing. "Never fires" means the trigger registers without error and its actions simply never run.
 
 ## Events that fire
@@ -17,7 +19,8 @@ A missing getter fails at the call with an "had no native implementation" log li
 |---|---|---|
 | Damage: `EVENT_UNIT_DAMAGED`, `EVENT_PLAYER_UNIT_DAMAGED`, `EVENT_UNIT_DAMAGING`, `EVENT_PLAYER_UNIT_DAMAGING` | works | One DAMAGING then one DAMAGED per hit; all `GetEvent*` and `BlzGetEvent*` damage getters work. |
 | Attack: `EVENT_UNIT_ATTACKED`, `EVENT_PLAYER_UNIT_ATTACKED` | works | Fires at swing start for unit targets; attacks on trees and other non-unit targets fire nothing. |
-| Death: `EVENT_UNIT_DEATH`, `EVENT_PLAYER_UNIT_DEATH`, `EVENT_WIDGET_DEATH` | works | `GetDyingUnit`, `GetTriggerUnit` and `GetKillingUnit` are set; the killer is nil when nothing killed the unit. |
+| Death: `EVENT_UNIT_DEATH`, `EVENT_PLAYER_UNIT_DEATH` | works | `GetDyingUnit`, `GetTriggerUnit` and `GetKillingUnit` are set; the killer is nil when nothing killed the unit. |
+| Widget death: `EVENT_WIDGET_DEATH` | unverified | Sets `GetTriggerWidget` only (`GetTriggerDestructable` for destructables); `GetDyingUnit`, `GetTriggerUnit` and `GetKillingUnit` are nil. |
 | Spells: `*_SPELL_CHANNEL`, `_CAST`, `_EFFECT`, `_FINISH`, `_ENDCAST` | partial | `GetTriggerPlayer` and `GetTriggerWidget` are nil; the player event fires before the unit event. |
 | Orders: `*_ISSUED_ORDER`, `_ISSUED_POINT_ORDER`, `_ISSUED_TARGET_ORDER` | partial | Order id, point and target getters work; `GetTriggerPlayer` is nil. |
 | Items: `*_PICKUP_ITEM`, `_DROP_ITEM`, `_USE_ITEM` | partial | Item getters work; `GetTriggerPlayer` is nil. |
@@ -71,7 +74,7 @@ A missing getter fails at the call with an "had no native implementation" log li
 
 | Getter | Status | What differs |
 |---|---|---|
-| `GetTriggerUnit` | partial | Set in unit events (shop in sales, hero in pawns); nil in dialog events. |
+| `GetTriggerUnit` | partial | Set in unit events (shop in sales, hero in pawns); nil in dialog and widget death events. |
 | Event getters outside their event | unverified | Return null, 0 or an empty string (inferred); before, JASS maps ended with `ClassCastException`. |
 | `GetTriggerEventId` in timer interval, variable and time-of-day handlers | bugfix | `EVENT_GAME_TIMER_EXPIRED`, `EVENT_GAME_VARIABLE_LIMIT` or `EVENT_GAME_STATE_LIMIT`. |
 | `GetTriggeringTrigger` in timer interval, variable and time-of-day handlers | bugfix | Returns the trigger; Lua previously got nil. |
@@ -83,14 +86,14 @@ A missing getter fails at the call with an "had no native implementation" log li
 | Event getters and triggering trigger in an `ExecuteFunc` function | unverified | Reads the caller's values; null when called from `main`. |
 | `BlzSetEventDamage`, `BlzSetEventAttackType`, `BlzSetEventDamageType`, `BlzSetEventWeaponType` after the event | unverified | After a wait or in `ExecuteFunc`: change nothing, type setters return false, logged once. |
 | `TriggerSleepAction`, `TriggerWaitForSound` in an `ExecuteFunc` function | unverified | Always wait, even if the caller's trigger has `TriggerWaitOnSleeps` false. |
-| `GetTriggerPlayer` in spell, order, pickup, drop, use-item, dialog and construction-finish events | gap | Returns nil. |
+| `GetTriggerPlayer` in spell, order, pickup, drop, use-item, dialog, region, widget death and construction-finish events | gap | Returns nil. |
 | `GetTriggerWidget` in spell events | gap | Returns nil; order, item, hero and construction events set it. |
 | `GetKillingUnit`, `GetDyingUnit` | works | Valid in death events only; the killer is nil for script kills such as a max life of 0. |
 | `GetAttacker` | works | Valid in attack events only; nil in damage events (use `GetEventDamageSource`). |
 | `GetEventDamage`, `GetEventDamageSource`, `BlzGetEventDamageTarget`, `BlzGetEventIsAttack` | works | Valid in damage events; outside one they return 0, nil or false. |
 | `BlzSetEventDamage`, `BlzSetEventAttackType`, `BlzSetEventDamageType`, `BlzSetEventWeaponType` | works | Take effect in DAMAGING and DAMAGED; outside a damage event they do nothing. |
-| `GetSpellAbilityUnit`, `GetSpellAbilityId`, `GetSpellAbility` | works | Set in all five spell events. |
-| `GetSpellTargetUnit`, `GetSpellTargetItem`, `GetSpellTargetDestructable` | works | Only the one matching the target kind is non-nil. |
+| `GetSpellAbilityUnit`, `GetSpellAbilityId`, `GetSpellAbility` | partial | Set in all five spell events, lost in [loops, filters and `TriggerExecute`](event-use.html#spell-getters-in-loops-and-sub-triggers). |
+| `GetSpellTargetUnit`, `GetSpellTargetItem`, `GetSpellTargetDestructable` | partial | Only the one matching the target kind is non-nil; lost in the same places. |
 | `GetSpellTargetX`, `GetSpellTargetY`, `GetSpellTargetLoc` | unverified | The target point, else the target's position, else 0. |
 | `GetOrderedUnit`, `GetIssuedOrderId`, `GetOrderPointX`, `GetOrderPointY`, `GetOrderPointLoc` | works | Point getters are 0 in non-point orders. |
 | `GetOrderTarget`, `GetOrderTargetUnit`, `GetOrderTargetItem`, `GetOrderTargetDestructable` | works | Only for target orders. |
