@@ -44,9 +44,9 @@ A missing getter fails at the call with an "had no native implementation" log li
 | Player: chat, key, mouse, end cinematic | works | Local player only for chat, key and mouse. |
 | Player leave: `EVENT_PLAYER_LEAVE` | partial | Raised only by `RemovePlayer` for a player other than the local one. |
 | Dialogs: `TriggerRegisterDialogEvent`, `TriggerRegisterDialogButtonEvent` | partial | `GetClickedDialog` and `GetClickedButton` work; `GetTriggerPlayer` is nil. |
-| Timer object: `TriggerRegisterTimerExpireEvent` | partial | Fires; `GetTriggerEventId` returns nil. |
-| Timer interval: `TriggerRegisterTimerEvent` | partial | Fires; some trigger getters fail (see "Getters by event"). |
-| `TriggerRegisterVariableEvent` | partial | Watches JASS globals only; a Lua map global raises an error; trigger getters fail. |
+| Timer object: `TriggerRegisterTimerExpireEvent` | partial | Fires; `GetTriggerEventId` is null, also in `TimerStart` callbacks. |
+| Timer interval: `TriggerRegisterTimerEvent` | unverified | Fires with event id and triggering trigger; `GetExpiredTimer` is null. |
+| `TriggerRegisterVariableEvent` | partial | Watches JASS globals only; a Lua map global raises an error. |
 
 ## Events that never fire
 
@@ -64,16 +64,25 @@ A missing getter fails at the call with an "had no native implementation" log li
 | `TriggerRegisterGameEvent` | stub | The registration is dropped with one log line, so the trigger never fires from it. |
 | `EVENT_PLAYER_ARROW_*`, `EVENT_PLAYER_SYNC_DATA` | gap | Never fire; `BlzGetTriggerSyncData`, `BlzGetTriggerSyncPrefix` and `BlzTriggerRegisterPlayerSyncEvent` are missing. |
 | `TriggerRegisterUnitStateEvent`, `GetEventUnitState` | works (MANA and max states unverified) | Edge-triggered, EQ never fires, registering fires nothing; measured for life. A death hit fires it after the death; regen events are queued. |
-| `TriggerRegisterGameStateEvent` | partial | Only time of day; other states raise an error, and trigger getters fail. |
-| `TriggerRegisterTrackableHitEvent`, `TriggerRegisterTrackableTrackEvent`, `GetTriggeringTrackable`, `GetEventGameState`, `GetWinningPlayer` | gap | Raise "not yet implemented" when called. |
+| `TriggerRegisterGameStateEvent` | partial | Only time of day; other states raise an error. |
+| `TriggerRegisterTrackableHitEvent`, `TriggerRegisterTrackableTrackEvent`, `GetTriggeringTrackable`, `GetWinningPlayer` | gap | Raise "not yet implemented" when called. |
 
 ## Getters by event
 
 | Getter | Status | What differs |
 |---|---|---|
 | `GetTriggerUnit` | partial | Set in unit events (shop in sales, hero in pawns); nil in dialog events. |
-| `GetTriggerEventId`, `GetTriggerUnit`, `GetTriggerPlayer` in timer interval, variable and game-state events | gap | Lua: nil. JASS: the game ends (from code, not run). |
-| `GetTriggeringTrigger` in a `TriggerRegisterTimerEvent` handler | gap | Returns nil in Lua. |
+| Event getters outside their event | unverified | Return null, 0 or an empty string (inferred); before, JASS maps ended with `ClassCastException`. |
+| `GetTriggerEventId` in timer interval, variable and time-of-day handlers | bugfix | `EVENT_GAME_TIMER_EXPIRED`, `EVENT_GAME_VARIABLE_LIMIT` or `EVENT_GAME_STATE_LIMIT`. |
+| `GetTriggeringTrigger` in timer interval, variable and time-of-day handlers | bugfix | Returns the trigger; Lua previously got nil. |
+| Unit and player getters, `GetExpiredTimer` in those three handlers | unverified | Return null. |
+| `GetOrderPointLoc`, `GetSpellTargetLoc` outside events and in those three handlers | unverified | Return null; other events without an order or spell give a location at 0,0. |
+| `GetEventGameState` | bugfix | `GAME_STATE_TIME_OF_DAY` in a time-of-day handler, null elsewhere; before, it raised an error. |
+| `GetTriggerEvalCount`, `GetTriggerExecCount` | gap | Always return 0. |
+| `ExecuteFunc` (JASS and Lua) | gap | Warcraft III runs the function at once; WarMash queues it to run later. |
+| Event getters and triggering trigger in an `ExecuteFunc` function | unverified | Reads the caller's values; null when called from `main`. |
+| `BlzSetEventDamage`, `BlzSetEventAttackType`, `BlzSetEventDamageType`, `BlzSetEventWeaponType` after the event | unverified | After a wait or in `ExecuteFunc`: change nothing, type setters return false, logged once. |
+| `TriggerSleepAction`, `TriggerWaitForSound` in an `ExecuteFunc` function | unverified | Always wait, even if the caller's trigger has `TriggerWaitOnSleeps` false. |
 | `GetTriggerPlayer` in spell, order, pickup, drop, use-item, dialog and construction-finish events | gap | Returns nil. |
 | `GetTriggerWidget` in spell events | gap | Returns nil; order, item, hero and construction events set it. |
 | `GetKillingUnit`, `GetDyingUnit` | works | Valid in death events only; the killer is nil for script kills such as a max life of 0. |

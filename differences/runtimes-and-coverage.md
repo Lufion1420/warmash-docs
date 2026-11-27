@@ -18,7 +18,7 @@ Lua 5.3 with 64-bit integers. A declared but missing native returns nil and logs
 | `TypeDefine` | unverified | Does nothing. |
 | Strings passed to natives | gap | Invalid UTF-8 becomes U+FFFD. |
 | Null string results | unverified | Appear as nil. |
-| `ExecuteFunc` | unverified | Queued as a new thread; an unknown name is logged once. |
+| `ExecuteFunc` | gap | Queued, not run at once (see [event getters](event-getters.html)); an unknown name is logged once. |
 | `SetRandomSeed`, `math.randomseed` | gap | Not implemented: logs the missing-native line, so seeding has no effect. |
 | `TriggerSleepAction` outside a trigger action | unverified | The callback ends with one logged traceback. |
 | Handles as weak-table keys | unverified | The key can vanish while the handle lives. |
@@ -31,7 +31,8 @@ JASS maps read `common.j` and `Blizzard.j` from the configured install (1.29 tod
 
 | Native | Status | What differs |
 |---|---|---|
-| `GetTriggerUnit`, `GetFilterUnit`, `GetEnumUnit` from `main` | gap | Throw an error. |
+| `GetTriggerUnit`, `GetFilterUnit`, `GetEnumUnit` from `main` | bugfix | Return null; before, they threw an error. |
+| `Preloader` | gap | After map start, resets JASS globals declared with an initial value back to that value. |
 | Integer literal with a leading zero (`010`) | bugfix | Read as octal (8), as in pjass; `08` and `09` stop the script with an error. |
 | Real literal with a leading zero (`05.5`, `00.5`, `08.5`) | bugfix | Read as a decimal real (5.5, 0.5, 8.5), as in pjass. |
 | Frame API natives in JASS maps | gap | Only if the install's `common.j` declares them. |

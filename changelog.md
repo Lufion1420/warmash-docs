@@ -198,6 +198,10 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Fixed
 
+- Event getters outside their event return null, 0 or an empty string instead of ending JASS maps with `ClassCastException` (values inferred) (2026-11-27)
+- Timer interval, variable and time-of-day handlers: `GetTriggerEventId` and `GetTriggeringTrigger` work, and `GetEventGameState` no longer raises an error (2026-11-27)
+- `ExecuteFunc` functions now read the caller's event getters and triggering trigger, and their waits always wait (2026-11-27)
+- `BlzSetEventDamage` and the damage type setters change nothing after their damage event ended (type setters return false) and log once (2026-11-27)
 - The selected unit's 3D portrait now follows a morph or Polymorph without reselecting, as in Warcraft III (2026-11-27)
 - Item writes of `ITEM_SF_MODEL_USED`, `ITEM_RF_SCALING_VALUE` and the `ITEM_IF_TINTING_COLOR_*` fields now change the ground item (before: stored only) (2026-11-27)
 - A unit type with bounty dice but sides 0 or less no longer raises an error when the unit dies (2026-11-27)

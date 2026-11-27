@@ -33,6 +33,7 @@ Most launch arguments below need `-qalog` and `-loadfile`. Full field lists are 
 | `-qaleavecount <n>`, `-qaleavemap <map>` | Repeats the leave `n` times; restarts load `<map>`. |
 | `-qaquestdialog <gameSeconds>` | Opens the quest dialog once at that game time, as F9 does. |
 | `-qalua <file>[;<file>...]` | Runs Lua files in order in the map's VM; a failing file stops the rest. |
+| `-qajass <prefix>` | With `-qalog`: sets JASS global `<prefix>frame` each frame; logs string `<prefix>results` at exit. |
 | `-qablpsync` | Turns off worker-thread BLP decoding at map load (decode on the render thread). |
 | `-qasoundsync` | Decodes script sounds on the render thread instead of the background (for timing comparisons). |
 | `-qablpticksync` | Keeps texture decoding during a script tick on the render thread (for timing comparisons). |
