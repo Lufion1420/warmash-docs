@@ -63,7 +63,24 @@ Effects attached to a unit ignore position, orientation and alpha. Images are no
 | `AddSpecialEffect`, `AddSpecialEffectLoc` with an empty model path | bugfix | Returns an invisible handle instead of nil, placed on ground or walkable surface. |
 | `CreateImage` family | stored-only | State is kept; nothing is drawn. |
 | `TerrainDeformCrater`, `TerrainDeformRipple`, `TerrainDeformWave`, `TerrainDeformRandom`, `TerrainDeformStop`, `TerrainDeformStopAll` | stub | Do nothing; the four creators return a null handle, so the terrain never deforms. |
-| `AddWeatherEffect`, `EnableWeatherEffect` | stub | Do nothing; `AddWeatherEffect` returns nil. |
+
+### Weather
+
+| Native | Status | What differs |
+|---|---|---|
+| `AddWeatherEffect`, `EnableWeatherEffect` | partial | Draw particles from `TerrainArt\Weather.slk`; effects start disabled and play no ambient sound. |
+| `RemoveWeatherEffect` | works | Clears the effect and its particles at once. |
+| `EnableWeatherEffect(e, false)` | unverified | No new particles; live ones finish. |
+| `AddWeatherEffect` with a null rect or unknown id | unverified | Returns nil and logs once; Reforged-only ids missing from the loaded data are unknown. |
+| `RemoveWeatherEffect`, `EnableWeatherEffect` on a nil or removed handle | unverified | Does nothing. |
+| Weather look and density | unverified | Not measured; particles appear only near the camera target. |
+| Weather particle limit | deliberate | At most 20000 live particles in total; later effects get fewer. |
+| Animated weather textures | unverified | The last image of the animation is never shown. |
+| Weather over fog of war and black mask | unverified | Drawn on top of both. |
+| Hidden scenery in unexplored areas under weather | unverified | Shows as dark silhouettes against the particles. |
+| Weather during pause or changed game speed | unverified | Particles are not scaled by either; pause is untested in game. |
+| Weather set in map or region settings | unverified | Not read; only the map script creates weather, as editor-generated scripts do. |
+| `GetHandleId` on weather effects | deliberate | Counts from 0x50000000; creating inside a `GetLocalPlayer` block shifts later weather ids on that client. |
 
 ### Models and textures
 

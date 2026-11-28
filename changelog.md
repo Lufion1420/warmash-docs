@@ -11,6 +11,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Added
 
+- Weather effects: `AddWeatherEffect`, `EnableWeatherEffect` and `RemoveWeatherEffect` now draw particles from `TerrainArt\Weather.slk` in Lua and JASS… (2026-11-28)
 - Unit illusions (WarMash-only, experimental): `WmsCreateIllusion` makes an illusion of a unit with its own duration, damage factors and optional hit limit (2026-11-28)
 - 2D unit portraits (WarMash-only, experimental): `WmsSetUnitPortraitTexture`, `WmsSetUnitTypePortraitTexture`, `WmsSetUnitPortraitFlipbook` and… (2026-11-27)
 - Machine-readable script API reference `warmash-api.json`: natives with signature and status, plus events, constants and types, for map and editor developers (2026-11-27)
