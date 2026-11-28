@@ -136,6 +136,7 @@ User-visible changes to WarMash, newest work under `Unreleased` (WarMash has no 
 
 ### Changed
 
+- Illusions from `WmsCreateIllusion` now hold copies of the source's items, which give passive stat bonuses only, and show its learned hero skills as unusable… (2026-11-28)
 - Script API reference and docs: natives that return a constant or do nothing now read `stub` (2026-11-27)
 - Script API reference: hand-written descriptions, notes and `partial` statuses, a status for every event (93 works, 33 partial, 44 missing) and the ability API… (2026-11-27)
 - `BlzGetUnitIntegerField(UNIT_IF_PRIMARY_ATTRIBUTE)` reads 0 on a non-hero (was the unit type's value), and `BlzGetHeroPrimaryStat` follows primary attribute… (2026-11-27)

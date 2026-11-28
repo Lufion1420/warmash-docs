@@ -325,14 +325,17 @@ Details for illusions (damage):
 Details for illusions (what is copied):
 
 - Type, skin, name, hero proper name, level, XP, stats, current life and mana; no level-up events.
-- No items and no skill points.
+- Items: a copy of each item in the same slot, with type and charges. Each copy is a new item handle.
+- Learned hero skills: display-only icons at the source's level. No skill points.
+- Items and skills are a snapshot: later changes on the source do not reach the illusion.
 
 Details for illusions (limits):
 
 - Counts as summoned. The summon events fire last, with the source as summoning unit.
 - Uses and gives no food; no hero limit, hero button, altar revive or tech count. It cannot be revived.
-- Keeps only basic abilities: it cannot cast, learn skills, build, repair or harvest. Heroes gain no XP.
-- Cannot hold, pick up or buy items, be a shop patron or be sacrificed.
+- Keeps only basic abilities and item stat bonuses: it cannot cast, learn skills, build, repair or harvest. Heroes gain no XP.
+- Cannot pick up, buy, use, drop or give items, be a shop patron or be sacrificed.
+- Item stat bonuses: damage, armor, attributes, life, mana, attack speed, move speed, mana regeneration and sight.
 - Gives no aura but receives auras. Friendly autocasts skip it.
 - `UnitAddItem` returns false, `UnitAddItemById` and `UnitAddItemToSlotById` return nil.
 - `UnitAddAbility` returns false for any ability an illusion cannot keep.

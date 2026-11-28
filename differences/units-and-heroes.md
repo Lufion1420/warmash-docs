@@ -231,6 +231,17 @@ Only [`WmsCreateIllusion`](../warmash-extensions.html) makes illusions.
 | `UnitAddItem`, `UnitAddItemById`, `UnitAddItemToSlotById` on an illusion | deliberate | Refused: false or nil. Warcraft III behavior not confirmed. |
 | Hex on an illusion | gap | Does not kill it; a Reforged player report says Warcraft III does. |
 | Illusion tint for allies | unverified | Seen when the viewer treats the owner as ally (`IsUnitAlly`), also one-sided; Warcraft III unmeasured. |
+| `UnitItemInSlot` on an illusion | unverified | Returns an item copy with its own handle; Warcraft III shows copies too, native results unmeasured. |
+| `UnitUseItem`, `UnitUseItemPoint`, `UnitUseItemTarget` on an item copy | unverified | Return false; a copy cannot be used or given to another unit. |
+| `UnitDropItemPoint`, `UnitDropItemSlot`, `UnitDropItemTarget`, `UnitRemoveItem`, `UnitRemoveItemFromSlot` on a copy | unverified | The copy stays; the drop natives return false and `UnitRemoveItemFromSlot` returns nil. |
+| `RemoveItem` on a copy | unverified | Removes the copy and its bonus, with no drop event. |
+| `SetItemPosition`, `SetItemVisible`, `SetItemDroppable`, `SetItemPawnable` on a copy | unverified | No effect: a copy stays hidden in its slot, never droppable or pawnable. |
+| `BlzItemAddAbility`, `SetWidgetLife` on a copy | unverified | Only stat bonuses can be added; a copy cannot die. |
+| Item abilities on an illusion | unverified | Only passive stat bonuses apply; no orbs, auras or active abilities. |
+| `GetUnitAbilityLevel`, `BlzGetUnitAbility` on a hero illusion | unverified | Learned hero skills exist as display-only icons at the source's level; none is usable. |
+| `SetUnitAbilityLevel`, `IncUnitAbilityLevel`, `DecUnitAbilityLevel` on an illusion's hero skill | unverified | The level never changes. |
+| `UnitModifySkillPoints` on a hero illusion | unverified | Returns false; nothing changes. |
+| `UnitRemoveAbility` on an illusion's hero skill | unverified | Removes the icon; `UnitAddAbility` cannot add it back. |
 
 ### Guard positions and creeps
 
