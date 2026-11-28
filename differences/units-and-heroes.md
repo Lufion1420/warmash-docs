@@ -75,7 +75,6 @@ Everyday unit and hero natives work. Several `Blz*Field` natives support only so
 | `IsUnitType` with `UNIT_TYPE_POISONED`, `UNIT_TYPE_PLAGUED` | gap | Always false: these effects do not exist in WarMash yet. |
 | `IsUnitType(unit, UNIT_TYPE_POLYMORPHED)` | works | True while the unit is under Polymorph. |
 | Null unit in `BlzGetUnitArmor`, `GetUnitDefense`, `GetUnitCastPoint`, `GetUnitCastBackswingPoint`, `UnitGetTemporaryDefenseBonus`; `GetSpellTargetUnit`, `GetSpellTargetLoc` outside a spell | bugfix | Return 0 or nil instead of a script error. |
-| `IsUnitIllusion` | stub | Always false: WarMash cannot create illusions yet. |
 | `SetWidgetLife`, `SetUnitState(UNIT_STATE_LIFE)` and heals on a killed unit | bugfix | Ignored: a killed unit stays at 0 life until a real revive (was a crash). |
 
 Details:
@@ -219,6 +218,19 @@ Details:
 
 Details:
 - Locust: not selectable, targetable or enumerated, no bars, others walk through it; script damage still lands. Its own movement still collides (gap).
+
+### Illusions
+
+Only [`WmsCreateIllusion`](../warmash-extensions.html) makes illusions.
+
+| Native | Status | What differs |
+|---|---|---|
+| `IsUnitIllusion` | works | True for units made by `WmsCreateIllusion`; was always false. |
+| Mirror Image, Wand of Illusion, item illusions | gap | These abilities do not create illusions yet. |
+| `UnitAddAbility` on an illusion | deliberate | Returns false for any ability an illusion cannot keep. |
+| `UnitAddItem`, `UnitAddItemById`, `UnitAddItemToSlotById` on an illusion | deliberate | Refused: false or nil. Warcraft III behavior not confirmed. |
+| Hex on an illusion | gap | Does not kill it; a Reforged player report says Warcraft III does. |
+| Illusion tint for allies | unverified | Seen when the viewer treats the owner as ally (`IsUnitAlly`), also one-sided; Warcraft III unmeasured. |
 
 ### Guard positions and creeps
 

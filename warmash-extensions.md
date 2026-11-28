@@ -108,6 +108,7 @@ Call `Wms` natives from `main()` or later; they are not available during `config
 | `WmsSetUnitTypePortraitTexture` | `(integer unitTypeId, string path)` | Same for every unit of the type without its own image. | 2026-11-27 | experimental |
 | `WmsSetUnitPortraitFlipbook` | `(unit, string path, integer columns, integer rows, real framesPerSecond)` | Plays an image grid as a looping animation in this unit's portrait. | 2026-11-27 | experimental |
 | `WmsSetUnitTypePortraitFlipbook` | `(integer unitTypeId, string path, integer columns, integer rows, real framesPerSecond)` | Same for every unit of the type without its own image. | 2026-11-27 | experimental |
+| `WmsCreateIllusion` | `(player owner, unit source, real x, real y, real facing, real duration, real damageDealt, real damageTaken, integer hits) -> unit` | Creates an illusion of the source unit for the owner; nil if refused. | 2026-11-28 | experimental |
 
 Details for ability interval events:
 - Passive abilities only (built-in passives, auras, ability-builder passives). Handlers use `GetTriggerUnit`, `GetTriggerPlayer`, `WmsGetEventAbilityId`, `WmsGetEventAbility`.
@@ -303,6 +304,51 @@ Details for `WmsSetUnitSkinKeepState`:
 
 ```lua
 WmsSetUnitSkinKeepState(u, FourCC("hkni"))
+```
+
+Details for illusions (arguments):
+
+- Returns nil for a nil owner, a nil, dead or removed source, a structure, or a NaN or infinite `x` or `y`.
+- A position off the map is moved onto it.
+- `duration` 0, negative or NaN: permanent.
+- `damageDealt` and `damageTaken` are factors: negative or NaN counts as 0, the maximum is 1000000.
+- Warcraft III's item illusion values, for reference: dealt 0, taken 2, duration 60.
+- `hits` above 0: that many hits kill the illusion. 0 or less: no limit.
+
+Details for illusions (damage):
+
+- A hit is damage still above 0 after armor, `DAMAGING` changes and the source's dealt factor, before the taken factor.
+- Both factors apply before `DAMAGED`. The dealt factor also scales damage to destructables and items.
+- Cleave, life steal and similar effects after a hit use the amount without the taken factor.
+- A `DAMAGED` handler that sets the damage also sets the amount those effects use.
+
+Details for illusions (what is copied):
+
+- Type, skin, name, hero proper name, level, XP, stats, current life and mana; no level-up events.
+- No items and no skill points.
+
+Details for illusions (limits):
+
+- Counts as summoned. The summon events fire last, with the source as summoning unit.
+- Uses and gives no food; no hero limit, hero button, altar revive or tech count. It cannot be revived.
+- Keeps only basic abilities: it cannot cast, learn skills, build, repair or harvest. Heroes gain no XP.
+- Cannot hold, pick up or buy items, be a shop patron or be sacrificed.
+- Gives no aura but receives auras. Friendly autocasts skip it.
+- `UnitAddItem` returns false, `UnitAddItemById` and `UnitAddItemToSlotById` return nil.
+- `UnitAddAbility` returns false for any ability an illusion cannot keep.
+- A morph keeps it an illusion. `IsUnitIllusion` returns true for it.
+
+Details for illusions (death and look):
+
+- Death or expiry shows the pop effect and removes the unit: no corpse. Death events fire.
+- The killer gets no bounty and no XP.
+- A paused illusion does not expire, but its end time does not move.
+- The owner, allies (the viewer's `IsUnitAlly`) and observers see a blue tint, also in the portrait; enemies see none.
+- Hex does not kill an illusion.
+
+```lua
+-- 60 s, deals no damage, takes double, no hit limit
+local copy = WmsCreateIllusion(GetOwningPlayer(u), u, GetUnitX(u), GetUnitY(u), GetUnitFacing(u), 60, 0, 2, 0)
 ```
 
 Details for 2D portraits:
